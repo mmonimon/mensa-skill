@@ -1,8 +1,8 @@
-Monique Noss 
-Olha Zolotarenko 
-Maria Lomaeva 
-Bogdan Kostić 
-20. Juni 2019 
+Monique Noss  
+Olha Zolotarenko  
+Maria Lomaeva  
+Bogdan Kostić  
+20. Juni 2019  
 
 # Dialogmodellierung – Gruppenprojekt, Meeting 1
 
@@ -45,17 +45,17 @@ Bogdan Kostić
 * nach Gerichten in allen Standorten suchen
 
 ## Beispieldialog
-U: Alexa, öffne Mensaauskunft.
-A: In welcher Mensa möchtest du essen?
-U: Golm.
-A: Wann möchtest du essen?
-U: Übermorgen. (wenn geschlossen, dann Exit?)
-A: Übermorgen gibt es Geflügelgulasch, …
-U: Alexa, welche Gerichte sind vegetarisch?
-A: Ich habe die folgenden vegetarischen Gerichte gefunden: Bami Goreng, …
-U: Alexa, wie viel kostet Bami Goreng für Studenten?
-A: Für Studenten kostet Bami Goreng 2€. Möchtest du noch etwas über ein anderes Gericht wissen?
-U: Welche Gerichte gab es denn?
-A: …
-U: …
-A: … . Guten Appetit! 
+U: Alexa, öffne Mensaauskunft.  
+A: In welcher Mensa möchtest du essen?  
+U: Golm.  
+A: Wann möchtest du essen?  
+U: Übermorgen. (wenn geschlossen, dann Exit?)  
+A: Übermorgen gibt es Geflügelgulasch, …  
+U: Alexa, welche Gerichte sind vegetarisch?  
+A: Ich habe die folgenden vegetarischen Gerichte gefunden: Bami Goreng, …  
+U: Alexa, wie viel kostet Bami Goreng für Studenten?  
+A: Für Studenten kostet Bami Goreng 2€. Möchtest du noch etwas über ein anderes Gericht wissen?  
+U: Welche Gerichte gab es denn?  
+A: …  
+U: …  
+A: … . Guten Appetit!   
