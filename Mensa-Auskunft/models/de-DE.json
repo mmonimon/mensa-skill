@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "pet match",
+      "invocationName": "mensa auskunft",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
