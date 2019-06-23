@@ -10,7 +10,7 @@
 - arbeitsteilung?
 
 ### Install ASK CLI
-
+```
     2  apt update
     3  apt install nodejs
     4  apt install ask-cli
@@ -23,3 +23,4 @@
    25  cd test-repo/
    26  ask deploy
    27  ask dialog --locale=de-DE
+```
