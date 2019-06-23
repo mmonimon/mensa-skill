@@ -1,0 +1,21 @@
+{
+  "manifest": {
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "MensaAuskunft",
+          "sourceDir": "lambda/eu-west-1_MensaAuskunft"
+        },
+        "interfaces": []
+      }
+    },
+    "manifestVersion": "1.0",
+    "publishingInformation": {
+      "locales": {
+        "de-DE": {
+          "name": "Mensa-Auskunft"
+        }
+      }
+    }
+  }
+}

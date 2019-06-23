@@ -1,0 +1,33 @@
+{
+  "deploy_settings": {
+    "default": {
+      "skill_id": "amzn1.ask.skill.1d90ac7e-8fc5-467c-89a2-1b4e3c3baa73",
+      "was_cloned": false,
+      "merge": {},
+      "resources": {
+        "manifest": {
+          "eTag": "c7ee91222f61bac964b2eb33895231ec"
+        },
+        "interactionModel": {
+          "de-DE": {
+            "eTag": "0653b88188c8f78eb10b27c9c170cf8d"
+          }
+        },
+        "lambda": [
+          {
+            "alexaUsage": [
+              "custom/default"
+            ],
+            "arn": "arn:aws:lambda:eu-west-1:198829071387:function:MensaAuskunft",
+            "awsRegion": "eu-west-1",
+            "codeUri": "lambda/eu-west-1_MensaAuskunft",
+            "functionName": "MensaAuskunft",
+            "handler": "lambda_function.lambda_handler",
+            "revisionId": "46ae7ee4-2805-4029-b112-92c669961204",
+            "runtime": "python3.7"
+          }
+        ]
+      }
+    }
+  }
+}
