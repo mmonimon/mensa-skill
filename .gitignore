@@ -55,6 +55,7 @@ six-1.12.0.dist-info/
 urllib3/
 urllib3-1.25.3.dist-info/
 werkzeug/
+six.py
 build/
 develop-eggs/
 dist/
