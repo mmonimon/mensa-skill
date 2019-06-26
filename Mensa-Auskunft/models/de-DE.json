@@ -1,442 +1,623 @@
 {
   "interactionModel": {
-    "languageModel": {
-      "invocationName": "mensa auskunft",
-      "intents": [
-        {
-          "name": "AMAZON.CancelIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.HelpIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.StopIntent",
-          "samples": []
-        },
-        {
-          "name": "PetMatchIntent",
-          "slots": [
-            {
-              "name": "pet",
-              "type": "AMAZON.Animal"
-            },
-            {
-              "name": "size",
-              "type": "sizeType",
-              "samples": [
-                "{I_Want} {article} {size} {pet}",
-                "{I_Want} {size}",
-                "the {size}",
-                "Something i can {size}",
-                "{size} size",
-                "{I_Want} {article} {size} {pet} that {energy}",
-                "{I_Want} {article} {size} {temperament} {pet}",
-                "{I_Want} {article} {size} {temperament} to {energy}",
-                " {temperament} {pet}",
-                "{energy} energy",
-                "{size}"
-              ]
-            },
-            {
-              "name": "temperament",
-              "type": "temperamentType",
-              "samples": [
-                "{temperament} {pet}"
-              ]
-            },
-            {
-              "name": "I_Want",
-              "type": "IWantType"
-            },
-            {
-              "name": "energy",
-              "type": "energyType",
-              "samples": [
-                "{energy} energy",
-                "{I_Want} to {energy}"
-              ]
-            },
-            {
-              "name": "article",
-              "type": "articleType"
-            },
-            {
-              "name": "at_the",
-              "type": "atTheType"
-            }
+      "languageModel": {
+          "invocationName": "mensa auskunft",
+          "intents": [
+              {
+                  "name": "AMAZON.CancelIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.HelpIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.StopIntent",
+                  "samples": []
+              },
+              {
+                  "name": "ListDishesIntent",
+                  "slots": [
+                      {
+                          "name": "date",
+                          "type": "AMAZON.DATE",
+                          "samples": [
+                              "{date}"
+                          ]
+                      },
+                      {
+                          "name": "mensa_name",
+                          "type": "mensa_name",
+                          "samples": [
+                              "{mensa_name}"
+                          ]
+                      },
+                      {
+                          "name": "ingredient",
+                          "type": "AMAZON.Food"
+                      }
+                  ],
+                  "samples": [
+                      "such mir {ingredient} gerichte für {date} von der {mensa_name}",
+                      "sag mir welche gerichte es gibt",
+                      "gib mir gerichte",
+                      "was gibt es {date} in der {mensa_name}",
+                      "was gibt es am {date} in der mensa "
+                  ]
+              },
+              {
+                  "name": "AMAZON.FallbackIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.NavigateHomeIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AddressIntent",
+                  "slots": [
+                      {
+                          "name": "mensa_name",
+                          "type": "mensa_name",
+                          "samples": [
+                              "{mensa_name}"
+                          ]
+                      }
+                  ],
+                  "samples": [
+                      "wie ist die adresse der {mensa_name}"
+                  ]
+              },
+              {
+                  "name": "PriceIntent",
+                  "slots": [
+                      {
+                          "name": "number",
+                          "type": "AMAZON.NUMBER",
+                          "samples": [
+                              "{number}"
+                          ]
+                      },
+                      {
+                          "name": "user_group",
+                          "type": "user_group"
+                      }
+                  ],
+                  "samples": [
+                      "wie viel kostet das {number} für {user_group}",
+                      "wie viel kostet das {number}",
+                      "wie viel kostet das"
+                  ]
+              },
+              {
+                  "name": "ListMensasIntent",
+                  "slots": [
+                      {
+                          "name": "city",
+                          "type": "AMAZON.DE_CITY"
+                      }
+                  ],
+                  "samples": [
+                      "welche mensas gibt es in {city}"
+                  ]
+              },
+              {
+                  "name": "IngredientIntent",
+                  "slots": [
+                      {
+                          "name": "ingredient",
+                          "type": "AMAZON.Food",
+                          "samples": [
+                              "{ingredient}"
+                          ]
+                      }
+                  ],
+                  "samples": [
+                      "gibt es {ingredient} gerichte"
+                  ]
+              },
+              {
+                  "name": "WithoutIntent",
+                  "slots": [
+                      {
+                          "name": "ingredient",
+                          "type": "AMAZON.Food",
+                          "samples": [
+                              "{ingredient}"
+                          ]
+                      }
+                  ],
+                  "samples": [
+                      "gibt es gerichte ohne {ingredient}"
+                  ]
+              }
           ],
-          "samples": [
-            "{I_Want} {article} {pet}",
-            "{I_Want} {article} {size} {temperament} dog",
-            "find a pet",
-            "match me",
-            "{size} {pet}",
-            "for a {pet}",
-            "{I_Want} {article} {pet} that is {temperament} and {energy}",
-            "{energy} {pet}",
-            "{I_Want} {article} {energy} {pet}",
-            "{I_Want} {article} {temperament} dog that is {energy} energy"
+          "types": [
+              {
+                  "name": "mensa_name",
+                  "values": [
+                      {
+                          "name": {
+                              "value": "mensa unicampus magdeburg"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "magdeburg herrenkurg"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa stendal"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa wernigerode"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "domcafete halberstadt"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "hannover hauptmensa"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "hannover contine"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa pzh"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa caballus"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa tiho-tower"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa hmtmh"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa ricklinger stadtweg"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "hannover mensacafeteria blumhardtstraße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "hannover mensa große pause"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "hannover cafeteria herrenhausen"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "hannover hauptmensa marktstand"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "hannover restaurant c. t."
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa beuth hochschule für technik kurfürstenstraße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa htw wilhelminenhof"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa ash berlin hellersdorf"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa fu ii otto-von-simson-straße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa hwr badensche straße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa htw treskowallee"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "karlsruhe mensa am adenauerring"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "karlsruhe mensa moltke"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "karlsruhe mensa erzbergerstraße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "karlsruhe mensa schloss gottesaue"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "pforzheim mensa tiefenbronner straße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa tu hardenbergstraße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa hu spandauer straße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa ehb teltower damm"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "pforzheim mensa holzgartenstraße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa khs weißensee"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa fu herrenhaus düppel"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa hu süd"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa hu nord"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa beuth hochschule für technik luxemburger straße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa hu oase adlershof"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa hfm charlottenstraße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa fu lankwitz malteserstraße"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa katholische hs für sozialwesen"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa am neuen palais"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa kiepenheuerallee"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa wildau"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa brandenburg"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa golm"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mensa griebnitzsee"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "leipzig mensa am park"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "leipzig mensa academica"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "leipzig mensa am elsterbecken"
+                          }
+                      }
+                  ]
+              },
+              {
+                  "name": "user_group",
+                  "values": [
+                      {
+                          "name": {
+                              "value": "schüler"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "mitarbeiter"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "besucher",
+                              "synonyms": [
+                                  "andere"
+                              ]
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "studenten"
+                          }
+                      }
+                  ]
+              },
+              {
+                  "name": "AMAZON.Food",
+                  "values": [
+                      {
+                          "name": {
+                              "value": "geflügel"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "fleisch"
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "vegane",
+                              "synonyms": [
+                                  "veganes",
+                                  "vegan"
+                              ]
+                          }
+                      },
+                      {
+                          "name": {
+                              "value": "vegetarische",
+                              "synonyms": [
+                                  "vegetarisches",
+                                  "vegetarisch"
+                              ]
+                          }
+                      }
+                  ]
+              }
           ]
-        },
-        {
-          "name": "AMAZON.FallbackIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.NavigateHomeIntent",
-          "samples": []
-        }
-      ],
-      "types": [
-        {
-          "values": [
-            {
-              "name": {
-                "value": "a"
+      },
+      "dialog": {
+          "intents": [
+              {
+                  "name": "PriceIntent",
+                  "confirmationRequired": false,
+                  "prompts": {},
+                  "slots": [
+                      {
+                          "name": "number",
+                          "type": "AMAZON.NUMBER",
+                          "confirmationRequired": false,
+                          "elicitationRequired": true,
+                          "prompts": {
+                              "elicitation": "Elicit.Slot.1442739773155.397611828099"
+                          }
+                      },
+                      {
+                          "name": "user_group",
+                          "type": "user_group",
+                          "confirmationRequired": false,
+                          "elicitationRequired": false,
+                          "prompts": {}
+                      }
+                  ]
+              },
+              {
+                  "name": "AddressIntent",
+                  "confirmationRequired": false,
+                  "prompts": {},
+                  "slots": [
+                      {
+                          "name": "mensa_name",
+                          "type": "mensa_name",
+                          "confirmationRequired": false,
+                          "elicitationRequired": true,
+                          "prompts": {
+                              "elicitation": "Elicit.Slot.661953623319.1316003562014"
+                          }
+                      }
+                  ]
+              },
+              {
+                  "name": "ListDishesIntent",
+                  "confirmationRequired": false,
+                  "prompts": {},
+                  "slots": [
+                      {
+                          "name": "date",
+                          "type": "AMAZON.DATE",
+                          "confirmationRequired": false,
+                          "elicitationRequired": true,
+                          "prompts": {
+                              "elicitation": "Elicit.Slot.1064646129460.197704333503"
+                          }
+                      },
+                      {
+                          "name": "mensa_name",
+                          "type": "mensa_name",
+                          "confirmationRequired": false,
+                          "elicitationRequired": true,
+                          "prompts": {
+                              "elicitation": "Elicit.Slot.1064646129460.1106937306601"
+                          }
+                      },
+                      {
+                          "name": "ingredient",
+                          "type": "AMAZON.Food",
+                          "confirmationRequired": false,
+                          "elicitationRequired": false,
+                          "prompts": {}
+                      }
+                  ]
+              },
+              {
+                  "name": "IngredientIntent",
+                  "confirmationRequired": false,
+                  "prompts": {},
+                  "slots": [
+                      {
+                          "name": "ingredient",
+                          "type": "AMAZON.Food",
+                          "confirmationRequired": false,
+                          "elicitationRequired": true,
+                          "prompts": {
+                              "elicitation": "Elicit.Slot.857497789458.1463405389155"
+                          }
+                      }
+                  ]
+              },
+              {
+                  "name": "WithoutIntent",
+                  "confirmationRequired": false,
+                  "prompts": {},
+                  "slots": [
+                      {
+                          "name": "ingredient",
+                          "type": "AMAZON.Food",
+                          "confirmationRequired": false,
+                          "elicitationRequired": true,
+                          "prompts": {
+                              "elicitation": "Elicit.Slot.687239636642.1463776098980"
+                          }
+                      }
+                  ]
               }
-            },
-            {
-              "name": {
-                "value": "an"
-              }
-            },
-            {
-              "name": {
-                "value": "the"
-              }
-            }
           ],
-          "name": "articleType"
-        },
-        {
-          "values": [
-            {
-              "name": {
-                "value": "at the"
-              }
-            },
-            {
-              "name": {
-                "value": "on the"
-              }
-            },
-            {
-              "name": {
-                "value": "around the"
-              }
-            },
-            {
-              "name": {
-                "value": "in the"
-              }
-            }
-          ],
-          "name": "atTheType"
-        },
-        {
-          "values": [
-            {
-              "name": {
-                "value": "low",
-                "synonyms": [
-                  "low energy",
-                  "to cuddle with",
-                  "to watch netflix with",
-                  "lazy"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "medium",
-                "synonyms": [
-                  "medium energy",
-                  "for my apartment",
-                  "fun to play with",
-                  "tug of war",
-                  "plays tug of war"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "high",
-                "synonyms": [
-                  "that I can run with",
-                  "play frisbee",
-                  "run",
-                  "hike",
-                  "go hiking",
-                  "play fetch",
-                  "energetic",
-                  "high energy"
-                ]
-              }
-            }
-          ],
-          "name": "energyType"
-        },
-        {
-          "values": [
-            {
-              "name": {
-                "value": "my favorite is"
-              }
-            },
-            {
-              "name": {
-                "value": "I prefer"
-              }
-            },
-            {
-              "name": {
-                "value": "let's find"
-              }
-            },
-            {
-              "name": {
-                "value": "we like"
-              }
-            },
-            {
-              "name": {
-                "value": "we would like"
-              }
-            },
-            {
-              "name": {
-                "value": "how about"
-              }
-            },
-            {
-              "name": {
-                "value": "I want"
-              }
-            },
-            {
-              "name": {
-                "value": "I like"
-              }
-            }
-          ],
-          "name": "IWantType"
-        },
-        {
-          "values": [
-            {
-              "name": {
-                "value": "large",
-                "synonyms": [
-                  "large size",
-                  "huge",
-                  "truck",
-                  "gigantic",
-                  "eat me out of house",
-                  "scary big",
-                  "ginormous",
-                  "ride",
-                  "waist height"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "medium",
-                "synonyms": [
-                  "medium size",
-                  "bigger than a cat",
-                  "on the bed",
-                  "up to my knees",
-                  "average"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "small",
-                "synonyms": [
-                  "small size",
-                  "little",
-                  "take on an airplane"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "tiny",
-                "synonyms": [
-                  "tiny size",
-                  "cheap to feed",
-                  "teacup",
-                  "pocket",
-                  "yippy",
-                  "carry in my purse",
-                  "put in my pocket",
-                  "itty bitty"
-                ]
-              }
-            }
-          ],
-          "name": "sizeType"
-        },
-        {
-          "values": [
-            {
-              "name": {
-                "value": "watch",
-                "synonyms": [
-                  "adult",
-                  "barks at people"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "guard",
-                "synonyms": [
-                  "to protect me",
-                  "protective"
-                ]
-              }
-            },
-            {
-              "name": {
-                "value": "family",
-                "synonyms": [
-                  "hang out",
-                  "hang out with kids",
-                  "is kid friendly",
-                  "good with kids",
-                  "family friends",
-                  "gentle with kids"
-                ]
-              }
-            }
-          ],
-          "name": "temperamentType"
-        },
-        {
-          "values": [
-            {
-              "name": {
-                "value": "mythical_creatures",
-                "synonyms": [
-                  "unicorn",
-                  "chimera",
-                  "dragon"
-                ]
-              }
-            }
-          ],
-          "name": "AMAZON.Animal"
-        }
-      ]
-    },
-    "dialog": {
-      "intents": [
-        {
-          "name": "PetMatchIntent",
-          "confirmationRequired": false,
-          "prompts": {},
-          "slots": [
-            {
-              "name": "pet",
-              "type": "AMAZON.Animal",
-              "elicitationRequired": false,
-              "confirmationRequired": false,
-              "prompts": {}
-            },
-            {
-              "name": "size",
-              "type": "sizeType",
-              "elicitationRequired": true,
-              "confirmationRequired": false,
-              "prompts": {
-                "elicitation": "Elicit.Intent-PetMatchIntent.IntentSlot-size"
-              }
-            },
-            {
-              "name": "temperament",
-              "type": "temperamentType",
-              "elicitationRequired": true,
-              "confirmationRequired": false,
-              "prompts": {
-                "elicitation": "Elicit.Intent-PetMatchIntent.IntentSlot-temperament"
-              }
-            },
-            {
-              "name": "I_Want",
-              "type": "IWantType",
-              "elicitationRequired": false,
-              "confirmationRequired": false,
-              "prompts": {}
-            },
-            {
-              "name": "energy",
-              "type": "energyType",
-              "elicitationRequired": true,
-              "confirmationRequired": false,
-              "prompts": {
-                "elicitation": "Elicit.Intent-PetMatchIntent.IntentSlot-energy"
-              }
-            },
-            {
-              "name": "article",
-              "type": "articleType",
-              "elicitationRequired": false,
-              "confirmationRequired": false,
-              "prompts": {}
-            },
-            {
-              "name": "at_the",
-              "type": "atTheType",
-              "elicitationRequired": false,
-              "confirmationRequired": false,
-              "prompts": {}
-            }
-          ]
-        }
-      ]
-    },
-    "prompts": [
-      {
-        "id": "Elicit.Intent-PetMatchIntent.IntentSlot-size",
-        "variations": [
+          "delegationStrategy": "ALWAYS"
+      },
+      "prompts": [
           {
-            "type": "PlainText",
-            "value": "There are dogs that are tiny, small, medium, and large. Which would you like?"
+              "id": "Elicit.Slot.1442739773155.397611828099",
+              "variations": [
+                  {
+                      "type": "PlainText",
+                      "value": "welche nummer?"
+                  }
+              ]
           },
           {
-            "type": "PlainText",
-            "value": "What size of a dog would you like?"
-          }
-        ]
-      },
-      {
-        "id": "Elicit.Intent-PetMatchIntent.IntentSlot-temperament",
-        "variations": [
-          {
-            "type": "PlainText",
-            "value": "Are you looking for more of a family dog or a guard dog?"
+              "id": "Elicit.Slot.661953623319.1316003562014",
+              "variations": [
+                  {
+                      "type": "PlainText",
+                      "value": "welche mensa?"
+                  }
+              ]
           },
           {
-            "type": "PlainText",
-            "value": "Would you prefer a dog to hang out with kids or to protect you?"
-          }
-        ]
-      },
-      {
-        "id": "Elicit.Intent-PetMatchIntent.IntentSlot-energy",
-        "variations": [
+              "id": "Elicit.Slot.1064646129460.1106937306601",
+              "variations": [
+                  {
+                      "type": "PlainText",
+                      "value": "für welche mensa möchtest du eine auskunft haben?"
+                  },
+                  {
+                      "type": "PlainText",
+                      "value": "welche mensa?"
+                  }
+              ]
+          },
           {
-            "type": "PlainText",
-            "value": "Do you prefer high energy or low energy dogs?"
+              "id": "Elicit.Slot.1064646129460.197704333503",
+              "variations": [
+                  {
+                      "type": "PlainText",
+                      "value": "für wann?"
+                  }
+              ]
+          },
+          {
+              "id": "Elicit.Slot.857497789458.1463405389155",
+              "variations": [
+                  {
+                      "type": "PlainText",
+                      "value": "welche zutat?"
+                  }
+              ]
+          },
+          {
+              "id": "Elicit.Slot.687239636642.1463776098980",
+              "variations": [
+                  {
+                      "type": "PlainText",
+                      "value": "ohne welcher zutat?"
+                  }
+              ]
           }
-        ]
-      }
-    ]
-  },
-  "version": "1"
+      ]
+  }
 }

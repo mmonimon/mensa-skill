@@ -5,6 +5,8 @@ import requests
 import six
 import random
 
+from flask import Flask
+from flask_ask_sdk.skill_adapter import SkillAdapter
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.dispatch_components import (
@@ -13,15 +15,16 @@ from ask_sdk_core.dispatch_components import (
 from ask_sdk_core.utils import is_intent_name, is_request_type
 
 from typing import Union, Dict, Any, List
-from ask_sdk_model.dialog import (
-    ElicitSlotDirective, DelegateDirective)
-from ask_sdk_model import (
-    Response, IntentRequest, DialogState, SlotConfirmationStatus, Slot)
+from ask_sdk_model.dialog import (ElicitSlotDirective, DelegateDirective)
+from ask_sdk_model import (Response, IntentRequest, DialogState, SlotConfirmationStatus, Slot)
 from ask_sdk_model.slu.entityresolution import StatusCode
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+app = Flask(__name__)
 
+# Skill Builder object
+sb = SkillBuilder()
 
 # Request Handler classes
 class LaunchRequestHandler(AbstractRequestHandler):
@@ -33,10 +36,8 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In LaunchRequestHandler")
-        speech = ('Welcome to pet match. I can help you find the best dog '
-                  'for you. What are two things you are looking for in a '
-                  'dog?')
-        reprompt = "What size and temperament are you looking for in a dog?"
+        speech = ('Willkommen bei der Mensa-Auskunft!')
+        reprompt = "Suchst du nach dem Tagesplan, der Adresse einer Mensa oder eine Auflistung aller Mensen in deiner Stadt?"
         handler_input.response_builder.speak(speech).ask(reprompt)
         return handler_input.response_builder.response
 
@@ -280,6 +281,9 @@ pet_match_api = {
 }
 
 
+api_url_base = "https://openmensa.org/api/v2/canteens"
+all_mensas = requests.get(api_url_base).json() # all mensas with names, cities, addresses, ids
+
 # Utility functions
 def get_resolved_value(request, slot_name):
     """Resolve the slot name from the request using resolutions."""
@@ -360,8 +364,7 @@ def http_get(http_options):
     return response.json()
 
 
-# Skill Builder object
-sb = SkillBuilder()
+
 
 # Add all request handlers to the skill.
 sb.add_request_handler(LaunchRequestHandler())
@@ -382,3 +385,16 @@ sb.add_global_response_interceptor(ResponseLogger())
 
 # Expose the lambda handler to register in AWS Lambda.
 lambda_handler = sb.lambda_handler()
+
+# ---
+skill_adapter = SkillAdapter(
+    skill=sb.create(), skill_id='TEST', app=app)
+
+
+@app.route("/", methods=['POST'])
+def invoke_skill():
+    return skill_adapter.dispatch_request()
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

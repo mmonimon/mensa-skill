@@ -1,0 +1,15 @@
+ask_sdk_webservice_support-0.1.2.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+ask_sdk_webservice_support-0.1.2.dist-info/METADATA,sha256=oycWHx38EoDcgBDVe3efYQ3bkq_Gn-x8AaCTx_Nh4s0,4181
+ask_sdk_webservice_support-0.1.2.dist-info/RECORD,,
+ask_sdk_webservice_support-0.1.2.dist-info/WHEEL,sha256=gduuPyBvFJQSQ0zdyxF7k0zynDXbIbvg5ZBHoXum5uk,110
+ask_sdk_webservice_support-0.1.2.dist-info/top_level.txt,sha256=-9kynO04fjgGS20gTDpEbrEZLOez97ekF4TOisCuTq0,27
+ask_sdk_webservice_support/__init__.py,sha256=IcoO9pX-nozlYUnlElCiO8wqGpqxzPftaJzYujSHWbc,593
+ask_sdk_webservice_support/__pycache__/__init__.cpython-37.pyc,,
+ask_sdk_webservice_support/__pycache__/__version__.cpython-37.pyc,,
+ask_sdk_webservice_support/__pycache__/verifier.cpython-37.pyc,,
+ask_sdk_webservice_support/__pycache__/verifier_constants.cpython-37.pyc,,
+ask_sdk_webservice_support/__pycache__/webservice_handler.cpython-37.pyc,,
+ask_sdk_webservice_support/__version__.py,sha256=JK_wBfJH9NXSjym7dGNnbWIM6Gl9a5R4Bmk3D0OVKUE,1198
+ask_sdk_webservice_support/verifier.py,sha256=xDWDxtPBdpyxNTO6DTt-6AM9sVd0e3lfO5KxCpyRGSw,19454
+ask_sdk_webservice_support/verifier_constants.py,sha256=gL1gjkmBntn47wvp1uT3R_Bb4YjtNvSwqrefE9p2avA,3157
+ask_sdk_webservice_support/webservice_handler.py,sha256=jGx34OVgjC8y4h9x1OBOgrYlFINdMiSK90z72hbpaho,6191
