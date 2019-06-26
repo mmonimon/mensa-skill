@@ -1,623 +1,673 @@
 {
-  "interactionModel": {
-      "languageModel": {
-          "invocationName": "mensa auskunft",
-          "intents": [
-              {
-                  "name": "AMAZON.CancelIntent",
-                  "samples": []
-              },
-              {
-                  "name": "AMAZON.HelpIntent",
-                  "samples": []
-              },
-              {
-                  "name": "AMAZON.StopIntent",
-                  "samples": []
-              },
-              {
-                  "name": "ListDishesIntent",
-                  "slots": [
-                      {
-                          "name": "date",
-                          "type": "AMAZON.DATE",
-                          "samples": [
-                              "{date}"
-                          ]
-                      },
-                      {
-                          "name": "mensa_name",
-                          "type": "mensa_name",
-                          "samples": [
-                              "{mensa_name}"
-                          ]
-                      },
-                      {
-                          "name": "ingredient",
-                          "type": "AMAZON.Food"
-                      }
-                  ],
-                  "samples": [
-                      "such mir {ingredient} gerichte für {date} von der {mensa_name}",
-                      "sag mir welche gerichte es gibt",
-                      "gib mir gerichte",
-                      "was gibt es {date} in der {mensa_name}",
-                      "was gibt es am {date} in der mensa "
-                  ]
-              },
-              {
-                  "name": "AMAZON.FallbackIntent",
-                  "samples": []
-              },
-              {
-                  "name": "AMAZON.NavigateHomeIntent",
-                  "samples": []
-              },
-              {
-                  "name": "AddressIntent",
-                  "slots": [
-                      {
-                          "name": "mensa_name",
-                          "type": "mensa_name",
-                          "samples": [
-                              "{mensa_name}"
-                          ]
-                      }
-                  ],
-                  "samples": [
-                      "wie ist die adresse der {mensa_name}"
-                  ]
-              },
-              {
-                  "name": "PriceIntent",
-                  "slots": [
-                      {
-                          "name": "number",
-                          "type": "AMAZON.NUMBER",
-                          "samples": [
-                              "{number}"
-                          ]
-                      },
-                      {
-                          "name": "user_group",
-                          "type": "user_group"
-                      }
-                  ],
-                  "samples": [
-                      "wie viel kostet das {number} für {user_group}",
-                      "wie viel kostet das {number}",
-                      "wie viel kostet das"
-                  ]
-              },
-              {
-                  "name": "ListMensasIntent",
-                  "slots": [
-                      {
-                          "name": "city",
-                          "type": "AMAZON.DE_CITY"
-                      }
-                  ],
-                  "samples": [
-                      "welche mensas gibt es in {city}"
-                  ]
-              },
-              {
-                  "name": "IngredientIntent",
-                  "slots": [
-                      {
-                          "name": "ingredient",
-                          "type": "AMAZON.Food",
-                          "samples": [
-                              "{ingredient}"
-                          ]
-                      }
-                  ],
-                  "samples": [
-                      "gibt es {ingredient} gerichte"
-                  ]
-              },
-              {
-                  "name": "WithoutIntent",
-                  "slots": [
-                      {
-                          "name": "ingredient",
-                          "type": "AMAZON.Food",
-                          "samples": [
-                              "{ingredient}"
-                          ]
-                      }
-                  ],
-                  "samples": [
-                      "gibt es gerichte ohne {ingredient}"
-                  ]
-              }
-          ],
-          "types": [
-              {
-                  "name": "mensa_name",
-                  "values": [
-                      {
-                          "name": {
-                              "value": "mensa unicampus magdeburg"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "magdeburg herrenkurg"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa stendal"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa wernigerode"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "domcafete halberstadt"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "hannover hauptmensa"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "hannover contine"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa pzh"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa caballus"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa tiho-tower"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa hmtmh"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa ricklinger stadtweg"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "hannover mensacafeteria blumhardtstraße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "hannover mensa große pause"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "hannover cafeteria herrenhausen"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "hannover hauptmensa marktstand"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "hannover restaurant c. t."
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa beuth hochschule für technik kurfürstenstraße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa htw wilhelminenhof"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa ash berlin hellersdorf"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa fu ii otto-von-simson-straße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa hwr badensche straße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa htw treskowallee"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "karlsruhe mensa am adenauerring"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "karlsruhe mensa moltke"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "karlsruhe mensa erzbergerstraße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "karlsruhe mensa schloss gottesaue"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "pforzheim mensa tiefenbronner straße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa tu hardenbergstraße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa hu spandauer straße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa ehb teltower damm"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "pforzheim mensa holzgartenstraße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa khs weißensee"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa fu herrenhaus düppel"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa hu süd"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa hu nord"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa beuth hochschule für technik luxemburger straße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa hu oase adlershof"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa hfm charlottenstraße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa fu lankwitz malteserstraße"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa katholische hs für sozialwesen"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa am neuen palais"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa kiepenheuerallee"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa wildau"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa brandenburg"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa golm"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mensa griebnitzsee"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "leipzig mensa am park"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "leipzig mensa academica"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "leipzig mensa am elsterbecken"
-                          }
-                      }
-                  ]
-              },
-              {
-                  "name": "user_group",
-                  "values": [
-                      {
-                          "name": {
-                              "value": "schüler"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "mitarbeiter"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "besucher",
-                              "synonyms": [
-                                  "andere"
-                              ]
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "studenten"
-                          }
-                      }
-                  ]
-              },
-              {
-                  "name": "AMAZON.Food",
-                  "values": [
-                      {
-                          "name": {
-                              "value": "geflügel"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "fleisch"
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "vegane",
-                              "synonyms": [
-                                  "veganes",
-                                  "vegan"
-                              ]
-                          }
-                      },
-                      {
-                          "name": {
-                              "value": "vegetarische",
-                              "synonyms": [
-                                  "vegetarisches",
-                                  "vegetarisch"
-                              ]
-                          }
-                      }
-                  ]
-              }
-          ]
-      },
-      "dialog": {
-          "intents": [
-              {
-                  "name": "PriceIntent",
-                  "confirmationRequired": false,
-                  "prompts": {},
-                  "slots": [
-                      {
-                          "name": "number",
-                          "type": "AMAZON.NUMBER",
-                          "confirmationRequired": false,
-                          "elicitationRequired": true,
-                          "prompts": {
-                              "elicitation": "Elicit.Slot.1442739773155.397611828099"
-                          }
-                      },
-                      {
-                          "name": "user_group",
-                          "type": "user_group",
-                          "confirmationRequired": false,
-                          "elicitationRequired": false,
-                          "prompts": {}
-                      }
-                  ]
-              },
-              {
-                  "name": "AddressIntent",
-                  "confirmationRequired": false,
-                  "prompts": {},
-                  "slots": [
-                      {
-                          "name": "mensa_name",
-                          "type": "mensa_name",
-                          "confirmationRequired": false,
-                          "elicitationRequired": true,
-                          "prompts": {
-                              "elicitation": "Elicit.Slot.661953623319.1316003562014"
-                          }
-                      }
-                  ]
-              },
-              {
-                  "name": "ListDishesIntent",
-                  "confirmationRequired": false,
-                  "prompts": {},
-                  "slots": [
-                      {
-                          "name": "date",
-                          "type": "AMAZON.DATE",
-                          "confirmationRequired": false,
-                          "elicitationRequired": true,
-                          "prompts": {
-                              "elicitation": "Elicit.Slot.1064646129460.197704333503"
-                          }
-                      },
-                      {
-                          "name": "mensa_name",
-                          "type": "mensa_name",
-                          "confirmationRequired": false,
-                          "elicitationRequired": true,
-                          "prompts": {
-                              "elicitation": "Elicit.Slot.1064646129460.1106937306601"
-                          }
-                      },
-                      {
-                          "name": "ingredient",
-                          "type": "AMAZON.Food",
-                          "confirmationRequired": false,
-                          "elicitationRequired": false,
-                          "prompts": {}
-                      }
-                  ]
-              },
-              {
-                  "name": "IngredientIntent",
-                  "confirmationRequired": false,
-                  "prompts": {},
-                  "slots": [
-                      {
-                          "name": "ingredient",
-                          "type": "AMAZON.Food",
-                          "confirmationRequired": false,
-                          "elicitationRequired": true,
-                          "prompts": {
-                              "elicitation": "Elicit.Slot.857497789458.1463405389155"
-                          }
-                      }
-                  ]
-              },
-              {
-                  "name": "WithoutIntent",
-                  "confirmationRequired": false,
-                  "prompts": {},
-                  "slots": [
-                      {
-                          "name": "ingredient",
-                          "type": "AMAZON.Food",
-                          "confirmationRequired": false,
-                          "elicitationRequired": true,
-                          "prompts": {
-                              "elicitation": "Elicit.Slot.687239636642.1463776098980"
-                          }
-                      }
-                  ]
-              }
-          ],
-          "delegationStrategy": "ALWAYS"
-      },
-      "prompts": [
-          {
-              "id": "Elicit.Slot.1442739773155.397611828099",
-              "variations": [
-                  {
-                      "type": "PlainText",
-                      "value": "welche nummer?"
-                  }
-              ]
-          },
-          {
-              "id": "Elicit.Slot.661953623319.1316003562014",
-              "variations": [
-                  {
-                      "type": "PlainText",
-                      "value": "welche mensa?"
-                  }
-              ]
-          },
-          {
-              "id": "Elicit.Slot.1064646129460.1106937306601",
-              "variations": [
-                  {
-                      "type": "PlainText",
-                      "value": "für welche mensa möchtest du eine auskunft haben?"
-                  },
-                  {
-                      "type": "PlainText",
-                      "value": "welche mensa?"
-                  }
-              ]
-          },
-          {
-              "id": "Elicit.Slot.1064646129460.197704333503",
-              "variations": [
-                  {
-                      "type": "PlainText",
-                      "value": "für wann?"
-                  }
-              ]
-          },
-          {
-              "id": "Elicit.Slot.857497789458.1463405389155",
-              "variations": [
-                  {
-                      "type": "PlainText",
-                      "value": "welche zutat?"
-                  }
-              ]
-          },
-          {
-              "id": "Elicit.Slot.687239636642.1463776098980",
-              "variations": [
-                  {
-                      "type": "PlainText",
-                      "value": "ohne welcher zutat?"
-                  }
-              ]
-          }
-      ]
-  }
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "mensa auskunft",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "ListDishesIntent",
+                    "slots": [
+                        {
+                            "name": "date",
+                            "type": "AMAZON.DATE",
+                            "samples": [
+                                "{date}"
+                            ]
+                        },
+                        {
+                            "name": "mensa_name",
+                            "type": "mensa_name",
+                            "samples": [
+                                "{mensa_name}"
+                            ]
+                        },
+                        {
+                            "name": "ingredient",
+                            "type": "AMAZON.Food"
+                        }
+                    ],
+                    "samples": [
+                        "such mir {ingredient} gerichte für {date} von der {mensa_name}",
+                        "sag mir welche gerichte es gibt",
+                        "gib mir gerichte",
+                        "was gibt es {date} in der {mensa_name}",
+                        "was gibt es am {date} in der mensa "
+                    ]
+                },
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AddressIntent",
+                    "slots": [
+                        {
+                            "name": "mensa_name",
+                            "type": "mensa_name",
+                            "samples": [
+                                "{mensa_name}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "wie ist die adresse der {mensa_name}"
+                    ]
+                },
+                {
+                    "name": "PriceIntent",
+                    "slots": [
+                        {
+                            "name": "number",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "{number}"
+                            ]
+                        },
+                        {
+                            "name": "user_group",
+                            "type": "user_group"
+                        }
+                    ],
+                    "samples": [
+                        "wie viel kostet das {number} für {user_group}",
+                        "wie viel kostet das {number}",
+                        "wie viel kostet das"
+                    ]
+                },
+                {
+                    "name": "ListMensasIntent",
+                    "slots": [
+                        {
+                            "name": "city",
+                            "type": "AMAZON.DE_CITY"
+                        }
+                    ],
+                    "samples": [
+                        "welche mensas gibt es in {city}"
+                    ]
+                },
+                {
+                    "name": "IngredientIntent",
+                    "slots": [
+                        {
+                            "name": "ingredient",
+                            "type": "AMAZON.Food",
+                            "samples": [
+                                "{ingredient}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "gibt es {ingredient} gerichte"
+                    ]
+                },
+                {
+                    "name": "WithoutIntent",
+                    "slots": [
+                        {
+                            "name": "ingredient",
+                            "type": "AMAZON.Food",
+                            "samples": [
+                                "{ingredient}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "gibt es gerichte ohne {ingredient}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "mensa_name",
+                    "values": [
+                        {
+                            "id": "1",
+                            "name": {
+                                "value": "mensa unicampus magdeburg"
+                            }
+                        },
+                        {
+                            "id": "2",
+                            "name": {
+                                "value": "magdeburg herrenkurg"
+                            }
+                        },
+                        {
+                            "id": "3",
+                            "name": {
+                                "value": "mensa stendal"
+                            }
+                        },
+                        {
+                            "id": "4",
+                            "name": {
+                                "value": "mensa wernigerode"
+                            }
+                        },
+                        {
+                            "id": "5",
+                            "name": {
+                                "value": "domcafete halberstadt"
+                            }
+                        },
+                        {
+                            "id": "6",
+                            "name": {
+                                "value": "hannover hauptmensa"
+                            }
+                        },
+                        {
+                            "id": "7",
+                            "name": {
+                                "value": "hannover contine"
+                            }
+                        },
+                        {
+                            "id": "8",
+                            "name": {
+                                "value": "mensa pzh"
+                            }
+                        },
+                        {
+                            "id": "9",
+                            "name": {
+                                "value": "mensa caballus"
+                            }
+                        },
+                        {
+                            "id": "10",
+                            "name": {
+                                "value": "mensa tiho-tower"
+                            }
+                        },
+                        {
+                            "id": "11",
+                            "name": {
+                                "value": "mensa hmtmh"
+                            }
+                        },
+                        {
+                            "id": "12",
+                            "name": {
+                                "value": "mensa ricklinger stadtweg"
+                            }
+                        },
+                        {
+                            "id": "13",
+                            "name": {
+                                "value": "hannover mensacafeteria blumhardtstraße"
+                            }
+                        },
+                        {
+                            "id": "14",
+                            "name": {
+                                "value": "hannover mensa große pause"
+                            }
+                        },
+                        {
+                            "id": "15",
+                            "name": {
+                                "value": "hannover cafeteria herrenhausen"
+                            }
+                        },
+                        {
+                            "id": "16",
+                            "name": {
+                                "value": "hannover hauptmensa marktstand"
+                            }
+                        },
+                        {
+                            "id": "17",
+                            "name": {
+                                "value": "hannover restaurant c. t."
+                            }
+                        },
+                        {
+                            "id": "19",
+                            "name": {
+                                "value": "mensa beuth hochschule für technik kurfürstenstraße"
+                            }
+                        },
+                        {
+                            "id": "24",
+                            "name": {
+                                "value": "mensa htw wilhelminenhof"
+                            }
+                        },
+                        {
+                            "id": "25",
+                            "name": {
+                                "value": "mensa ash berlin hellersdorf"
+                            }
+                        },
+                        {
+                            "id": "27",
+                            "name": {
+                                "value": "mensa fu ii otto-von-simson-straße"
+                            }
+                        },
+                        {
+                            "id": "29",
+                            "name": {
+                                "value": "mensa hwr badensche straße"
+                            }
+                        },
+                        {
+                            "id": "30",
+                            "name": {
+                                "value": "mensa htw treskowallee"
+                            }
+                        },
+                        {
+                            "id": "31",
+                            "name": {
+                                "value": "karlsruhe mensa am adenauerring"
+                            }
+                        },
+                        {
+                            "id": "32",
+                            "name": {
+                                "value": "karlsruhe mensa moltke"
+                            }
+                        },
+                        {
+                            "id": "33",
+                            "name": {
+                                "value": "karlsruhe mensa erzbergerstraße"
+                            }
+                        },
+                        {
+                            "id": "34",
+                            "name": {
+                                "value": "karlsruhe mensa schloss gottesaue"
+                            }
+                        },
+                        {
+                            "id": "35",
+                            "name": {
+                                "value": "pforzheim mensa tiefenbronner straße"
+                            }
+                        },
+                        {
+                            "id": "36",
+                            "name": {
+                                "value": "mensa tu hardenbergstraße"
+                            }
+                        },
+                        {
+                            "id": "37",
+                            "name": {
+                                "value": "mensa hu spandauer straße"
+                            }
+                        },
+                        {
+                            "id": "38",
+                            "name": {
+                                "value": "mensa ehb teltower damm"
+                            }
+                        },
+                        {
+                            "id": "39",
+                            "name": {
+                                "value": "pforzheim mensa holzgartenstraße"
+                            }
+                        },
+                        {
+                            "id": "40",
+                            "name": {
+                                "value": "mensa khs weißensee"
+                            }
+                        },
+                        {
+                            "id": "42",
+                            "name": {
+                                "value": "mensa fu herrenhaus düppel"
+                            }
+                        },
+                        {
+                            "id": "43",
+                            "name": {
+                                "value": "mensa hu süd"
+                            }
+                        },
+                        {
+                            "id": "48",
+                            "name": {
+                                "value": "mensa hu nord"
+                            }
+                        },
+                        {
+                            "id": "49",
+                            "name": {
+                                "value": "mensa beuth hochschule für technik luxemburger straße"
+                            }
+                        },
+                        {
+                            "id": "50",
+                            "name": {
+                                "value": "mensa hu oase adlershof"
+                            }
+                        },
+                        {
+                            "id": "51",
+                            "name": {
+                                "value": "mensa hfm charlottenstraße"
+                            }
+                        },
+                        {
+                            "id": "52",
+                            "name": {
+                                "value": "mensa fu lankwitz malteserstraße"
+                            }
+                        },
+                        {
+                            "id": "54",
+                            "name": {
+                                "value": "mensa katholische hs für sozialwesen"
+                            }
+                        },
+                        {
+                            "id": "55",
+                            "name": {
+                                "value": "mensa am neuen palais"
+                            }
+                        },
+                        {
+                            "id": "57",
+                            "name": {
+                                "value": "mensa kiepenheuerallee"
+                            }
+                        },
+                        {
+                            "id": "58",
+                            "name": {
+                                "value": "mensa wildau"
+                            }
+                        },
+                        {
+                            "id": "59",
+                            "name": {
+                                "value": "mensa brandenburg"
+                            }
+                        },
+                        {
+                            "id": "61",
+                            "name": {
+                                "value": "mensa golm"
+                            }
+                        },
+                        {
+                            "id": "62",
+                            "name": {
+                                "value": "mensa griebnitzsee"
+                            }
+                        },
+                        {
+                            "id": "63",
+                            "name": {
+                                "value": "leipzig mensa am park"
+                            }
+                        },
+                        {
+                            "id": "64",
+                            "name": {
+                                "value": "leipzig mensa academica"
+                            }
+                        },
+                        {
+                            "id": "65",
+                            "name": {
+                                "value": "leipzig mensa am elsterbecken"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "user_group",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "schüler"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "mitarbeiter"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "besucher",
+                                "synonyms": [
+                                    "andere"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "studenten"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "AMAZON.Food",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "geflügel"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fleisch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "vegane",
+                                "synonyms": [
+                                    "veganes",
+                                    "vegan"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "vegetarische",
+                                "synonyms": [
+                                    "vegetarisches",
+                                    "vegetarisch"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "PriceIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "number",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1442739773155.397611828099"
+                            }
+                        },
+                        {
+                            "name": "user_group",
+                            "type": "user_group",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "AddressIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "mensa_name",
+                            "type": "mensa_name",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.661953623319.1316003562014"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ListDishesIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "date",
+                            "type": "AMAZON.DATE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1064646129460.197704333503"
+                            }
+                        },
+                        {
+                            "name": "mensa_name",
+                            "type": "mensa_name",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1064646129460.1106937306601"
+                            }
+                        },
+                        {
+                            "name": "ingredient",
+                            "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "IngredientIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "ingredient",
+                            "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.857497789458.1463405389155"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "WithoutIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "ingredient",
+                            "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.687239636642.1463776098980"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1442739773155.397611828099",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "welche nummer?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.661953623319.1316003562014",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "welche mensa?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1064646129460.1106937306601",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "für welche mensa möchtest du eine auskunft haben?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "welche mensa?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1064646129460.197704333503",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "für wann?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.857497789458.1463405389155",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "welche zutat?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.687239636642.1463776098980",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "ohne welcher zutat?"
+                    }
+                ]
+            }
+        ]
+    }
 }
