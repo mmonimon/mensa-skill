@@ -24,3 +24,8 @@
    26  ask deploy
    27  ask dialog --locale=de-DE
 ```
+### Use ngrok for testing
+* `ngrok http 5000` => öffnet port
+* https URL kopieren, als Endpoint in ASK einfügen als "wildcard certificate"
+* lokal lambda_function.py ausführen => extra terminal fenster, da kommen dann auch die error meldungen
+* in TEST section kann skill jetzt getestet werden
