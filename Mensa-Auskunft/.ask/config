@@ -23,7 +23,7 @@
             "codeUri": "lambda/eu-west-1_MensaAuskunft",
             "functionName": "MensaAuskunft",
             "handler": "lambda_function.lambda_handler",
-            "revisionId": "722266e8-4e5a-4678-8b03-43197e5a9fd7",
+            "revisionId": "76d050e6-cc34-4caa-9985-d48f9687a6e0",
             "runtime": "python3.7"
           }
         ]

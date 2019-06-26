@@ -26,225 +26,83 @@ app = Flask(__name__)
 # Skill Builder object
 sb = SkillBuilder()
 
-# Request Handler classes
-class LaunchRequestHandler(AbstractRequestHandler):
-    """Handler for skill launch."""
+
+##################################################
+# DATA  ##########################################
+##################################################
+
+### PROMPT constants
+# TODO: geht bestimmt schöner
+WELCOME_PROMPT = "Willkommen bei der Mensa-Auskunft! "
+HELP_PROMPT = "Ich kann dir dabei helfen, eine Auskunft über das Essen in der Mensa zu erhalten! "
+REPROMPT = "Suchst du nach dem Tagesplan, der Adresse einer Mensa oder eine Auflistung aller Mensen in deiner Stadt? "
+SAD_PROMPT = "Sorry, damit kann Mensa-Auskunft nicht helfen. "
+ERROR_PROMPT = "Sorry, das kann Mensa-Auskunft leider nicht verstehen. Bitte versuche es erneut. "
+ERROR_PROMPT2 = "Sorry, da ist etwas schiefgegangen. Ich kann die Webanfrage gerade nicht starten. "
+
+### Data
+required_slots = ["mensa_name", "date"]
+api_url_base = "https://openmensa.org/api/v2/canteens"
+
+## TODO: aus den Slots ziehen
+ID = "61"
+DATE = "2019-06-19"
+
+def get_mensa_plan_by_date(mensa_id, date):
+    return 'https://openmensa.org/api/v2/canteens/{}/days/{}/meals'.format(mensa_id, date)
+
+def random_phrase(str_list):
+    """Return random element from list."""
+    # type: List[str] -> str
+    return random.choice(str_list)
+
+def http_get(url):
+    response = requests.get(url)
+    if response.status_code < 200 or response.status_code >= 300:
+        response.raise_for_status()
+    return response.json()
+
+#### TEST ABOVE section:
+# all_mensas = requests.get(api_url_base).json() # all mensas with names, cities, addresses, ids
+# print(all_mensas)
+# print(http_get('https://openmensa.org/api/v2/canteens/61/days/2019-06-19/meals'))
+
+##################################################
+# Request Handler classes ########################
+##### OUR OWN SKILL INTENTS ######################
+##################################################
+## TODO
+
+class ListDishesIntent(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_request_type("LaunchRequest")(handler_input)
+        return (is_intent_name("ListDishesIntent")(handler_input) and handler_input.request_envelope.request.dialog_state == DialogState.COMPLETED)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        logger.info("In LaunchRequestHandler")
-        speech = ('Willkommen bei der Mensa-Auskunft!')
-        reprompt = "Suchst du nach dem Tagesplan, der Adresse einer Mensa oder eine Auflistung aller Mensen in deiner Stadt?"
-        handler_input.response_builder.speak(speech).ask(reprompt)
-        return handler_input.response_builder.response
-
-
-class MythicalCreaturesHandler(AbstractRequestHandler):
-    """Handler for MythicalCreatures."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        if not is_intent_name("PetMatchIntent")(handler_input):
-            return False
-
-        is_mythical_creature = False
-        resolved_value = get_resolved_value(
-            handler_input.request_envelope.request, "pet")
-        if (resolved_value is not None and
-                resolved_value == "mythical_creatures"):
-            is_mythical_creature = True
-            handler_input.attributes_manager.session_attributes["mythical_creature"] = handler_input.request_envelope.request.intent.slots["pet"].value
-        return is_mythical_creature
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        logger.info("In MythicalCreaturesHandler")
-        session_attr = handler_input.attributes_manager.session_attributes
-        speech = random_phrase(slots_meta["pet"]["invalid_responses"]).format(
-            session_attr["mythical_creature"])
-
-        return handler_input.response_builder.speak(speech).response
-
-
-class InProgressPetMatchIntent(AbstractRequestHandler):
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return (is_intent_name("PetMatchIntent")(handler_input)
-                and handler_input.request_envelope.request.dialog_state != DialogState.COMPLETED)
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        logger.info("In InProgressPetMatchIntent")
-        current_intent = handler_input.request_envelope.request.intent
-        prompt = ""
-
-        for slot_name, current_slot in six.iteritems(
-                current_intent.slots):
-            if slot_name not in ["article", "at_the", "I_Want"]:
-                if (current_slot.confirmation_status != SlotConfirmationStatus.CONFIRMED
-                        and current_slot.resolutions
-                        and current_slot.resolutions.resolutions_per_authority[0]):
-                    if current_slot.resolutions.resolutions_per_authority[0].status.code == StatusCode.ER_SUCCESS_MATCH:
-                        if len(current_slot.resolutions.resolutions_per_authority[0].values) > 1:
-                            prompt = "Which would you like "
-
-                            values = " or ".join([e.value.name for e in current_slot.resolutions.resolutions_per_authority[0].values])
-                            prompt += values + " ?"
-                            return handler_input.response_builder.speak(
-                                prompt).ask(prompt).add_directive(
-                                ElicitSlotDirective(slot_to_elicit=current_slot.name)
-                            ).response
-                    elif current_slot.resolutions.resolutions_per_authority[0].status.code == StatusCode.ER_SUCCESS_NO_MATCH:
-                        if current_slot.name in required_slots:
-                            prompt = "What {} are you looking for?".format(current_slot.name)
-
-                            return handler_input.response_builder.speak(
-                                prompt).ask(prompt).add_directive(
-                                    ElicitSlotDirective(
-                                        slot_to_elicit=current_slot.name
-                                    )).response
-
-        return handler_input.response_builder.add_directive(
-            DelegateDirective(
-                updated_intent=current_intent
-            )).response
-
-
-class CompletedPetMatchIntent(AbstractRequestHandler):
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return (is_intent_name("PetMatchIntent")(handler_input)
-            and handler_input.request_envelope.request.dialog_state == DialogState.COMPLETED)
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        logger.info("In CompletedPetMatchIntent")
+        logger.info("In ListDishesIntent")
         filled_slots = handler_input.request_envelope.request.intent.slots
         slot_values = get_slot_values(filled_slots)
-        pet_match_options = build_pet_match_options(
-            host_name=pet_match_api["host_name"], path=pet_match_api["pets"],
-            port=pet_match_api["port"], slot_values=slot_values)
-
+        mensa_url = get_mensa_plan_by_date(mensa_id=ID, date=DATE)
         try:
-            response = http_get(pet_match_options)
-
-            if response["result"]:
-                speech = ("So a {} "
-                          "{} "
-                          "{} "
-                          "energy dog sounds good for you. Consider a "
-                          "{}".format(
-                    slot_values["size"]["resolved"],
-                    slot_values["temperament"]["resolved"],
-                    slot_values["energy"]["resolved"],
-                    response["result"][0]["breed"])
-                )
-            else:
-                speech = ("I am sorry I could not find a match for a "
-                          "{} "
-                          "{} "
-                          "{} energy dog".format(
-                    slot_values["size"]["resolved"],
-                    slot_values["temperament"]["resolved"],
-                    slot_values["energy"]["resolved"])
-                )
+            response = http_get(mensa_url)
+            speech = "Es gibt folgende Gerichte zur Auswahl: "
+            count = 0
+            for dish in response:
+                count += 1
+                speech += '{}. {}, '.format(count, dish["name"])
+            speech += '.'
         except Exception as e:
-            speech = ("I am really sorry. I am unable to access part of my "
-                      "memory. Please try again later")
-            logger.info("Intent: {}: message: {}".format(
-                handler_input.request_envelope.request.intent.name, str(e)))
+            speech = ERROR_PROMPT2
+            logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
 
         return handler_input.response_builder.speak(speech).response
 
 
-class FallbackIntentHandler(AbstractRequestHandler):
-    """Handler for handling fallback intent.
+################################################
+# Request and Response Loggers #################
+################################################
 
-     2018-May-01: AMAZON.FallackIntent is only currently available in
-     en-US locale. This handler will not be triggered except in that
-     locale, so it can be safely deployed for any locale."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return is_intent_name("AMAZON.FallbackIntent")(handler_input)
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        logger.info("In FallbackIntentHandler")
-        speech = ("I'm sorry Pet Match can't help you with that. I can help "
-                  "find the perfect dog for you. What are two things you're "
-                  "looking for in a dog?")
-        reprompt = "What size and temperament are you looking for in a dog?"
-        handler_input.response_builder.speak(speech).ask(reprompt)
-        return handler_input.response_builder.response
-
-
-class HelpIntentHandler(AbstractRequestHandler):
-    """Handler for help intent."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return is_intent_name("AMAZON.HelpIntent")(handler_input)
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        logger.info("In HelpIntentHandler")
-        speech = ("This is pet match. I can help you find the perfect pet "
-                  "for you. You can say, I want a dog.")
-        reprompt = "What size and temperament are you looking for in a dog?"
-
-        handler_input.response_builder.speak(speech).ask(reprompt)
-        return handler_input.response_builder.response
-
-
-class ExitIntentHandler(AbstractRequestHandler):
-    """Single Handler for Cancel, Stop and Pause intents."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return (is_intent_name("AMAZON.CancelIntent")(handler_input) or
-                is_intent_name("AMAZON.StopIntent")(handler_input))
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        logger.info("In ExitIntentHandler")
-        handler_input.response_builder.speak("Bye").set_should_end_session(
-            True)
-        return handler_input.response_builder.response
-
-
-class SessionEndedRequestHandler(AbstractRequestHandler):
-    """Handler for skill session end."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return is_request_type("SessionEndedRequest")(handler_input)
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        logger.info("In SessionEndedRequestHandler")
-        logger.info("Session ended with reason: {}".format(
-            handler_input.request_envelope.request.reason))
-        return handler_input.response_builder.response
-
-# Exception Handler classes
-class CatchAllExceptionHandler(AbstractExceptionHandler):
-    """Catch All Exception handler.
-
-    This handler catches all kinds of exceptions and prints
-    the stack trace on AWS Cloudwatch with the request envelope."""
-    def can_handle(self, handler_input, exception):
-        # type: (HandlerInput, Exception) -> bool
-        return True
-
-    def handle(self, handler_input, exception):
-        # type: (HandlerInput, Exception) -> Response
-        logger.error(exception, exc_info=True)
-
-        speech = "Sorry, I can't understand the command. Please say again."
-        handler_input.response_builder.speak(speech).ask(speech)
-        return handler_input.response_builder.response
-
-
-# Request and Response Loggers
 class RequestLogger(AbstractRequestInterceptor):
     """Log the request envelope."""
     def process(self, handler_input):
@@ -252,39 +110,16 @@ class RequestLogger(AbstractRequestInterceptor):
         logger.info("Request Envelope: {}".format(
             handler_input.request_envelope))
 
-
 class ResponseLogger(AbstractResponseInterceptor):
     """Log the response envelope."""
     def process(self, handler_input, response):
         # type: (HandlerInput, Response) -> None
         logger.info("Response: {}".format(response))
 
+################################################
+# Utility functions ############################
+################################################
 
-# Data
-required_slots = ["energy", "size", "temperament"]
-
-slots_meta = {
-    "pet": {
-        "invalid_responses": [
-            "I'm sorry, but I'm not qualified to match you with {}s.",
-            "Ah yes, {}s are splendid creatures, but unfortunately owning one as a pet is outlawed.",
-            "I'm sorry I can't match you with {}s."
-        ]
-    },
-    "error_default": "I'm sorry I can't match you with {}s."
-}
-
-pet_match_api = {
-    "host_name": "e4v7rdwl7l.execute-api.us-east-1.amazonaws.com",
-    "pets": "/Test",
-    "port": 443
-}
-
-
-api_url_base = "https://openmensa.org/api/v2/canteens"
-all_mensas = requests.get(api_url_base).json() # all mensas with names, cities, addresses, ids
-
-# Utility functions
 def get_resolved_value(request, slot_name):
     """Resolve the slot name from the request using resolutions."""
     # type: (IntentRequest, str) -> Union[str, None]
@@ -331,46 +166,109 @@ def get_slot_values(filled_slots):
             }
     return slot_values
 
-def random_phrase(str_list):
-    """Return random element from list."""
-    # type: List[str] -> str
-    return random.choice(str_list)
 
-def build_pet_match_options(host_name, path, port, slot_values):
-    """Return options for HTTP Get call."""
-    # type: (str, str, int, Dict[str, Any]) -> Dict
-    path_params = {
-        "SSET": "canine-{}-{}-{}".format(
-            slot_values["energy"]["resolved"],
-            slot_values["size"]["resolved"],
-            slot_values["temperament"]["resolved"])
-    }
-    if host_name[:4] != "http":
-        host_name = "https://{}".format(host_name)
-    url = "{}:{}{}".format(host_name, str(port), path)
-    return {
-        "url": url,
-        "path_params": path_params
-    }
+##################################################
+# Request Handler classes ########################
+##### BUILT IN INTENTS ###########################
+##################################################
+### NO NEED FOR MODIFICATION
 
-def http_get(http_options):
-    url = http_options["url"]
-    params = http_options["path_params"]
-    response = requests.get(url=url, params=params)
+## AMAZON.WelcomeIntent
+# => no sample utterances, will be triggered by opening the skill without one shot 
+# (no direct link to a skill specific intent)
+class LaunchRequestHandler(AbstractRequestHandler):
+    """Handler for skill launch."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_request_type("LaunchRequest")(handler_input)
 
-    if response.status_code < 200 or response.status_code >= 300:
-        response.raise_for_status()
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In LaunchRequestHandler")
+        speech = WELCOME_PROMPT + HELP_PROMPT
+        handler_input.response_builder.speak(speech).ask(REPROMPT)
+        return handler_input.response_builder.response
 
-    return response.json()
+## AMAZON.FallbackIntent
+class FallbackIntentHandler(AbstractRequestHandler):
+    """Handler for handling fallback intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("AMAZON.FallbackIntent")(handler_input)
 
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In FallbackIntentHandler")
+        speech = SAD_PROMPT + REPROMPT
+        handler_input.response_builder.speak(speech).ask(REPROMPT)
+        return handler_input.response_builder.response
 
+## AMAZON.HelpIntent
+class HelpIntentHandler(AbstractRequestHandler):
+    """Handler for help intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("AMAZON.HelpIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In HelpIntentHandler")
+        speech = "Dies ist Mensa-Auskunft. "+ HELP_PROMPT
+        handler_input.response_builder.speak(speech).ask(REPROMPT)
+        return handler_input.response_builder.response
+
+## AMAZON.StopIntent
+class ExitIntentHandler(AbstractRequestHandler):
+    """Single Handler for Cancel, Stop and Pause intents."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return (is_intent_name("AMAZON.CancelIntent")(handler_input) or
+                is_intent_name("AMAZON.StopIntent")(handler_input))
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In ExitIntentHandler")
+        handler_input.response_builder.speak("Bye").set_should_end_session(
+            True)
+        return handler_input.response_builder.response
+
+## ExitAppIntent (schließen, verlassen...)
+class SessionEndedRequestHandler(AbstractRequestHandler):
+    """Handler for skill session end."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_request_type("SessionEndedRequest")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In SessionEndedRequestHandler")
+        logger.info("Session ended with reason: {}".format(
+            handler_input.request_envelope.request.reason))
+        return handler_input.response_builder.response
+
+# Exception Handler classes
+class CatchAllExceptionHandler(AbstractExceptionHandler):
+    """Catch All Exception handler.
+    This handler catches all kinds of exceptions and prints
+    the stack trace on AWS Cloudwatch with the request envelope."""
+    def can_handle(self, handler_input, exception):
+        # type: (HandlerInput, Exception) -> bool
+        return True
+
+    def handle(self, handler_input, exception):
+        # type: (HandlerInput, Exception) -> Response
+        logger.error(exception, exc_info=True)
+        speech = ERROR_PROMPT
+        handler_input.response_builder.speak(speech).ask(speech)
+        return handler_input.response_builder.response
 
 
 # Add all request handlers to the skill.
+## custom intents
+sb.add_request_handler(ListDishesIntent())
+
+## built-in intents
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(MythicalCreaturesHandler())
-sb.add_request_handler(InProgressPetMatchIntent())
-sb.add_request_handler(CompletedPetMatchIntent())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
 sb.add_request_handler(ExitIntentHandler())
@@ -386,9 +284,8 @@ sb.add_global_response_interceptor(ResponseLogger())
 # Expose the lambda handler to register in AWS Lambda.
 lambda_handler = sb.lambda_handler()
 
-# ---
-skill_adapter = SkillAdapter(
-    skill=sb.create(), skill_id='TEST', app=app)
+# --- flask
+skill_adapter = SkillAdapter(skill=sb.create(), skill_id='TEST', app=app)
 
 
 @app.route("/", methods=['POST'])
