@@ -139,301 +139,678 @@
                         {
                             "id": "1",
                             "name": {
-                                "value": "mensa unicampus magdeburg"
+                                "value": "mensa unicampus magdeburg",
+                                "synonyms": [
+                                    "magdeburg unicampus",
+                                    "unicampus magdeburg"
+                                ]
                             }
                         },
                         {
                             "id": "2",
                             "name": {
-                                "value": "magdeburg herrenkurg"
+                                "value": "magdeburg herrenkurg",
+                                "synonyms": [
+                                    "magdeburg herrenkrug",
+                                    "herrenkrug magdeburg",
+                                    "mensa herrenkrug",
+                                    "herrenkrug"
+                                ]
                             }
                         },
                         {
                             "id": "3",
                             "name": {
-                                "value": "mensa stendal"
+                                "value": "mensa stendal",
+                                "synonyms": [
+                                    "stendal"
+                                ]
                             }
                         },
                         {
                             "id": "4",
                             "name": {
-                                "value": "mensa wernigerode"
+                                "value": "mensa wernigerode",
+                                "synonyms": [
+                                    "wernigerode"
+                                ]
                             }
                         },
                         {
                             "id": "5",
                             "name": {
-                                "value": "domcafete halberstadt"
+                                "value": "domcafete halberstadt",
+                                "synonyms": [
+                                    "magdeburg halberstadt",
+                                    "magdeburg domcafete",
+                                    "domcafete magdeburg",
+                                    "halberstadt",
+                                    "domcafete"
+                                ]
                             }
                         },
                         {
                             "id": "6",
                             "name": {
-                                "value": "hannover hauptmensa"
+                                "value": "hannover hauptmensa",
+                                "synonyms": [
+                                    "hauptmensa hannover"
+                                ]
                             }
                         },
                         {
                             "id": "7",
                             "name": {
-                                "value": "hannover contine"
+                                "value": "hannover contine",
+                                "synonyms": [
+                                    "contine hannover",
+                                    "contine"
+                                ]
                             }
                         },
                         {
                             "id": "8",
                             "name": {
-                                "value": "mensa pzh"
+                                "value": "mensa pzh",
+                                "synonyms": [
+                                    "hannover pzh",
+                                    "pzh hannover",
+                                    "produktionstechnisches zentrum",
+                                    "mensa produktionstechnisches zentrum"
+                                ]
                             }
                         },
                         {
                             "id": "9",
                             "name": {
-                                "value": "mensa caballus"
+                                "value": "mensa caballus",
+                                "synonyms": [
+                                    "caballus hannover",
+                                    "hannover caballus",
+                                    "mensa caballus hannover",
+                                    "caballus"
+                                ]
                             }
                         },
                         {
                             "id": "10",
                             "name": {
-                                "value": "mensa tiho-tower"
+                                "value": "mensa tiho-tower",
+                                "synonyms": [
+                                    "mensa tiho-tower hannover",
+                                    "mensa hannover tiho-tower",
+                                    "hannover tiho-tower",
+                                    "tiho-tower hannover",
+                                    "tiho-tower"
+                                ]
                             }
                         },
                         {
                             "id": "11",
                             "name": {
-                                "value": "mensa hmtmh"
+                                "value": "mensa hmtmh",
+                                "synonyms": [
+                                    "medienhochschule hannover",
+                                    "hochschule für musik theater und medien",
+                                    "musikhochschule hannover",
+                                    "hannover hmtmh",
+                                    "hmtmh hannover",
+                                    "hmtmh"
+                                ]
                             }
                         },
                         {
                             "id": "12",
                             "name": {
-                                "value": "mensa ricklinger stadtweg"
+                                "value": "mensa ricklinger stadtweg",
+                                "synonyms": [
+                                    "hannover ricklinger stadtweg",
+                                    "ricklinger stadtweg hannover",
+                                    "ricklinger stadtweg"
+                                ]
                             }
                         },
                         {
                             "id": "13",
                             "name": {
-                                "value": "hannover mensacafeteria blumhardtstraße"
+                                "value": "hannover mensacafeteria blumhardtstraße",
+                                "synonyms": [
+                                    "blumhardtstraße hannover",
+                                    "hannover blumhardtstraße",
+                                    "mensacafeteria blumhardtstraße",
+                                    "blumhardtstraße"
+                                ]
                             }
                         },
                         {
                             "id": "14",
                             "name": {
-                                "value": "hannover mensa große pause"
+                                "value": "hannover mensa große pause",
+                                "synonyms": [
+                                    "mensa große pause hannover",
+                                    "mensa große pause",
+                                    "große pause hannover",
+                                    "große pause"
+                                ]
                             }
                         },
                         {
                             "id": "15",
                             "name": {
-                                "value": "hannover cafeteria herrenhausen"
+                                "value": "hannover cafeteria herrenhausen",
+                                "synonyms": [
+                                    "hannover herrenhausen",
+                                    "herrenhausen hannover",
+                                    "herrenhausen",
+                                    "cafeteria herrenhausen"
+                                ]
                             }
                         },
                         {
                             "id": "16",
                             "name": {
-                                "value": "hannover hauptmensa marktstand"
+                                "value": "hannover hauptmensa marktstand",
+                                "synonyms": [
+                                    "hauptmensa marktstand",
+                                    "marktstand hannover",
+                                    "mensa marktstand",
+                                    "marktstand"
+                                ]
                             }
                         },
                         {
                             "id": "17",
                             "name": {
-                                "value": "hannover restaurant c. t."
+                                "value": "hannover restaurant c. t.",
+                                "synonyms": [
+                                    "c. t. restaurant",
+                                    "c. t. restaurant hannover"
+                                ]
                             }
                         },
                         {
                             "id": "19",
                             "name": {
-                                "value": "mensa beuth hochschule für technik kurfürstenstraße"
+                                "value": "mensa beuth hochschule für technik kurfürstenstraße",
+                                "synonyms": [
+                                    "beuth berlin kurfürstenstraße",
+                                    "beuth hochschule berlin kurfürstenstraße",
+                                    "beuth hochschule kurfürstenstraße",
+                                    "mensa kurfürstenstraße beuth",
+                                    "beuth kurfürstenstraße",
+                                    "mensa kurfürstenstraße",
+                                    "kurfürstenstraße berlin"
+                                ]
                             }
                         },
                         {
                             "id": "24",
                             "name": {
-                                "value": "mensa htw wilhelminenhof"
+                                "value": "mensa htw wilhelminenhof",
+                                "synonyms": [
+                                    "htw wilhelminenhof",
+                                    "mensa wilhelminenhof",
+                                    "wilhelminenhof"
+                                ]
                             }
                         },
                         {
                             "id": "25",
                             "name": {
-                                "value": "mensa ash berlin hellersdorf"
+                                "value": "mensa ash berlin hellersdorf",
+                                "synonyms": [
+                                    "mensa alice salomon hochschule",
+                                    "alice salomon hochschule",
+                                    "ash",
+                                    "mensa ash",
+                                    "ash berlin",
+                                    "ash hellersdorf"
+                                ]
                             }
                         },
                         {
                             "id": "27",
                             "name": {
-                                "value": "mensa fu ii otto-von-simson-straße"
+                                "value": "mensa fu ii otto-von-simson-straße",
+                                "synonyms": [
+                                    "freie uni mensa 2",
+                                    "mensa 2 fu",
+                                    "mensa 2 fu berlin",
+                                    "fu berlin mensa 2",
+                                    "freie universität mensa 2",
+                                    "mensa 2 freie universität"
+                                ]
                             }
                         },
                         {
                             "id": "29",
                             "name": {
-                                "value": "mensa hwr badensche straße"
+                                "value": "mensa hwr badensche straße",
+                                "synonyms": [
+                                    "hwr schöneberg",
+                                    "hwr campus schöneberg",
+                                    "schöneberg hwr",
+                                    "campus schöneberg",
+                                    "mensa hwr schöneberg"
+                                ]
                             }
                         },
                         {
                             "id": "30",
                             "name": {
-                                "value": "mensa htw treskowallee"
+                                "value": "mensa htw treskowallee",
+                                "synonyms": [
+                                    "htw treskowallee",
+                                    "mensa treskowallee",
+                                    "treskowallee"
+                                ]
                             }
                         },
                         {
                             "id": "31",
                             "name": {
-                                "value": "karlsruhe mensa am adenauerring"
+                                "value": "karlsruhe mensa am adenauerring",
+                                "synonyms": [
+                                    "mensa am adenauerring",
+                                    "karlsruhe am adenauerring",
+                                    "am adenauerring karlsruhe"
+                                ]
                             }
                         },
                         {
                             "id": "32",
                             "name": {
-                                "value": "karlsruhe mensa moltke"
+                                "value": "karlsruhe mensa moltke",
+                                "synonyms": [
+                                    "mensa moltke",
+                                    "moltke",
+                                    "karlsruhe moltke"
+                                ]
                             }
                         },
                         {
                             "id": "33",
                             "name": {
-                                "value": "karlsruhe mensa erzbergerstraße"
+                                "value": "karlsruhe mensa erzbergerstraße",
+                                "synonyms": [
+                                    "erzbergerstraße",
+                                    "mensa erzbergerstraße",
+                                    "karlsruhe erzbergerstraße",
+                                    "erzbergerstraße karlsruhe"
+                                ]
                             }
                         },
                         {
                             "id": "34",
                             "name": {
-                                "value": "karlsruhe mensa schloss gottesaue"
+                                "value": "karlsruhe mensa schloss gottesaue",
+                                "synonyms": [
+                                    "mensa schloss gottesaue",
+                                    "schloss gottesaue",
+                                    "karlsruhe schloss gottesaue",
+                                    "schloss gottesaue karlsruhe",
+                                    "karlsruhe schloss",
+                                    "schloss karlsruhe"
+                                ]
                             }
                         },
                         {
                             "id": "35",
                             "name": {
-                                "value": "pforzheim mensa tiefenbronner straße"
+                                "value": "pforzheim mensa tiefenbronner straße",
+                                "synonyms": [
+                                    "mensa tiefenbronner straße",
+                                    "tiefenbronner straße",
+                                    "pforzheim tiefenbronner straße",
+                                    "tiefenbronner straße pforzheim"
+                                ]
                             }
                         },
                         {
                             "id": "36",
                             "name": {
-                                "value": "mensa tu hardenbergstraße"
+                                "value": "mensa tu hardenbergstraße",
+                                "synonyms": [
+                                    "tu berlin",
+                                    "mensa hardenbergstraße",
+                                    "tu hardenbergstaße",
+                                    "technische uni berlin",
+                                    "technische universität berlin",
+                                    "hardenbergstraße"
+                                ]
                             }
                         },
                         {
                             "id": "37",
                             "name": {
-                                "value": "mensa hu spandauer straße"
+                                "value": "mensa hu spandauer straße",
+                                "synonyms": [
+                                    "mensa spandauer straße",
+                                    "spandauer straße",
+                                    "hu spandauer straße"
+                                ]
                             }
                         },
                         {
                             "id": "38",
                             "name": {
-                                "value": "mensa ehb teltower damm"
+                                "value": "mensa ehb teltower damm",
+                                "synonyms": [
+                                    "evangelische hochschule berlin",
+                                    "mensa ehb",
+                                    "mensa evangelische hochschule berlin",
+                                    "mensa teltower damm",
+                                    "teltower damm"
+                                ]
                             }
                         },
                         {
                             "id": "39",
                             "name": {
-                                "value": "pforzheim mensa holzgartenstraße"
+                                "value": "pforzheim mensa holzgartenstraße",
+                                "synonyms": [
+                                    "mensa holzgartenstraße",
+                                    "holzgartenstraße",
+                                    "pfrozheim holzgartenstraße",
+                                    "holzgartenstraße pforzheim"
+                                ]
                             }
                         },
                         {
                             "id": "40",
                             "name": {
-                                "value": "mensa khs weißensee"
+                                "value": "mensa khs weißensee",
+                                "synonyms": [
+                                    "mensa kunsthochschule weißensee",
+                                    "kunsthochschule weißensee",
+                                    "weißensee khs",
+                                    "weißensee khs",
+                                    "khs",
+                                    "kunsthochschule",
+                                    "mensa khs",
+                                    "mensa kunsthochschule",
+                                    "khs berlin",
+                                    "berlin khs",
+                                    "mensa khs berlin"
+                                ]
                             }
                         },
                         {
                             "id": "42",
                             "name": {
-                                "value": "mensa fu herrenhaus düppel"
+                                "value": "mensa fu herrenhaus düppel",
+                                "synonyms": [
+                                    "mensa herrenhaus düppel",
+                                    "mensa herrenhaus",
+                                    "mensa düppel",
+                                    "fu herrenhaus düppel",
+                                    "fu herrenhaus",
+                                    "fu düppel",
+                                    "freie uni herrenhaus düppel",
+                                    "freie universität herrenhaus düppel",
+                                    "mensa fu herrenhaus düppel",
+                                    "mensa fu herrenhaus",
+                                    "mensa fu düppel",
+                                    "mensa freie uni herrenhaus düppel",
+                                    "mensa freie uni herrenhaus",
+                                    "mensa freie uni düppel",
+                                    "mensa freie universität herrenhaus",
+                                    "mensa freie universität düppel",
+                                    "fu berlin herrenhaus düppel",
+                                    "mensa fu berlin herrenhaus düppel"
+                                ]
                             }
                         },
                         {
                             "id": "43",
                             "name": {
-                                "value": "mensa hu süd"
+                                "value": "mensa hu süd",
+                                "synonyms": [
+                                    "hu süd",
+                                    "mensa süd",
+                                    "mensa hu berlin süd",
+                                    "mensa berlin süd",
+                                    "berlin süd",
+                                    "hu süd mensa"
+                                ]
                             }
                         },
                         {
                             "id": "48",
                             "name": {
-                                "value": "mensa hu nord"
+                                "value": "mensa hu nord",
+                                "synonyms": [
+                                    "hu nord",
+                                    "mensa nord",
+                                    "mensa hu berlin nord",
+                                    "mensa berlin nord",
+                                    "berlin nord",
+                                    "hu nord mensa"
+                                ]
                             }
                         },
                         {
                             "id": "49",
                             "name": {
-                                "value": "mensa beuth hochschule für technik luxemburger straße"
+                                "value": "mensa beuth hochschule für technik luxemburger straße",
+                                "synonyms": [
+                                    "beuth berlin",
+                                    "beuth hochschule berlin",
+                                    "beuth hochschule",
+                                    "mensa beuth",
+                                    "beuth",
+                                    "beuth luxemburger straße",
+                                    "mensa luxemburger straße",
+                                    "beuth hochschule luxemburger straße"
+                                ]
                             }
                         },
                         {
                             "id": "50",
                             "name": {
-                                "value": "mensa hu oase adlershof"
+                                "value": "mensa hu oase adlershof",
+                                "synonyms": [
+                                    "oase adlershof",
+                                    "hu adlershof",
+                                    "hu campus adlershof",
+                                    "hu berlin adlershof",
+                                    "berlin adlershof",
+                                    "adlershof",
+                                    "mensa campus adlershof",
+                                    "mensa oase adlershof",
+                                    "mensa adlershof",
+                                    "mensa berlin adlershof"
+                                ]
                             }
                         },
                         {
                             "id": "51",
                             "name": {
-                                "value": "mensa hfm charlottenstraße"
+                                "value": "mensa hfm charlottenstraße",
+                                "synonyms": [
+                                    "mensa charlottenstraße",
+                                    "charlottenstraße",
+                                    "charlottenstraße berlin",
+                                    "hochschule für musik berlin",
+                                    "hfm berlin",
+                                    "mensa hfm berlin",
+                                    "hanns eisler hochschule berlin",
+                                    "mensa hanns eisler hochschule berlin"
+                                ]
                             }
                         },
                         {
                             "id": "52",
                             "name": {
-                                "value": "mensa fu lankwitz malteserstraße"
+                                "value": "mensa fu lankwitz malteserstraße",
+                                "synonyms": [
+                                    "mensa fu lankwitz",
+                                    "fu lankwitz",
+                                    "fu lankwitz malteserstraße",
+                                    "malteserstraße",
+                                    "mensa malteserstraße",
+                                    "malteserstraße berlin",
+                                    "mensa malteserstraße berlin"
+                                ]
                             }
                         },
                         {
                             "id": "54",
                             "name": {
-                                "value": "mensa katholische hs für sozialwesen"
+                                "value": "mensa katholische hs für sozialwesen",
+                                "synonyms": [
+                                    "mensa khs berlin",
+                                    "khs berlin",
+                                    "katholische hochschule berlin",
+                                    "mensa katholische hochschule",
+                                    "mensa katholische hochschule berlin",
+                                    "katholische hochschule für sozialwesen",
+                                    "mensa katholische hochschule für sozialwesen"
+                                ]
                             }
                         },
                         {
                             "id": "55",
                             "name": {
-                                "value": "mensa am neuen palais"
+                                "value": "mensa am neuen palais",
+                                "synonyms": [
+                                    "mensa neues palais",
+                                    "mensa neues palais potsdam",
+                                    "mensa am neuen palais potsdam",
+                                    "am neuen palais potsdam",
+                                    "neues palais",
+                                    "neues palais potsdam",
+                                    "am neuen palais",
+                                    "am neuen palais potsdam",
+                                    "campus neues palais",
+                                    "mensa campus neues palais",
+                                    "uni potsdam neues palais",
+                                    "uni potsdam am neuen palais",
+                                    "universität potsdam neues palais",
+                                    "universität potsdam am neuen palais",
+                                    "mensa uni potsdam neues palais",
+                                    "mensa uni potsdam am neuen palais",
+                                    "mensa universität potsdam neues palais",
+                                    "mensa universität potsdam am neuen palais"
+                                ]
                             }
                         },
                         {
                             "id": "57",
                             "name": {
-                                "value": "mensa kiepenheuerallee"
+                                "value": "mensa kiepenheuerallee",
+                                "synonyms": [
+                                    "mensa fh potsdam",
+                                    "mensa fachhochschule potsdam",
+                                    "kiepenheuerallee",
+                                    "kiepenheuerallee potsdam",
+                                    "fh potsdam",
+                                    "fachhochschule potsdam"
+                                ]
                             }
                         },
                         {
                             "id": "58",
                             "name": {
-                                "value": "mensa wildau"
+                                "value": "mensa wildau",
+                                "synonyms": [
+                                    "th wildau",
+                                    "technische hochschule wildau",
+                                    "mensa th wildau",
+                                    "wildau",
+                                    "mensa technische hochschule wildau"
+                                ]
                             }
                         },
                         {
                             "id": "59",
                             "name": {
-                                "value": "mensa brandenburg"
+                                "value": "mensa brandenburg",
+                                "synonyms": [
+                                    "th brandenburg",
+                                    "technische hochschule brandenburg",
+                                    "mensa th brandenburg",
+                                    "brandenburg",
+                                    "mensa technische hochschule brandenburg"
+                                ]
                             }
                         },
                         {
                             "id": "61",
                             "name": {
-                                "value": "mensa golm"
+                                "value": "mensa golm",
+                                "synonyms": [
+                                    "golm",
+                                    "golm potsdam",
+                                    "potsdam golm",
+                                    "mensa golm potsdam",
+                                    "mensa potsdam golm",
+                                    "campus golm",
+                                    "mensa campus golm",
+                                    "uni potsdam golm",
+                                    "universität potsdam golm",
+                                    "mensa uni potsdam golm",
+                                    "mensa universität potsdam golm"
+                                ]
                             }
                         },
                         {
                             "id": "62",
                             "name": {
-                                "value": "mensa griebnitzsee"
+                                "value": "mensa griebnitzsee",
+                                "synonyms": [
+                                    "griebnitzsee",
+                                    "griebnitzsee potsdam",
+                                    "potsdam griebnitzsee",
+                                    "mensa griebnitzsee potsdam",
+                                    "mensa potsdam griebnitzsee",
+                                    "campus griebnitzsee",
+                                    "mensa campus griebnitzsee",
+                                    "uni potsdam griebnitzsee",
+                                    "universität potsdam griebnitzsee",
+                                    "babelsberg",
+                                    "mensa babelsberg",
+                                    "uni potsdam babelsberg",
+                                    "mensa uni potsdam griebnitzsee",
+                                    "mensa universität potsdam griebnitzsee",
+                                    "mensa uni potsdam babelsberg",
+                                    "universität potsdam babelsberg",
+                                    "mensa universität potsdam babelsberg"
+                                ]
                             }
                         },
                         {
                             "id": "63",
                             "name": {
-                                "value": "leipzig mensa am park"
+                                "value": "leipzig mensa am park",
+                                "synonyms": [
+                                    "mensa am park",
+                                    "am park leipzig"
+                                ]
                             }
                         },
                         {
                             "id": "64",
                             "name": {
-                                "value": "leipzig mensa academica"
+                                "value": "leipzig mensa academica",
+                                "synonyms": [
+                                    "academica leipzig",
+                                    "mensa academica leipzig",
+                                    "academica",
+                                    "mensa academica"
+                                ]
                             }
                         },
                         {
                             "id": "65",
                             "name": {
-                                "value": "leipzig mensa am elsterbecken"
+                                "value": "leipzig mensa am elsterbecken",
+                                "synonyms": [
+                                    "am elsterbecken",
+                                    "leipzig mensa am elsterbecken",
+                                    "am elsterbecken leipzig",
+                                    "leipzig am elsterbecken"
+                                ]
                             }
                         }
                     ]
