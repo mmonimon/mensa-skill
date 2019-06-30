@@ -10,7 +10,7 @@
         },
         "interactionModel": {
           "de-DE": {
-            "eTag": "cebb307c40f6a0da88fad293b91d535f"
+            "eTag": "c37d180a451c8e9d0ce3a15c240ebdd9"
           }
         },
         "lambda": [
@@ -23,7 +23,7 @@
             "codeUri": "lambda/eu-west-1_MensaAuskunft",
             "functionName": "MensaAuskunft",
             "handler": "lambda_function.lambda_handler",
-            "revisionId": "d3462b01-d3ea-42db-9cb9-543679069e9a",
+            "revisionId": "8cf4559b-10fc-4d38-bdf6-71b65bf537b3",
             "runtime": "python3.7"
           }
         ]
