@@ -5,8 +5,8 @@ import requests
 import six
 import random
 
-# from flask import Flask
-# from flask_ask_sdk.skill_adapter import SkillAdapter
+from flask import Flask
+from flask_ask_sdk.skill_adapter import SkillAdapter
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.dispatch_components import (
@@ -21,7 +21,7 @@ from ask_sdk_model.slu.entityresolution import StatusCode
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-# app = Flask(__name__)
+app = Flask(__name__)
 
 # Skill Builder object
 sb = SkillBuilder()
@@ -336,13 +336,13 @@ sb.add_global_response_interceptor(ResponseLogger())
 lambda_handler = sb.lambda_handler()
 
 # --- flask
-# skill_adapter = SkillAdapter(skill=sb.create(), skill_id='TEST', app=app)
+skill_adapter = SkillAdapter(skill=sb.create(), skill_id='TEST', app=app)
 
 
-# @app.route("/", methods=['POST'])
-# def invoke_skill():
-#     return skill_adapter.dispatch_request()
+@app.route("/", methods=['POST'])
+def invoke_skill():
+    return skill_adapter.dispatch_request()
 
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
