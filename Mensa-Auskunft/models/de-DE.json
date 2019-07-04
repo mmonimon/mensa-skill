@@ -130,10 +130,62 @@
                         {
                             "name": "ingredient",
                             "type": "AMAZON.Food"
+                        },
+                        {
+                            "name": "synonyms_gericht",
+                            "type": "synonyms_gericht"
                         }
                     ],
                     "samples": [
-                        "gibt es gerichte ohne {ingredient}"
+                        "suche für {date} {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "such mir bitte für {date} {synonyms_gericht} ohne {ingredient}",
+                        "bitte such mir für {date} {synonyms_gericht} ohne {ingredient}",
+                        "such mir bitte für {date} {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "bitte such mir für {date} {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "such mir für {date} {synonyms_gericht} ohne {ingredient}",
+                        "such mir {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "such mir für {date} {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "such mir bitte {synonyms_gericht} ohne {ingredient} {date} in {mensa_name}",
+                        "bitte such mir {synonyms_gericht} ohne {ingredient} {date} in {mensa_name}",
+                        "gibt es {date} {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "gibt es {date} {synonyms_gericht} ohne {ingredient}",
+                        "such mir {synonyms_gericht} ohne {ingredient} {date} in {mensa_name}",
+                        "such mir {synonyms_gericht} ohne {ingredient}",
+                        "was gibt es {date} ohne {ingredient} in {mensa_name}",
+                        "gibt es {synonyms_gericht} ohne {ingredient}",
+                        "suche {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "suche {synonyms_gericht} ohne {ingredient}",
+                        "suche für {date} {synonyms_gericht} ohne {ingredient} ",
+                        "bitte suche {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "bitte suche {synonyms_gericht} ohne {ingredient}",
+                        "bitte suche für {date} {synonyms_gericht} ohne {ingredient}",
+                        "suche bitte {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "suche bitte {synonyms_gericht} ohne {ingredient}",
+                        "suche bitte für {date} {synonyms_gericht} ohne {ingredient}",
+                        "suche {synonyms_gericht} ohne {ingredient} in {mensa_name} bitte",
+                        "suche {synonyms_gericht} ohne {ingredient} bitte",
+                        "suche für {date} {synonyms_gericht} ohne {ingredient} bitte",
+                        "such mir für {date} {synonyms_gericht} ohne {ingredient} bitte",
+                        "such mir {synonyms_gericht} ohne {ingredient} in {mensa_name} bitte",
+                        "such mir für {date} {synonyms_gericht} ohne {ingredient} in {mensa_name} bitte",
+                        "für {date} nach {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "nach {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "nach {synonyms_gericht} ohne {ingredient}",
+                        "für {date} nach {synonyms_gericht} ohne {ingredient}",
+                        "nach {synonyms_gericht} ohne {ingredient} in {mensa_name} für {date}",
+                        "nach {synonyms_gericht} ohne {ingredient} für {date}",
+                        "für {date} bitte nach {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "bitte nach {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+                        "bitte nach {synonyms_gericht} ohne {ingredient}",
+                        "für {date} bitte nach {synonyms_gericht} ohne {ingredient}",
+                        "bitte nach {synonyms_gericht} ohne {ingredient} in {mensa_name} für {date}",
+                        "bitte nach {synonyms_gericht} ohne {ingredient} für {date}",
+                        "für {date} nach {synonyms_gericht} ohne {ingredient} in {mensa_name} bitte",
+                        "nach {synonyms_gericht} ohne {ingredient} in {mensa_name} bitte",
+                        "nach {synonyms_gericht} ohne {ingredient} bitte",
+                        "für {date} nach {synonyms_gericht} ohne {ingredient} bitte",
+                        "nach {synonyms_gericht} ohne {ingredient} in {mensa_name} für {date} bitte",
+                        "nach {synonyms_gericht} ohne {ingredient} für {date} bitte"
                     ]
                 }
             ],
@@ -911,25 +963,38 @@
                     "values": [
                         {
                             "name": {
-                                "value": "schüler"
+                                "value": "schüler",
+                                "synonyms": [
+                                    "schülerin"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "mitarbeiter"
+                                "value": "mitarbeiter",
+                                "synonyms": [
+                                    "mitarbeiterin"
+                                ]
                             }
                         },
                         {
                             "name": {
                                 "value": "besucher",
                                 "synonyms": [
+                                    "besucherin",
                                     "andere"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "studenten"
+                                "value": "studenten",
+                                "synonyms": [
+                                    "studierende",
+                                    "studierender",
+                                    "studentin",
+                                    "student"
+                                ]
                             }
                         }
                     ]
@@ -963,6 +1028,116 @@
                                     "vegetarisches",
                                     "vegetarisch"
                                 ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "synonyms_gericht",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "einer mahlzeit"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "eine mahlzeit"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "mahlzeiten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "mahlzeit"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "einem menü"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ein menü"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "menü"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "menüs"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "einem angebot"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ein angebot"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "angeboten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "angebote"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "angebot"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gericht"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "einem essen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ein essen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "essen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "einem gericht"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ein gericht"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gerichten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gerichte"
                             }
                         }
                     ]
@@ -1089,6 +1264,13 @@
                             "prompts": {
                                 "elicitation": "Elicit.Slot.526671739558.1375599315259"
                             }
+                        },
+                        {
+                            "name": "synonyms_gericht",
+                            "type": "synonyms_gericht",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
                         }
                     ]
                 }
@@ -1159,6 +1341,14 @@
                 "variations": [
                     {
                         "type": "PlainText",
+                        "value": "Wann möchtest du essen?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Für wann soll ich suchen?"
+                    },
+                    {
+                        "type": "PlainText",
                         "value": "Für wann?"
                     }
                 ]
@@ -1168,6 +1358,14 @@
                 "variations": [
                     {
                         "type": "PlainText",
+                        "value": "In welcher Mensa möchtest du essen?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Für welche Mensa soll ich suchen?"
+                    },
+                    {
+                        "type": "PlainText",
                         "value": "Welche Mensa?"
                     }
                 ]
@@ -1175,6 +1373,10 @@
             {
                 "id": "Elicit.Slot.526671739558.1375599315259",
                 "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Welche Zutat soll nicht enthalten sein?"
+                    },
                     {
                         "type": "PlainText",
                         "value": "Ohne welche Zutat?"
