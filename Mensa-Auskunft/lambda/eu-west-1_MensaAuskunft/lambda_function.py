@@ -21,7 +21,7 @@ from ask_sdk_model.slu.entityresolution import StatusCode
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-app = Flask(__name__)
+# app = Flask(__name__)
 
 # Skill Builder object
 sb = SkillBuilder()
