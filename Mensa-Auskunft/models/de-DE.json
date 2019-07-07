@@ -235,6 +235,14 @@
                         "nach {synonyms_gericht} ohne {ingredient} in {mensa_name} für {date} bitte",
                         "nach {synonyms_gericht} ohne {ingredient} für {date} bitte"
                     ]
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
                 }
             ],
             "types": [
@@ -1338,6 +1346,22 @@
                             "prompts": {}
                         }
                     ]
+                },
+                {
+                    "name": "ListMensasIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "city",
+                            "type": "AMAZON.DE_CITY",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1362930234519.352231139885"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1445,6 +1469,15 @@
                     {
                         "type": "PlainText",
                         "value": "Ohne welche Zutat?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1362930234519.352231139885",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "welche stadt?"
                     }
                 ]
             }

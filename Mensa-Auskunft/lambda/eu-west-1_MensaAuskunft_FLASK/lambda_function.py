@@ -4,6 +4,7 @@ import logging
 import requests
 import six
 import random
+from datetime import datetime
 
 from flask import Flask
 from flask_ask_sdk.skill_adapter import SkillAdapter
@@ -13,6 +14,7 @@ from ask_sdk_core.dispatch_components import (
     AbstractRequestHandler, AbstractExceptionHandler,
     AbstractResponseInterceptor, AbstractRequestInterceptor)
 from ask_sdk_core.utils import is_intent_name, is_request_type
+from ask_sdk.standard import StandardSkillBuilder
 
 from typing import Union, Dict, Any, List
 from ask_sdk_model.dialog import (ElicitSlotDirective, DelegateDirective)
@@ -25,6 +27,7 @@ app = Flask(__name__)
 
 # Skill Builder object
 sb = SkillBuilder()
+sb = StandardSkillBuilder(table_name="High-Low-Game", auto_create_table=True)
 
 ##################################################
 # DATA  ##########################################
@@ -43,9 +46,9 @@ ERROR_PROMPT3 = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden.
 SAMPLES1 = "Frag zum Beispiel: Gibt es morgen vegane Gerichte in der Mensa Golm? Oder: Welche Mensen gibt es in Berlin? "
 SAMPLES2 = "Sag zum Beispiel: Gib mir den Essensplan! Oder: Finde Gerichte ohne Fleisch! "
 SAMPLES3 = "Frag zum Beispiel: Wie ist die Adresse der Mensa Golm? Oder: Lies mir den Plan für Montag vor! "
-
+PRICE_QUESTION = 'Möchtest du den Preis eines dieser Gerichte erfahren? \
+            Frag zum Beispiel: Wie viel kostet das erste Gericht für Studenten? '
 ### Data
-# required_slots = ["mensa_name", "date"]
 api_url_base = "https://openmensa.org/api/v2/canteens"
 DISHES = {}
 RESPONSE = []
@@ -90,15 +93,19 @@ class ListDishesIntent(AbstractRequestHandler):
         filled_slots = handler_input.request_envelope.request.intent.slots
         slot_values = get_slot_values(filled_slots)
         print(slot_values)
-        current_mensa_id = slot_values['mensa_name']['id']
         current_date = slot_values['date']['resolved']
         optional_ingredient = slot_values['ingredient']['resolved']
-        question = 'Möchtest du den Preis eines dieser Gerichte erfahren? Frag zum Beispiel: Wie viel kostet das erste Gericht für Studenten? '
+        session_attr = handler_input.attributes_manager.session_attributes
+        session_attr['mensa_name'] = slot_values['mensa_name']['resolved']
+        session_attr['mensa_id'] = slot_values['mensa_name']['id']
+        handler_input.attributes_manager.persistent_attributes = session_attr
+        handler_input.attributes_manager.save_persistent_attributes()
+        question = PRICE_QUESTION
 
-        if current_mensa_id == None:
-            speech = ERROR_PROMPT2.format(slot_values['mensa_name']['resolved'])
+        if session_attr['mensa_id'] == None:
+            speech = ERROR_PROMPT2.format(session_attr['mensa_name'])
             return handler_input.response_builder.speak(speech).response
-        mensa_url = create_mensa_url(mensa_id=current_mensa_id, date=current_date)
+        mensa_url = create_mensa_url(mensa_id=session_attr['mensa_id'], date=current_date)
         try:
             response = http_get(mensa_url)
             count = 0
@@ -117,12 +124,13 @@ class ListDishesIntent(AbstractRequestHandler):
                 question = 'Kann ich sonst noch helfen? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
 
         except Exception as e:
-            speech = ERROR_PROMPT1.format(current_date, current_mensa_id)
+            speech = ERROR_PROMPT1.format(current_date, session_attr['mensa_name'])
             logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
 
         return handler_input.response_builder.speak(speech).ask(question).response
-
-    def build_speech(self, dish, count):
+    
+    @staticmethod
+    def build_speech(dish, count):
         speech = ''
         RESPONSE.append(dish)
         DISHES[count] = dish['id']
@@ -263,9 +271,73 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In LaunchRequestHandler")
+        attr = handler_input.attributes_manager.persistent_attributes
+        if attr:
+            reprompt = 'Möchtest du wieder den Tagesplan für {} hören? '.format(attr['mensa_name'])
+            speech = WELCOME_PROMPT + reprompt
+            handler_input.response_builder.speak(speech).ask(reprompt)
+            return handler_input.response_builder.response
+        # else:
+        #     attr['mensa_name'] = None
+        #     attr['mensa_id'] = None
+        handler_input.attributes_manager.session_attributes = attr
+        print(attr)
         speech = WELCOME_PROMPT + HELP_PROMPT + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
         handler_input.response_builder.speak(speech).ask(REPROMPT)
         return handler_input.response_builder.response
+
+## AMAZON.YesIntent
+class YesIntentHandler(AbstractRequestHandler):
+    """Handler for handling yes intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("AMAZON.YesIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In YesIntentHandler")
+        session_attr = handler_input.attributes_manager.persistent_attributes
+        print(session_attr)
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        question = PRICE_QUESTION
+
+        if session_attr['mensa_id'] == None:
+            speech = ERROR_PROMPT2.format(session_attr['mensa_name'])
+            return handler_input.response_builder.speak(speech).response
+        mensa_url = create_mensa_url(mensa_id=session_attr['mensa_id'], date=current_date)
+        try:
+            response = http_get(mensa_url)
+            count = 0
+            dish_speech = ''
+            for dish in response:
+                count += 1
+                dish_speech += ListDishesIntent.build_speech(dish, count)
+            if dish_speech:
+                speech = 'Es gibt folgende Gerichte zur Auswahl: ' + dish_speech + '. ' + question
+            else: 
+                speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage. '
+                question = 'Kann ich sonst noch helfen? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
+
+        except Exception as e:
+            speech = ERROR_PROMPT1.format(current_date, session_attr['mensa_name'])
+            logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+
+        return handler_input.response_builder.speak(speech).ask(question).response
+
+## AMAZON.NoIntent
+class NoIntentHandler(AbstractRequestHandler):
+    """Handler for handling no intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("AMAZON.NoIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In NoIntentHandler")
+        speech = 'Okay, was möchtest du tun? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
+        handler_input.response_builder.speak(speech).ask(REPROMPT)
+        return handler_input.response_builder.response
+
 
 ## AMAZON.FallbackIntent
 class FallbackIntentHandler(AbstractRequestHandler):
@@ -347,6 +419,8 @@ sb.add_request_handler(ListDishesIntent())
 sb.add_request_handler(PriceIntent())
 
 ## built-in intents
+sb.add_request_handler(YesIntentHandler())
+sb.add_request_handler(NoIntentHandler())
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
