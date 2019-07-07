@@ -40,12 +40,17 @@ SAD_PROMPT = "Sorry, dabei kann Mensa-Auskunft leider nicht helfen. "
 ERROR_PROMPT = "Sorry, das kann Mensa-Auskunft leider nicht verstehen. Bitte versuche es erneut. "
 ERROR_PROMPT2 = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. "
 ERROR_PROMPT3 = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. "
+ERROR_PROMPT4 = "Die Adresse der angefragten Mensa konnte leider nicht wiedergefunden werden. "
 
 ### Data
 required_slots = ["mensa_name", "date"]
 api_url_base = "https://openmensa.org/api/v2/canteens"
 DISHES = {}
 RESPONSE = []
+
+r = requests.get(api_url_base)
+json_data = r.json()
+#print(json_data)
 
 def create_mensa_url(mensa_id, date):
     return 'https://openmensa.org/api/v2/canteens/{}/days/{}/meals'.format(mensa_id, date)
@@ -60,6 +65,19 @@ def http_get(url):
     if response.status_code < 200 or response.status_code >= 300:
         response.raise_for_status()
     return response.json()
+
+#def get_mensa_address_by_city(city,mensa_name):
+#    city_mensas = [m for m in r.json() if m['city'] == city]
+#    address = [j['address'] for j in city_mensas if j['name'] == mensa_name]
+#    return address[0]
+
+def get_mensa_address_by_id(id):
+#    city_mensas = [m for m in r.json() if m['city'] == city]
+    address = [j['address'] for j in json_data if j['id'] == id]
+    return address[0]
+
+print('Output: : ' + str(get_mensa_address_by_id(61)))
+#print('Output: ' + str(get_mensa_address_by_city('Potsdam','Mensa Golm')))
 
 
 #### TEST ABOVE section:
@@ -86,7 +104,7 @@ class ListDishesIntent(AbstractRequestHandler):
         logger.info("In ListDishesIntent")
         filled_slots = handler_input.request_envelope.request.intent.slots
         slot_values = get_slot_values(filled_slots)
-        # print(slot_values)
+        print(slot_values)
         mensa_url = create_mensa_url(mensa_id=slot_values['mensa_name']['id'], date=slot_values['date']['resolved'])
         try:
             response = http_get(mensa_url)
@@ -124,11 +142,11 @@ class PriceIntent(AbstractRequestHandler):
         user_groups = ['Studenten', 'Angestellte', 'Schüler', 'Andere']
         filled_slots = handler_input.request_envelope.request.intent.slots
         slot_values = get_slot_values(filled_slots)
-        # print(slot_values)
+#        print(slot_values)
         try:
             dish_id = DISHES[int(slot_values['number']['resolved'])]
-            # print(DISHES)
-            # print(RESPONSE)
+#             print(DISHES)
+#             print(RESPONSE)
             for dish in RESPONSE:
                 if dish_id == dish['id']:
                     speech = "Das Gericht {} kostet ".format(dish['name'])
@@ -145,6 +163,32 @@ class PriceIntent(AbstractRequestHandler):
 
         return handler_input.response_builder.speak(speech).response
 
+## TODO
+class AddressIntent(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return (is_intent_name("AddressIntent")(handler_input) and
+                handler_input.request_envelope.request.dialog_state == DialogState.COMPLETED)
+    
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In AddressIntent")
+        filled_slots = handler_input.request_envelope.request.intent.slots
+#        print("Filled slots: " + str(filled_slots))
+        slot_values = get_slot_values(filled_slots)
+        print("Slot values: " + str(slot_values))
+        current_mensa_id = slot_values['mensa_name']['id']
+        current_mensa_name = slot_values['mensa_name']['resolved']
+        print("Mensa: " + str(current_mensa_name))
+        print("Mensa ID: " + str(current_mensa_id))
+        try:
+            address = get_mensa_address_by_id(int(current_mensa_id))
+            speech = "Die Adresse der {} lautet {}".format(current_mensa_name,address)
+        except Exception as e:
+            speech = ERROR_PROMPT4
+            logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+
+        return handler_input.response_builder.speak(speech).response
 
 ################################################
 # Request and Response Loggers #################
@@ -317,6 +361,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 ## custom intents
 sb.add_request_handler(ListDishesIntent())
 sb.add_request_handler(PriceIntent())
+sb.add_request_handler(AddressIntent())
 
 ## built-in intents
 sb.add_request_handler(LaunchRequestHandler())
