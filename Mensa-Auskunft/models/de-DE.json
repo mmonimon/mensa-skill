@@ -99,6 +99,10 @@
                         }
                     ],
                     "samples": [
+                        "bitte die adresse der {mensa_name}",
+                        "ich brauche die adresse der {mensa_name}",
+                        "adresse der {mensa_name}",
+                        "gib mir die adresse der {mensa_name}",
                         "wie ist die adresse der {mensa_name}"
                     ]
                 },
