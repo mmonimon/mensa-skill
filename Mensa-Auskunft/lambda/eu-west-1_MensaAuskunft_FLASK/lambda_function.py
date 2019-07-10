@@ -10,8 +10,8 @@ from flask_ask_sdk.skill_adapter import SkillAdapter
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.dispatch_components import (
-    AbstractRequestHandler, AbstractExceptionHandler,
-    AbstractResponseInterceptor, AbstractRequestInterceptor)
+                                              AbstractRequestHandler, AbstractExceptionHandler,
+                                              AbstractResponseInterceptor, AbstractRequestInterceptor)
 from ask_sdk_core.utils import is_intent_name, is_request_type
 
 from typing import Union, Dict, Any, List
@@ -40,6 +40,8 @@ ERROR_PROMPT = "Sorry, das kann Mensa-Auskunft leider nicht verstehen. Bitte ver
 ERROR_PROMPT1 = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. "
 ERROR_PROMPT2 = "Sorry, Essenspläne für {} habe ich leider nicht im Angebot. "
 ERROR_PROMPT3 = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. "
+ERROR_PROMPT4 = "Die Adresse der angefragten Mensa konnte leider nicht wiedergefunden werden. "
+
 SAMPLES1 = "Frag zum Beispiel: Gibt es morgen vegane Gerichte in der Mensa Golm? Oder: Welche Mensen gibt es in Berlin? "
 SAMPLES2 = "Sag zum Beispiel: Gib mir den Essensplan! Oder: Finde Gerichte ohne Fleisch! "
 SAMPLES3 = "Frag zum Beispiel: Wie ist die Adresse der Mensa Golm? Oder: Lies mir den Plan für Montag vor! "
@@ -49,6 +51,9 @@ SAMPLES3 = "Frag zum Beispiel: Wie ist die Adresse der Mensa Golm? Oder: Lies mi
 api_url_base = "https://openmensa.org/api/v2/canteens"
 DISHES = {}
 RESPONSE = []
+
+r = requests.get(api_url_base)
+json_data = r.json()
 
 def create_mensa_url(mensa_id, date):
     return 'https://openmensa.org/api/v2/canteens/{}/days/{}/meals'.format(mensa_id, date)
@@ -83,7 +88,7 @@ class ListDishesIntent(AbstractRequestHandler):
         # type: (HandlerInput) -> bool
         return (is_intent_name("ListDishesIntent")(handler_input) and
                 handler_input.request_envelope.request.dialog_state == DialogState.COMPLETED)
-
+    
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In ListDishesIntent")
@@ -94,7 +99,7 @@ class ListDishesIntent(AbstractRequestHandler):
         current_date = slot_values['date']['resolved']
         optional_ingredient = slot_values['ingredient']['resolved']
         question = 'Möchtest du den Preis eines dieser Gerichte erfahren? Frag zum Beispiel: Wie viel kostet das erste Gericht für Studenten? '
-
+        
         if current_mensa_id == None:
             speech = ERROR_PROMPT2.format(slot_values['mensa_name']['resolved'])
             return handler_input.response_builder.speak(speech).response
@@ -119,7 +124,6 @@ class ListDishesIntent(AbstractRequestHandler):
         except Exception as e:
             speech = ERROR_PROMPT1.format(current_date, current_mensa_id)
             logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-
         return handler_input.response_builder.speak(speech).ask(question).response
 
     def build_speech(self, dish, count):
@@ -134,7 +138,7 @@ class PriceIntent(AbstractRequestHandler):
         # type: (HandlerInput) -> bool
         return (is_intent_name("PriceIntent")(handler_input) and
                 handler_input.request_envelope.request.dialog_state == DialogState.COMPLETED)
-
+    
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In PriceIntent")
@@ -174,18 +178,15 @@ class PriceIntent(AbstractRequestHandler):
         return '{} Euro für {}, '.format(str(price).replace('.',','), user)
 
 class WithoutIntent(AbstractRequestHandler) :
-
     def can_handle(self, handler_input) :
         # type: (HandlerInput) -> bool
         return (is_intent_name("WithoutIntent")(handler_input) and 
                 handler_input.request_envelope.request.dialog_state == DialogState.COMPLETED)
-
     def handle(self, handler_input) :
         # type: (HandlerInput) -> Response
         logger.info("In WithoutIntent")
         # RESPONSE = []
         question = 'Möchtest du den Preis eines dieser Gerichte erfahren? Frag zum Beispiel: Wie viel kostet das erste Gericht für Studenten? '
-
         # extract slot values
         filled_slots = handler_input.request_envelope.request.intent.slots
         slot_values = get_slot_values(filled_slots)
@@ -193,12 +194,10 @@ class WithoutIntent(AbstractRequestHandler) :
         current_mensa_id = slot_values['mensa_name']['id']
         current_date = slot_values['date']['resolved']
         undesired_ingredient = slot_values['ingredient']['resolved'].lower()
-
         # Mensa not available
         if current_mensa_id == None :
             speech = ERROR_PROMPT2.format(slot_values['mensa_name']['resolved'])
             return handler_input.response_builder.speak(speech).response
-
         # request OpenMensa-API
         mensa_url = create_mensa_url(mensa_id=current_mensa_id, date=current_date)
         try :
@@ -225,17 +224,41 @@ class WithoutIntent(AbstractRequestHandler) :
         except Exception as e :
             speech = ERROR_PROMPT1.format(current_date, current_mensa_id)
             logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-
         return handler_input.response_builder.speak(speech).ask(question).response
-
-    
-
+      
     def build_speech(self, dish, count):
         speech = ''
         RESPONSE.append(dish)
         DISHES[count] = dish['id']
         speech += '{}. {}, '.format(count, dish['name'])
         return speech
+
+class AddressIntent(AbstractRequestHandler):
+    
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return (is_intent_name("AddressIntent")(handler_input) and
+                handler_input.request_envelope.request.dialog_state == DialogState.COMPLETED)
+    
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In AddressIntent")
+        filled_slots = handler_input.request_envelope.request.intent.slots
+        #        print("Filled slots: " + str(filled_slots))
+        slot_values = get_slot_values(filled_slots)
+        #        print("Slot values: " + str(slot_values))
+        current_mensa_id = slot_values['mensa_name']['id']
+        current_mensa_name = slot_values['mensa_name']['resolved']
+        #        print("Mensa: " + str(current_mensa_name))
+        #        print("Mensa ID: " + str(current_mensa_id))
+        try:
+            address = [j['address'] for j in json_data if j['id'] == int(current_mensa_id)]
+            speech = "Die Adresse der {} lautet {}".format(current_mensa_name,address[0])
+        except Exception as e:
+            speech = ERROR_PROMPT4
+            logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+        
+        return handler_input.response_builder.speak(speech).response
 
 ################################################
 # Request and Response Loggers #################
@@ -246,7 +269,7 @@ class RequestLogger(AbstractRequestInterceptor):
     def process(self, handler_input):
         # type: (HandlerInput) -> None
         logger.info("Request Envelope: {}".format(
-            handler_input.request_envelope))
+                                                  handler_input.request_envelope))
 
 class ResponseLogger(AbstractResponseInterceptor):
     """Log the response envelope."""
@@ -274,26 +297,26 @@ def get_slot_values(filled_slots):
     # type: (Dict[str, Slot]) -> Dict[str, Any]
     slot_values = {}
     logger.info("Filled slots: {}".format(filled_slots))
-
+    
     for key, slot_item in six.iteritems(filled_slots):
         name = slot_item.name
         try:
             status_code = slot_item.resolutions.resolutions_per_authority[0].status.code
-
+            
             if status_code == StatusCode.ER_SUCCESS_MATCH:
                 slot_values[name] = {
                     "synonym": slot_item.value,
                     "resolved": slot_item.resolutions.resolutions_per_authority[0].values[0].value.name,
                     "id": slot_item.resolutions.resolutions_per_authority[0].values[0].value.id,
                     "is_validated": True,
-                }
+            }
             elif status_code == StatusCode.ER_SUCCESS_NO_MATCH:
                 slot_values[name] = {
                     "synonym": slot_item.value,
                     "resolved": slot_item.value,
                     "id": None,
                     "is_validated": False,
-                }
+            }
             else:
                 pass
         except (AttributeError, ValueError, KeyError, IndexError, TypeError) as e:
@@ -301,10 +324,10 @@ def get_slot_values(filled_slots):
             logger.info(e)
             slot_values[name] = {
                 "synonym": slot_item.value,
-                "resolved": slot_item.value,
-                "id": None,
-                "is_validated": False,
-            }
+                    "resolved": slot_item.value,
+                        "id": None,
+                        "is_validated": False,
+                }
     return slot_values
 
 
@@ -315,14 +338,14 @@ def get_slot_values(filled_slots):
 ### NO NEED FOR MODIFICATION
 
 ## AMAZON.WelcomeIntent
-# => no sample utterances, will be triggered by opening the skill without one shot 
+# => no sample utterances, will be triggered by opening the skill without one shot
 # (no direct link to a skill specific intent)
 class LaunchRequestHandler(AbstractRequestHandler):
     """Handler for skill launch."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_request_type("LaunchRequest")(handler_input)
-
+    
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In LaunchRequestHandler")
@@ -336,7 +359,7 @@ class FallbackIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_intent_name("AMAZON.FallbackIntent")(handler_input)
-
+    
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In FallbackIntentHandler")
@@ -350,7 +373,7 @@ class HelpIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_intent_name("AMAZON.HelpIntent")(handler_input)
-
+    
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In HelpIntentHandler")
@@ -365,12 +388,12 @@ class ExitIntentHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> bool
         return (is_intent_name("AMAZON.CancelIntent")(handler_input) or
                 is_intent_name("AMAZON.StopIntent")(handler_input))
-
+    
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In ExitIntentHandler")
         handler_input.response_builder.speak("Bye").set_should_end_session(
-            True)
+                                                                           True)
         return handler_input.response_builder.response
 
 ## ExitAppIntent (schließen, verlassen...)
@@ -379,23 +402,23 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_request_type("SessionEndedRequest")(handler_input)
-
+    
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In SessionEndedRequestHandler")
         logger.info("Session ended with reason: {}".format(
-            handler_input.request_envelope.request.reason))
+                                                           handler_input.request_envelope.request.reason))
         return handler_input.response_builder.response
 
 # Exception Handler classes
 class CatchAllExceptionHandler(AbstractExceptionHandler):
     """Catch All Exception handler.
-    This handler catches all kinds of exceptions and prints
-    the stack trace on AWS Cloudwatch with the request envelope."""
+        This handler catches all kinds of exceptions and prints
+        the stack trace on AWS Cloudwatch with the request envelope."""
     def can_handle(self, handler_input, exception):
         # type: (HandlerInput, Exception) -> bool
         return True
-
+    
     def handle(self, handler_input, exception):
         # type: (HandlerInput, Exception) -> Response
         logger.error(exception, exc_info=True)
@@ -409,6 +432,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 sb.add_request_handler(ListDishesIntent())
 sb.add_request_handler(PriceIntent())
 sb.add_request_handler(WithoutIntent())
+sb.add_request_handler(AddressIntent())
 
 ## built-in intents
 sb.add_request_handler(LaunchRequestHandler())
