@@ -38,6 +38,40 @@
                         }
                     ],
                     "samples": [
+                        "{date} {ingredient} {mensa_name}",
+                        "{mensa_name} {date} {ingredient}",
+                        "{date} {mensa_name} {ingredient}",
+                        "{ingredient} {mensa_name} {date}",
+                        "mensaauskunft für {mensa_name}",
+                        "mensaauskunft für {date}",
+                        "mensaauskunft",
+                        "was gibt's in der mensa",
+                        "was gibt's {date} in der mensa",
+                        "haben sie {date} {ingredient} in der mensa",
+                        "verkaufen sie {date} {ingredient} in der {mensa_name}",
+                        "gibt es {date} {ingredient} in der {mensa_name}",
+                        "gibt es {date} {ingredient} in der mensa",
+                        "{ingredient} {date} {mensa_name}",
+                        "gerichte mit {ingredient} für {date} in {mensa_name}",
+                        "gerichte mit {ingredient} für {date} in der {mensa_name}",
+                        "gerichte mit {ingredient} für {date} für {mensa_name}",
+                        "mit {ingredient}",
+                        "gerichteliste",
+                        "liste gerichte",
+                        "einem gericht mit {ingredient}",
+                        "ein gericht mit {ingredient}",
+                        "gerichten mit {ingredient}",
+                        "gib mir gerichte mit {ingredient}",
+                        "such gerichte mit {ingredient} von {mensa_name}",
+                        "was gibt's am {date}",
+                        "{ingredient} gerichte",
+                        "plan {mensa_name}",
+                        "{mensa_name} plan",
+                        "mensaplan",
+                        "plan",
+                        "essensplan",
+                        "lies den plan vor",
+                        "was gibt's zu essen",
                         "such mir {ingredient} gerichte für {date} von der {mensa_name}",
                         "sag mir welche gerichte es gibt",
                         "gib mir gerichte",
@@ -65,6 +99,10 @@
                         }
                     ],
                     "samples": [
+                        "bitte die adresse der {mensa_name}",
+                        "ich brauche die adresse der {mensa_name}",
+                        "adresse der {mensa_name}",
+                        "gib mir die adresse der {mensa_name}",
                         "wie ist die adresse der {mensa_name}"
                     ]
                 },
@@ -84,6 +122,16 @@
                         }
                     ],
                     "samples": [
+                        "{user_group}",
+                        "{number}",
+                        "{user_group} {number}",
+                        "{number} für {user_group}",
+                        "was kostet das {number}",
+                        "was kostet nummer {number}",
+                        "nummer {number}",
+                        "preis {number}",
+                        "preis für nummer {number}",
+                        "wie viel kostet nummer {number}",
                         "wie viel kostet das {number} für {user_group}",
                         "wie viel kostet das {number}",
                         "wie viel kostet das"
@@ -962,6 +1010,7 @@
                     "name": "user_group",
                     "values": [
                         {
+                            "id": "pupils",
                             "name": {
                                 "value": "schüler",
                                 "synonyms": [
@@ -970,14 +1019,17 @@
                             }
                         },
                         {
+                            "id": "employees",
                             "name": {
-                                "value": "mitarbeiter",
+                                "value": "angestellte",
                                 "synonyms": [
+                                    "mitarbeiter",
                                     "mitarbeiterin"
                                 ]
                             }
                         },
                         {
+                            "id": "others",
                             "name": {
                                 "value": "besucher",
                                 "synonyms": [
@@ -987,6 +1039,7 @@
                             }
                         },
                         {
+                            "id": "students",
                             "name": {
                                 "value": "studenten",
                                 "synonyms": [
@@ -1003,28 +1056,40 @@
                     "name": "AMAZON.Food",
                     "values": [
                         {
+                            "id": "Geflügel",
                             "name": {
-                                "value": "geflügel"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "fleisch"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "vegane",
+                                "value": "Geflügel",
                                 "synonyms": [
+                                    "geflügel"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Fleisch",
+                            "name": {
+                                "value": "Fleisch",
+                                "synonyms": [
+                                    "fleisch"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Vegan",
+                            "name": {
+                                "value": "Vegan",
+                                "synonyms": [
+                                    "vegane",
                                     "veganes",
                                     "vegan"
                                 ]
                             }
                         },
                         {
+                            "id": "Vegetarisch",
                             "name": {
-                                "value": "vegetarische",
+                                "value": "Vegetarisch",
                                 "synonyms": [
+                                    "vegetarische",
                                     "vegetarisches",
                                     "vegetarisch"
                                 ]

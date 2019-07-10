@@ -173,8 +173,6 @@ class PriceIntent(AbstractRequestHandler):
     def build_speech(self, price, user):
         return '{} Euro für {}, '.format(str(price).replace('.',','), user)
 
-
-
 class WithoutIntent(AbstractRequestHandler) :
 
     def can_handle(self, handler_input) :
@@ -238,7 +236,6 @@ class WithoutIntent(AbstractRequestHandler) :
         DISHES[count] = dish['id']
         speech += '{}. {}, '.format(count, dish['name'])
         return speech
-
 
 ################################################
 # Request and Response Loggers #################
