@@ -99,6 +99,16 @@
                         }
                     ],
                     "samples": [
+  		"zeige mir die adresse der {mensa_name}",
+                        "standort {mensa_name}",
+                        "wo finde ich {mensa_name}",
+                        "standort der {mensa_name}",
+                        "wo befindet sich {mensa_name}",
+                        "wo ist die {mensa_name}",
+                        "gib mir die adresse der {mensa_name} bitte",
+                        "adresse {mensa_name}",
+                        "wie lautet die adresse der {mensa_name}",
+                        "ich hätte gerne die adresse der {mensa_name}",
                         "bitte die adresse der {mensa_name}",
                         "ich brauche die adresse der {mensa_name}",
                         "adresse der {mensa_name}",
