@@ -120,9 +120,9 @@ class ListDishesIntent(AbstractRequestHandler):
                 speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage. '
                 question = 'Kann ich sonst noch helfen? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
 
-except Exception as e:
-    speech = ERROR_PROMPT1.format(current_date, current_mensa_id)
-    logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+        except Exception as e:
+            speech = ERROR_PROMPT1.format(current_date, current_mensa_id)
+            logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
         
         return handler_input.response_builder.speak(speech).ask(question).response
     
@@ -172,10 +172,75 @@ class PriceIntent(AbstractRequestHandler):
             speech = ERROR_PROMPT3.format(current_number)
             logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
         
-                        return handler_input.response_builder.speak(speech).response
+        return handler_input.response_builder.speak(speech).response
 
 def build_speech(self, price, user):
     return '{} Euro für {}, '.format(str(price).replace('.',','), user)
+
+class WithoutIntent(AbstractRequestHandler) :
+    
+    def can_handle(self, handler_input) :
+        # type: (HandlerInput) -> bool
+        return (is_intent_name("WithoutIntent")(handler_input) and
+                handler_input.request_envelope.request.dialog_state == DialogState.COMPLETED)
+    
+    def handle(self, handler_input) :
+        # type: (HandlerInput) -> Response
+        logger.info("In WithoutIntent")
+        # RESPONSE = []
+        question = 'Möchtest du den Preis eines dieser Gerichte erfahren? Frag zum Beispiel: Wie viel kostet das erste Gericht für Studenten? '
+        
+        # extract slot values
+        filled_slots = handler_input.request_envelope.request.intent.slots
+        slot_values = get_slot_values(filled_slots)
+        logger.info("Slot values: {}".format(slot_values))
+        current_mensa_id = slot_values['mensa_name']['id']
+        current_date = slot_values['date']['resolved']
+        undesired_ingredient = slot_values['ingredient']['resolved'].lower()
+        
+        # Mensa not available
+        if current_mensa_id == None :
+            speech = ERROR_PROMPT2.format(slot_values['mensa_name']['resolved'])
+            return handler_input.response_builder.speak(speech).response
+        
+        # request OpenMensa-API
+        mensa_url = create_mensa_url(mensa_id=current_mensa_id, date=current_date)
+        try :
+            all_dishes = http_get(mensa_url)
+            desired_dishes = []
+            count = 0
+            dish_speech = ''
+            
+            # add dishes without undesired ingredient to desired_dishes
+            for dish in all_dishes :
+                if not ([note for note in dish['notes'] if (undesired_ingredient in note.lower())] or
+                        undesired_ingredient in dish['name'].lower()) :
+                    
+                    count += 1
+                    desired_dishes.append(dish)
+                    dish_speech += self.build_speech(dish, count)
+        
+            if dish_speech :
+                speech = 'Es gibt folgende Gerichte zur Auswahl: ' + dish_speech + '. ' + question
+            else:
+                speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage. '
+                question = 'Kann ich sonst noch helfen? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
+
+        except Exception as e :
+            speech = ERROR_PROMPT1.format(current_date, current_mensa_id)
+            logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+                
+        return handler_input.response_builder.speak(speech).ask(question).response
+    
+    
+    
+    def build_speech(self, dish, count):
+        speech = ''
+        RESPONSE.append(dish)
+        DISHES[count] = dish['id']
+        speech += '{}. {}, '.format(count, dish['name'])
+        return speech
+
 
 class AddressIntent(AbstractRequestHandler):
     
@@ -193,8 +258,8 @@ class AddressIntent(AbstractRequestHandler):
         #        print("Slot values: " + str(slot_values))
         current_mensa_id = slot_values['mensa_name']['id']
         current_mensa_name = slot_values['mensa_name']['resolved']
-        print("Mensa: " + str(current_mensa_name))
-        print("Mensa ID: " + str(current_mensa_id))
+        #        print("Mensa: " + str(current_mensa_name))
+        #        print("Mensa ID: " + str(current_mensa_id))
         try:
             address = [j['address'] for j in json_data if j['id'] == int(current_mensa_id)]
             speech = "Die Adresse der {} lautet {}".format(current_mensa_name,address[0])
@@ -263,18 +328,16 @@ def get_slot_values(filled_slots):
             }
             else:
                 pass
-except (AttributeError, ValueError, KeyError, IndexError, TypeError) as e:
-    logger.info("Couldn't resolve status_code for slot item: {}".format(slot_item))
-    logger.info(e)
-    slot_values[name] = {
-        "synonym": slot_item.value,
-            "resolved": slot_item.value,
-                "id": None,
-                "is_validated": False,
-        }
+        except (AttributeError, ValueError, KeyError, IndexError, TypeError) as e:
+            logger.info("Couldn't resolve status_code for slot item: {}".format(slot_item))
+            logger.info(e)
+            slot_values[name] = {
+                "synonym": slot_item.value,
+                    "resolved": slot_item.value,
+                        "id": None,
+                        "is_validated": False,
+                }
     return slot_values
-
-
 
 
 ##################################################
@@ -377,6 +440,8 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 ## custom intents
 sb.add_request_handler(ListDishesIntent())
 sb.add_request_handler(PriceIntent())
+sb.add_request_handler(WithoutIntent())
+sb.add_request_handler(AddressIntent())
 
 ## built-in intents
 sb.add_request_handler(LaunchRequestHandler())
