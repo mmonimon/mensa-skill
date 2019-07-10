@@ -26,7 +26,7 @@ logger.setLevel(logging.INFO)
 app = Flask(__name__)
 
 # Skill Builder object
-sb = SkillBuilder()
+# sb = SkillBuilder()
 sb = StandardSkillBuilder(table_name="High-Low-Game", auto_create_table=True)
 
 ##################################################
@@ -97,7 +97,7 @@ class ListDishesIntent(AbstractRequestHandler):
         logger.info("In ListDishesIntent")
         filled_slots = handler_input.request_envelope.request.intent.slots
         slot_values = get_slot_values(filled_slots)
-        print(slot_values)
+        # print(slot_values)
         current_date = slot_values['date']['resolved']
         optional_ingredient = slot_values['ingredient']['resolved']
         session_attr = handler_input.attributes_manager.session_attributes
@@ -105,6 +105,7 @@ class ListDishesIntent(AbstractRequestHandler):
         session_attr['mensa_id'] = slot_values['mensa_name']['id']
         handler_input.attributes_manager.persistent_attributes = session_attr
         handler_input.attributes_manager.save_persistent_attributes()
+        session_attr['response'] = []
         question = PRICE_QUESTION
 
         if session_attr['mensa_id'] == None:
@@ -116,28 +117,34 @@ class ListDishesIntent(AbstractRequestHandler):
             count = 0
             dish_speech = ''
             for dish in response:
-                if optional_ingredient and optional_ingredient in dish['notes']:
+                if optional_ingredient:
+                    if [note for note in dish['notes'] if (optional_ingredient in note.lower())] or \
+                    optional_ingredient in dish['name'].lower():
+                        count += 1
+                        session_attr['response'].append(dish)
+                        dish_speech += self.build_speech(dish, count)
+                else:
                     count += 1
-                    dish_speech += self.build_speech(dish, count)
-                elif not optional_ingredient:
-                    count += 1
+                    session_attr['response'].append(dish)
                     dish_speech += self.build_speech(dish, count)
             if dish_speech:
                 speech = 'Es gibt folgende Gerichte zur Auswahl: ' + dish_speech + '. ' + question
             else: 
                 speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage. '
                 question = 'Kann ich sonst noch helfen? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
+            # session_attr['dishes'] = matching_dishes 
+            print(session_attr)
 
         except Exception as e:
             speech = ERROR_PROMPT1.format(current_date, session_attr['mensa_name'])
-            logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+            print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
         return handler_input.response_builder.speak(speech).ask(question).response
     
     @staticmethod
     def build_speech(dish, count):
         speech = ''
-        RESPONSE.append(dish)
-        DISHES[count] = dish['id']
+        # RESPONSE.append(dish)
+        # DISHES[count] = dish['id']
         speech += '{}. {}, '.format(count, dish['name'])
         return speech
 
@@ -150,37 +157,35 @@ class PriceIntent(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In PriceIntent")
+        session_attr = handler_input.attributes_manager.session_attributes
         user_groups = ['Studenten', 'Angestellte', 'Schüler', 'Andere']
         filled_slots = handler_input.request_envelope.request.intent.slots
         slot_values = get_slot_values(filled_slots)
         current_number = slot_values['number']['resolved']
-        current_user_id = slot_values['user_group']['id']
+        current_usergroup_id = slot_values['user_group']['id']
         current_user = slot_values['user_group']['resolved']
+        reprompt = 'Möchtest du noch einen anderen Preis erfahren? Sage bitte die Nummer des Gerichts. '
         print(slot_values)
         try:
-            dish_id = DISHES[int(current_number)]
-            print(DISHES)
-            print(RESPONSE)
-            for dish in RESPONSE:
-                if dish_id == dish['id']:
-                    speech = "Das Gericht {} kostet ".format(dish['name'])
-                    dish_keys = list(dish['prices'].keys())
-                    print(dish_keys)
-                    if current_user_id:
-                        price = dish['prices'][current_user_id]
-                        speech += self.build_speech(price, current_user)
-                    else:
-                        for i in range(len(dish_keys)):
-                            price = dish['prices'][dish_keys[i]]
-                            if price == None:
-                                continue
-                            speech += self.build_speech(price, user_groups[i])
-                    speech += '.'
+            dish_name = session_attr['response'][int(current_number)-1]['name']
+            dish_prices = session_attr['response'][int(current_number)-1]['prices']
+            user_group_keys = list(dish_prices.keys())
+            speech = "Das Gericht {} kostet ".format(dish_name)
+            if current_usergroup_id:
+                price = dish_prices[current_usergroup_id]
+                speech += self.build_speech(price, current_user)
+            else:
+                for i in range(len(user_group_keys)):
+                    price = dish_prices[user_group_keys[i]]
+                    if price == None:
+                        continue
+                    speech += self.build_speech(price, user_groups[i])
+            speech += '.' + reprompt
         except Exception as e:
-           speech = ERROR_PROMPT3.format(current_number)
-           logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-
-        return handler_input.response_builder.speak(speech).response
+            speech = ERROR_PROMPT3.format(current_number)
+            logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+        
+        return handler_input.response_builder.speak(speech).ask(reprompt).response
 
     def build_speech(self, price, user):
         return '{} Euro für {}, '.format(str(price).replace('.',','), user)
@@ -221,7 +226,7 @@ class WithoutIntent(AbstractRequestHandler) :
 
                     count += 1
                     desired_dishes.append(dish)
-                    dish_speech += self.build_speech(dish, count)
+                    dish_speech += ListDishesIntent.build_speech(dish, count)
 
             if dish_speech :
                 speech = 'Es gibt folgende Gerichte zur Auswahl: ' + dish_speech + '. ' + question
@@ -233,13 +238,6 @@ class WithoutIntent(AbstractRequestHandler) :
             speech = ERROR_PROMPT1.format(current_date, current_mensa_id)
             logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
         return handler_input.response_builder.speak(speech).ask(question).response
-      
-    def build_speech(self, dish, count):
-        speech = ''
-        RESPONSE.append(dish)
-        DISHES[count] = dish['id']
-        speech += '{}. {}, '.format(count, dish['name'])
-        return speech
 
 class AddressIntent(AbstractRequestHandler):
     
@@ -357,17 +355,13 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In LaunchRequestHandler")
-        attr = handler_input.attributes_manager.persistent_attributes
-        if attr:
-            reprompt = 'Möchtest du wieder den Tagesplan für {} hören? '.format(attr['mensa_name'])
+        persist_attr = handler_input.attributes_manager.persistent_attributes
+        if persist_attr:
+            handler_input.attributes_manager.session_attributes = persist_attr
+            reprompt = 'Möchtest du wieder den Tagesplan für {} hören? '.format(persist_attr['mensa_name'])
             speech = WELCOME_PROMPT + reprompt
             handler_input.response_builder.speak(speech).ask(reprompt)
             return handler_input.response_builder.response
-        # else:
-        #     attr['mensa_name'] = None
-        #     attr['mensa_id'] = None
-        handler_input.attributes_manager.session_attributes = attr
-        print(attr)
         speech = WELCOME_PROMPT + HELP_PROMPT + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
         handler_input.response_builder.speak(speech).ask(REPROMPT)
         return handler_input.response_builder.response
@@ -382,14 +376,15 @@ class YesIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In YesIntentHandler")
-        session_attr = handler_input.attributes_manager.persistent_attributes
+        session_attr = handler_input.attributes_manager.session_attributes
+        session_attr['response'] = []
         print(session_attr)
+
+        if not session_attr:
+            speech = "Du musst zuerst eine Mensa auswählen! " + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
+            return handler_input.response_builder.speak(speech).response
         current_date = datetime.now().strftime("%Y-%m-%d")
         question = PRICE_QUESTION
-
-        if session_attr['mensa_id'] == None:
-            speech = ERROR_PROMPT2.format(session_attr['mensa_name'])
-            return handler_input.response_builder.speak(speech).response
         mensa_url = create_mensa_url(mensa_id=session_attr['mensa_id'], date=current_date)
         try:
             response = http_get(mensa_url)
@@ -397,13 +392,14 @@ class YesIntentHandler(AbstractRequestHandler):
             dish_speech = ''
             for dish in response:
                 count += 1
+                session_attr['response'].append(dish)
                 dish_speech += ListDishesIntent.build_speech(dish, count)
             if dish_speech:
                 speech = 'Es gibt folgende Gerichte zur Auswahl: ' + dish_speech + '. ' + question
             else: 
                 speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage. '
                 question = 'Kann ich sonst noch helfen? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-
+            print(session_attr)
         except Exception as e:
             speech = ERROR_PROMPT1.format(current_date, session_attr['mensa_name'])
             logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
