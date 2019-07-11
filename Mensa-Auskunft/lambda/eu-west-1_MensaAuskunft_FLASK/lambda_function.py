@@ -279,7 +279,7 @@ class ListMensasIntent(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In ListMensasIntent")
-        all_mensas = requests.http_get(api_url_base)
+        all_mensas = http_get(api_url_base)
         filled_slots = handler_input.request_envelope.request.intent.slots
         slot_values = get_slot_values(filled_slots)
         city = slot_values['city']['resolved']
@@ -533,6 +533,7 @@ sb.add_request_handler(ListDishesIntent())
 sb.add_request_handler(PriceIntent())
 sb.add_request_handler(WithoutIntent())
 sb.add_request_handler(AddressIntent())
+sb.add_request_handler(ListMensasIntent())
 
 ## built-in intents
 sb.add_request_handler(YesIntentHandler())
