@@ -86,7 +86,11 @@ jmespath-0.9.4.dist-info/
 jmespath/
 s3transfer-0.2.1.dist-info/
 s3transfer/
-
+boto3-1.9.188.dist-info/
+botocore-1.12.188.dist-info/
+Flask-1.1.1.dist-info/
+boto3-1.9.188.dist-info/
+botocore-1.12.188.dist-info/
 
 *.egg-info/
 .installed.cfg

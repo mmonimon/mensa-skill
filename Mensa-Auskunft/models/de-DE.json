@@ -22,6 +22,9 @@
                             "name": "date",
                             "type": "AMAZON.DATE",
                             "samples": [
+                                "{ingredient}",
+                                "{mensa_name}",
+                                "am {date}",
                                 "{date}"
                             ]
                         },
@@ -29,6 +32,9 @@
                             "name": "mensa_name",
                             "type": "mensa_name",
                             "samples": [
+                                "{ingredient}",
+                                "in der {mensa_name}",
+                                "{date}",
                                 "{mensa_name}"
                             ]
                         },
@@ -38,6 +44,24 @@
                         }
                     ],
                     "samples": [
+                        "lies mir den plan für {date} vor",
+                        "gibt es {date} {ingredient} gerichte in der {mensa_name}",
+                        "gib mir den essensplan",
+                        "finde gerichte {ingredient}",
+                        "liste gerichte auf",
+                        "auflistung gerichte",
+                        "{mensa_name} tagesplan für {date}",
+                        "tagesplan für {mensa_name}",
+                        "essensplan für {mensa_name}",
+                        "essensplan für {date}",
+                        "tagesplan",
+                        "gibt es {date} wieder {ingredient} in der mensa",
+                        "kann ich {date} {ingredient} in der mensa essen",
+                        "gibt's heute gerichte mit {ingredient}",
+                        "gibt es {date} {ingredient} gerichte in der mensa",
+                        "gibt es am {date} {ingredient} gerichte in der mensa",
+                        "gibt es {date} {ingredient} gerichte",
+                        "gibt es {ingredient} gerichte",
                         "{date} {ingredient} {mensa_name}",
                         "{mensa_name} {date} {ingredient}",
                         "{date} {mensa_name} {ingredient}",
@@ -99,7 +123,7 @@
                         }
                     ],
                     "samples": [
-  		"zeige mir die adresse der {mensa_name}",
+                        "zeige mir die adresse der {mensa_name}",
                         "standort {mensa_name}",
                         "wo finde ich {mensa_name}",
                         "standort der {mensa_name}",
@@ -123,6 +147,9 @@
                             "name": "number",
                             "type": "AMAZON.NUMBER",
                             "samples": [
+                                "gericht {number}",
+                                "das {number}",
+                                "nummer {number}",
                                 "{number}"
                             ]
                         },
@@ -132,6 +159,19 @@
                         }
                     ],
                     "samples": [
+                        "wie teuer ist das {number} gericht",
+                        "wie teuer ist das",
+                        "wie teuer ist nummer {number} für {user_group}",
+                        "der preis für nummer {number}",
+                        "der preis für {number}",
+                        "ich will das {number}",
+                        "essen {number}",
+                        "{number} gericht",
+                        "gericht {number}",
+                        "was muss ich für die {number} blechen",
+                        "wie viel kostet gericht {number}",
+                        "was kostet das {number} gericht",
+                        "wie viel kostet das {number} gericht",
                         "{user_group}",
                         "{number}",
                         "{user_group} {number}",
@@ -157,21 +197,6 @@
                     ],
                     "samples": [
                         "welche mensas gibt es in {city}"
-                    ]
-                },
-                {
-                    "name": "IngredientIntent",
-                    "slots": [
-                        {
-                            "name": "ingredient",
-                            "type": "AMAZON.Food",
-                            "samples": [
-                                "{ingredient}"
-                            ]
-                        }
-                    ],
-                    "samples": [
-                        "gibt es {ingredient} gerichte"
                     ]
                 },
                 {
@@ -1107,6 +1132,7 @@
                             "name": {
                                 "value": "Vegetarisch",
                                 "synonyms": [
+                                    "ohne fleisch",
                                     "vegetarische",
                                     "vegetarisches",
                                     "vegetarisch"
@@ -1301,22 +1327,6 @@
                     ]
                 },
                 {
-                    "name": "IngredientIntent",
-                    "confirmationRequired": false,
-                    "prompts": {},
-                    "slots": [
-                        {
-                            "name": "ingredient",
-                            "type": "AMAZON.Food",
-                            "confirmationRequired": false,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "elicitation": "Elicit.Slot.857497789458.1463405389155"
-                            }
-                        }
-                    ]
-                },
-                {
                     "name": "WithoutIntent",
                     "confirmationRequired": false,
                     "prompts": {},
@@ -1382,7 +1392,11 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "welche nummer?"
+                        "value": "Welches Gericht, nenne bitte die Nummer."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Welche Nummer?"
                     }
                 ]
             },
@@ -1391,7 +1405,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "welche mensa?"
+                        "value": "Welche Mensa?"
                     }
                 ]
             },
@@ -1400,11 +1414,11 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "für welche mensa möchtest du eine auskunft haben?"
+                        "value": "Welche Mensa?"
                     },
                     {
                         "type": "PlainText",
-                        "value": "welche mensa?"
+                        "value": "In welcher Mensa möchtest du essen?"
                     }
                 ]
             },
@@ -1413,7 +1427,11 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "für wann?"
+                        "value": "Für wann?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Wann möchtest du essen?"
                     }
                 ]
             },
@@ -1487,7 +1505,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "welche stadt?"
+                        "value": "Welche Stadt?"
                     }
                 ]
             }
