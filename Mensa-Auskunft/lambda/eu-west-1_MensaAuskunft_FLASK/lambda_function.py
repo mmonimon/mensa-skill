@@ -110,9 +110,11 @@ class ListDishesIntent(AbstractRequestHandler):
             count = 0
             dish_speech = ''
             for dish in response:
-                if optional_ingredient and optional_ingredient in dish['notes']:
-                    count += 1
-                    dish_speech += self.build_speech(dish, count)
+                if optional_ingredient:
+                    if [note for note in dish['notes'] if (optional_ingredient in note.lower())] or \
+                    optional_ingredient in dish['name'].lower():
+                        count += 1
+                        dish_speech += self.build_speech(dish, count)
                 elif not optional_ingredient:
                     count += 1
                     dish_speech += self.build_speech(dish, count)
