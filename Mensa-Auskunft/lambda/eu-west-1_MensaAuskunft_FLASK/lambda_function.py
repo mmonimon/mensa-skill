@@ -4,7 +4,6 @@ import logging
 import requests
 import six
 import random
-from datetime import datetime
 
 from flask import Flask
 from ask_sdk_core.skill_builder import SkillBuilder
@@ -458,7 +457,6 @@ def unhandled_intent_handler(handler_input):
     # type: (HandlerInput) -> Response
     return handler_input.response_builder.speak(ERROR_PROMPT).ask(REPROMPT).response
 
-
 lambda_handler = sb.lambda_handler()
 
 # --- flask
@@ -467,7 +465,6 @@ skill_adapter = SkillAdapter(skill=sb.create(), skill_id='TEST', app=app)
 @app.route("/", methods=['POST'])
 def invoke_skill():
     return skill_adapter.dispatch_request()
-
 
 if __name__ == '__main__':
     app.run(debug=True)
