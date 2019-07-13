@@ -41,6 +41,7 @@ ERROR_PROMPT1 = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Esse
 ERROR_PROMPT2 = "Sorry, Essenspläne für {} habe ich leider nicht im Angebot. "
 ERROR_PROMPT3 = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. "
 ERROR_PROMPT4 = "Die Adresse der angefragten Mensa konnte leider nicht wiedergefunden werden. "
+ERROR_PROMPT5 = "Leider keine Mensas gefunden. Sie können eine andere Stadt wählen."
 
 SAMPLES1 = "Frag zum Beispiel: Gibt es morgen vegane Gerichte in der Mensa Golm? Oder: Welche Mensen gibt es in Berlin? "
 SAMPLES2 = "Sag zum Beispiel: Gib mir den Essensplan! Oder: Finde Gerichte ohne Fleisch! "
@@ -260,6 +261,33 @@ class AddressIntent(AbstractRequestHandler):
         
         return handler_input.response_builder.speak(speech).response
 
+
+class ListMensasIntent(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return (is_intent_name("ListMensasIntent")(handler_input) and
+                handler_input.request_envelope.request.dialog_state == DialogState.COMPLETED)
+    
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In ListMensasIntent")
+        all_mensas = http_get(api_url_base)
+        filled_slots = handler_input.request_envelope.request.intent.slots
+        slot_values = get_slot_values(filled_slots)
+        city = slot_values['city']['resolved']
+        try:
+            speech = 'Es gibt die folgenden Mensas in {}:\n'.format(city)
+            for diction in all_mensas:
+                if diction['city'].lower() == city:
+                    speech += '{}\n'.format(diction['name'])
+        
+        except Exception as e:
+            speech = ERROR_PROMPT5
+            logger.info("Intent: {}: message: {}".format(
+                handler_input.request_envelope.request.intent.name, str(e)))
+        
+        return handler_input.response_builder.speak(speech).response
+
 ################################################
 # Request and Response Loggers #################
 ################################################
@@ -433,6 +461,7 @@ sb.add_request_handler(ListDishesIntent())
 sb.add_request_handler(PriceIntent())
 sb.add_request_handler(WithoutIntent())
 sb.add_request_handler(AddressIntent())
+sb.add_request_handler(ListMensasIntent())
 
 ## built-in intents
 sb.add_request_handler(LaunchRequestHandler())
