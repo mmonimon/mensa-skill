@@ -4,6 +4,7 @@ import logging
 import requests
 import six
 import random
+from datetime import datetime
 
 from flask import Flask
 from ask_sdk_core.skill_builder import SkillBuilder
