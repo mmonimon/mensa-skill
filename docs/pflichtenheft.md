@@ -1,30 +1,123 @@
-#### Zielbestimmungen
-Im Pflichtenheft werden die Zielbestimmungen exakt eingegrenzt. Sie werden in 3 Kategorien gegliedert:
-MUSS- Kriterien sind unerlässlich damit die Anwendung funktioniert.
-WUNSCH- Kriterien bleiben entbehrlich. Auch ohne sie wäre eine Inbetriebnahme möglich. Eine Pflicht diese umzusetzen besteht trotzdem.
-ABGRENZUNGS- Kriterien machen klar, was die Anwendung auf keinen Fall beinhalten sollte.
-#### Einsatz
-Wichtig ist die Analyse des späteren Einsatzumfelds. Dazu gehören Zielgruppen, Anwendungsbereiche und Betriebsbedingungen. Die physikalische Umgebung, die Betriebszeit und die Qualifikation der Benutzergruppen wird festgelegt.
-#### Produktübersicht
-Im Pflichtenheft steht ebenfalls die Produktübersicht über alle die Anwendung betreffende Geschäftsprozesse und beteiligte Akteure.
-#### Funktionen
-Hier erfolgt die Erklärung jedes einzelnen Anwendungsfalls. Diese beschreibt jede unterstützende Funktion des Produkts. Wer ist beteiligt? Wie und unter welchen Bedingungen läuft die Funktion ab? Wie wirkt sich das auf die weiteren Geschäftsprozesse aus?
-#### Leistungen
-Der Unterpunkt Leistungen beschreibt die Anforderungen an eine bestimmte Funktion. Dazu gehören zum Beispiel: Ausführungszeit, Genauigkeit der Berechnung, Datentransfervolumen und Dauer. Hier stehen auch Anmerkungen zu den bestimmten Anforderungen und ob diese überhaupt erreicht werden können.
-#### Qualitätsanforderungen
-Bestimmten Merkmalen wird hier eine Qualitätsstufe zugeordnet. Beispielsweise so: Änderbarkeit = nicht relevant, Effizienz = gut, usw.
+# Pflichtenheft
+## Dialogmodellierung: Gruppenprojekt - Alexa Mensaauskunft-Skill
+*Monique Noss*
+*Olha Zolotarenko*
+*Maria Lomaeva*
+*Bogdan Kostić*
+
+### Zielbestimmungen
+Grundsätzliches Ziel des Gruppenprojektes ist es, den standortsübergreifend Alexa Mensaauskunft-Skill zu programmieren.
+
+### Aufteilung
+
+* Bogdan: IngredientIntent, WithoutIntent
+* Olha: AddressIntent, Pflichtenheft
+* Maria: ListMensasIntent, Pflichtenheft
+* Moni: ListDishesIntent, PriceIntent
+
+### Invocation Name
+Mensa auskunft *mensaria?
+
+### Mögliche Erweiterungen
+Als weitere mögliche Verbesserungen, die aber zur Zeit den Rahmen des Projekts sprengen, werden folgene Punkte betrachtet:
+
+1. User Accounts, um personliche Vorlieben des Users speichern zu können. 
+2. Syntaktisches Parsing der Gerichte, um nur Kopf der "Gerichtsphrase" auszugeben. 
+3. Nach Gerichten in allen Standorten suchen. 
+
+### Einsatz - Wofür benutzt man den Mensaauskunft-Skill?
+Der Mensaauskunft-Skill gibt die folgenden Informationen aus: 
+
+* welche Mensas gibt es in einer Stadt
+* welche Adresse hat die Mensa
+* welche Gerichte werden am bestimmten Tag serviert
+* welche Preise gibt es für das ausgewählte Gericht. 
+
+Ein Beuspieldialog wäre:
+
+> U: Alexa, öffne Mensaauskunft.  
+> A: In welcher Mensa möchtest du essen?  
+U: Golm.  
+A: Wann möchtest du essen?  
+U: Übermorgen.   
+A: Übermorgen gibt es Geflügelgulasch, … \* 
+U: Alexa, welche Gerichte sind vegetarisch?  
+A: Ich habe die folgenden vegetarischen Gerichte gefunden: Bami Goreng, …  
+U: Alexa, wie viel kostet Bami Goreng für Studenten?  
+A: Für Studenten kostet Bami Goreng 2€. Möchtest du noch etwas über ein anderes Gericht wissen?  
+U: Welche Gerichte gab es denn?  
+A: …  
+U: …  
+> A: … . Guten Appetit! 
+
+\*Alexa kann immer unterbrochen werden
+
+### Funktionen - Was man bei dem Mensaasukunft-Skill fragen kann?
+#### Essenplan
+Gibt den Essenplan von einer bestimmten Mensa, Datum oder Ingredient aus. 
+
+Beispieläußerungen:
+
+>"lies mir den plan für {date} vor"
+"gibt es {date} {ingredient} gerichte in der {mensa_name}"
+>"was gibt's in der mensa" usw.
+
+#### Adresse der Mensa
+Die Adresse einer Mensa wird vorgelesen. 
+
+Beispieläußerungen:
+
+>"zeige mir die adresse der {mensa_name}"
+"standort {mensa_name}"
+>"adresse {mensa_name}" usw.
+
+#### Preis der Gerichte
+Der Skill gibt den Preis für ein Gericht zurück.
+
+Beispieläußerungen:
+
+>"preis für nummer {number}",
+"wie viel kostet das {number} für {user_group}",
+>"wie teuer ist das {number} gericht" usw. 
+
+#### Mensas in einer Stadt
+Listet die Mensas in einer genannten Stadt auf.
+
+Beispieläußerungen:
+
+>"welche mensas gibt es in {city}",
+"suche mensas in {city}",
+>"gibt es mensas in {city}"  usw.
+
+#### Gericht ohne Ingrediens
+Nach dem Wunsch können nur die Gerichte ohne bestimmtes Ingrediens gesucht werden. 
+
+Beispieläußerungen:
+
+>"suche für {date} {synonyms_gericht} ohne {ingredient} in {mensa_name}",
+"gibt es {date} {synonyms_gericht} ohne {ingredient}",
+>"nach {synonyms_gericht} ohne {ingredient} bitte" usw.
+
+### Leistungen
+*können wir zB die Faktoren wie Ausführungszeit oder Datentransfervolumen 
+überhaupt beeinflußen?
+
 #### Benutzeroberfläche
-Grundlegende Anforderungen zur Art des Layouts, der Dialogstruktur und der Zugriffsrechte stehen hier.
-#### Sonstige Anforderungen
-Dokumentation, Buchführung und Sicherheitsanforderungen wie Passwortschutz etc.
+??? *brauchen wir das? Benutzer muss einfach sprechen...
+
 ##### Technisches Umfeld
-Eine Auflistung der Soft- und Hardwaresysteme, die für die Anwendung zu installieren sind, sollte erstellt werden. Um beispielsweise die Verfügbarkeit des Netwerkanschlusses zu garantieren, werden Randbedingungen festgelegt. Schnittstellen werden benannt, um das Produkt mit anderen Anwendungen zu verknüpfen.
-#### Gliederung
-Eine komplexe Entwicklung gliedert sich besser in Teilanwendungen, dadurch entsteht ein besserer Überblick über das gesamte Projekt.
+
+1. Python3
+2. Ngrok
+3. AWS
+4. git/github
+5. Flask
+6. ask_sdk
+
+*bitte hinzufügen, wenn ich etwas vergessen habe
+
 #### Ergänzungen
-Hier stehen Anmerkungen des Arbeitgebers, z.B. zu konkreten Wünschen nach bestimmten Herstellern. Hier sollten die zu berücksichtigenden Normen und Vorschriften, sowie Hinweise zu Patenten und Lizenzen aufgelistet werden.
+*Lizenzen?
+
 #### Tests
-Testfälle prüfen das Produkt vor der Fertigstellung in Bezug auf Funktionen, Eigenschaften und Qualitätsmerkmale. Tests, die den größten Teil der Funktion abdecken, werden hier dokumentiert. Nach einem fehlerfreien Durchlauf kann das Produkt als fertiggestellt deklariert werden.
-
-
-von: https://wiki.induux.de/Pflichtenheft
+???
