@@ -1,9 +1,9 @@
 # Pflichtenheft
 ## Dialogmodellierung: Gruppenprojekt - Alexa Mensaauskunft-Skill
-*Monique Noss*
-*Olha Zolotarenko*
-*Maria Lomaeva*
-*Bogdan Kostić*
+*Monique Noss*  
+*Olha Zolotarenko*  
+*Maria Lomaeva*  
+*Bogdan Kostić*  
 
 ### Zielbestimmungen
 Grundsätzliches Ziel des Gruppenprojektes ist es, den standortsübergreifend Alexa Mensaauskunft-Skill zu programmieren.
@@ -40,7 +40,7 @@ Ein Beuspieldialog wäre:
 U: Golm.  
 A: Wann möchtest du essen?  
 U: Übermorgen.   
-A: Übermorgen gibt es Geflügelgulasch, … \* 
+A: Übermorgen gibt es Geflügelgulasch, … \*  
 U: Alexa, welche Gerichte sind vegetarisch?  
 A: Ich habe die folgenden vegetarischen Gerichte gefunden: Bami Goreng, …  
 U: Alexa, wie viel kostet Bami Goreng für Studenten?  
@@ -58,66 +58,49 @@ Gibt den Essenplan von einer bestimmten Mensa, Datum oder Ingredient aus.
 
 Beispieläußerungen:
 
->"lies mir den plan für {date} vor"
-"gibt es {date} {ingredient} gerichte in der {mensa_name}"
->"was gibt's in der mensa" usw.
+>"lies mir den plan für {date} vor"  
+"gibt es {date} {ingredient} gerichte in der {mensa_name}"  
+>"was gibt's in der mensa"  
 
 #### Adresse der Mensa
 Die Adresse einer Mensa wird vorgelesen. 
 
 Beispieläußerungen:
 
->"zeige mir die adresse der {mensa_name}"
-"standort {mensa_name}"
->"adresse {mensa_name}" usw.
+>"zeige mir die adresse der {mensa_name}"  
+"standort {mensa_name}"  
+>"adresse {mensa_name}"  
 
 #### Preis der Gerichte
 Der Skill gibt den Preis für ein Gericht zurück.
 
 Beispieläußerungen:
 
->"preis für nummer {number}",
-"wie viel kostet das {number} für {user_group}",
->"wie teuer ist das {number} gericht" usw. 
+>"preis für nummer {number}"  
+"wie viel kostet das {number} für {user_group}"  
+>"wie teuer ist das {number} gericht"  
 
 #### Mensas in einer Stadt
 Listet die Mensas in einer genannten Stadt auf.
 
 Beispieläußerungen:
 
->"welche mensas gibt es in {city}",
-"suche mensas in {city}",
->"gibt es mensas in {city}"  usw.
+>"welche mensas gibt es in {city}"  
+"suche mensas in {city}"  
+>"gibt es mensas in {city}"  
 
 #### Gericht ohne Ingrediens
 Nach dem Wunsch können nur die Gerichte ohne bestimmtes Ingrediens gesucht werden. 
 
 Beispieläußerungen:
 
->"suche für {date} {synonyms_gericht} ohne {ingredient} in {mensa_name}",
-"gibt es {date} {synonyms_gericht} ohne {ingredient}",
->"nach {synonyms_gericht} ohne {ingredient} bitte" usw.
+>"suche für {date} {synonyms_gericht} ohne {ingredient} in {mensa_name}"  
+"gibt es {date} {synonyms_gericht} ohne {ingredient}"  
+>"nach {synonyms_gericht} ohne {ingredient} bitte"  
 
-### Leistungen
-*können wir zB die Faktoren wie Ausführungszeit oder Datentransfervolumen 
-überhaupt beeinflußen?
+#### Technisches Umfeld
 
-#### Benutzeroberfläche
-??? *brauchen wir das? Benutzer muss einfach sprechen...
-
-##### Technisches Umfeld
-
-1. Python3
-2. Ngrok
-3. AWS
-4. git/github
-5. Flask
-6. ask_sdk
-
-*bitte hinzufügen, wenn ich etwas vergessen habe
-
-#### Ergänzungen
-*Lizenzen?
+<img src="mermaid-diagram-20190715215538.svg" alt="drawing" width="500" align="middle"/>
 
 #### Tests
 ???
