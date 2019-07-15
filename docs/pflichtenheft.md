@@ -16,7 +16,10 @@ Grundsätzliches Ziel des Gruppenprojektes ist es, den standortsübergreifend Al
 * Moni: ListDishesIntent, PriceIntent
 
 ### Invocation Name
-Mensa auskunft *mensaria?
+
+```sh
+mensa auskunft
+```
 
 ### Mögliche Erweiterungen
 Als weitere mögliche Verbesserungen, die aber zur Zeit den Rahmen des Projekts sprengen, werden folgene Punkte betrachtet:
