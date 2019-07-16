@@ -20,8 +20,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 app = Flask(__name__)
 
+
 # Skill Builder object
 sb = StandardSkillBuilder(table_name="Mensa-Auskunft", auto_create_table=True)
+
 
 ################################################
 # Utility functions ############################
@@ -215,7 +217,7 @@ def price_intent_handler(handler_input):
         return handler_input.response_builder.speak(ERROR_PROMPT6).ask(SAMPLES2).response
     
     # define user group names
-    user_groups_de = ['Studenten', 'Angestellte', 'Schüler', 'Andere']
+    user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studenten']
 
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
@@ -236,6 +238,7 @@ def price_intent_handler(handler_input):
             speech += build_price_speech(price, current_user)
         # if not: read all prices for each available user group
         else:
+            print(user_groups)
             for i in range(len(user_groups)):
                 price = dish_prices[user_groups[i]]
                 if price == None:
@@ -258,7 +261,7 @@ def without_intent_handler(handler_input) :
     filled_slots = handler_input.request_envelope.request.intent.slots
     slot_values = get_slot_values(filled_slots)
     current_date = slot_values['date']['resolved']
-    undesired_ingredient = slot_values['ingredient']['resolved'].lower()
+    undesired_ingredient = slot_values['ingredient']['resolved']
 
     # assigning session attributes to the mensa_name slot values
     session_attr = handler_input.attributes_manager.session_attributes
@@ -287,13 +290,21 @@ def without_intent_handler(handler_input) :
         dish_speech = ''
 
         # add dishes without undesired ingredient to desired_dishes 
-        for dish in all_dishes :
-            if not ([note for note in dish['notes'] if (undesired_ingredient in note.lower())] or
-                undesired_ingredient in dish['name'].lower()) :
+        if (undesired_ingredient.lower() == 'fleisch') :
+            for dish in all_dishes :
+                if ('Vegetarisch' in dish['notes']) or ('Vegan' in dish['notes']) :
+                    count += 1
+                    session_attr['all_dishes'].append(dish)
+                    dish_speech += build_dish_speech(dish, count)
 
-                count += 1
-                session_attr['all_dishes'].append(dish)
-                dish_speech += build_dish_speech(dish, count)
+        else :
+            for dish in all_dishes :
+                if not ([note for note in dish['notes'] if (undesired_ingredient.lower() in note.lower())] or
+                    undesired_ingredient.lower() in dish['name'].lower()) :
+
+                    count += 1
+                    session_attr['all_dishes'].append(dish)
+                    dish_speech += build_dish_speech(dish, count)
 
         if dish_speech :
             speech = 'Es gibt {} Gerichte ohne {} zur Auswahl: {}. {}'.format(count, undesired_ingredient, dish_speech, question)
