@@ -6,7 +6,7 @@
 *Bogdan Kostić*  
 
 ### Zielbestimmungen
-Grundsätzliches Ziel des Gruppenprojektes ist es, den standortsübergreifend Alexa Mensaauskunft-Skill zu programmieren.
+Grundsätzliches Ziel des Gruppenprojektes ist es, einen standortübergreifenden Alexa Mensaauskunft-Skill zu implementieren.
 
 ### Aufteilung
 
@@ -24,7 +24,7 @@ mensa auskunft
 ### Mögliche Erweiterungen
 Als weitere mögliche Verbesserungen, die aber zur Zeit den Rahmen des Projekts sprengen, werden folgene Punkte betrachtet:
 
-1. User Accounts, um personliche Vorlieben des Users speichern zu können. 
+1. User Accounts, um persönliche Vorlieben des Users speichern zu können. 
 2. Syntaktisches Parsing der Gerichte, um nur Kopf der "Gerichtsphrase" auszugeben. 
 3. Nach Gerichten in allen Standorten suchen. 
 
@@ -33,10 +33,10 @@ Der Mensaauskunft-Skill gibt die folgenden Informationen aus:
 
 * welche Mensas gibt es in einer Stadt
 * welche Adresse hat die Mensa
-* welche Gerichte werden am bestimmten Tag serviert
-* welche Preise gibt es für das ausgewählte Gericht. 
+* welche Gerichte werden an einem bestimmten Tag serviert
+* wie viel kostet das ausgewählte Gericht
 
-Ein Beuspieldialog wäre:
+Ein Beispieldialog wäre:
 
 > U: Alexa, öffne Mensaauskunft.  
 > A: In welcher Mensa möchtest du essen?  
@@ -55,9 +55,9 @@ U: …
 
 \*Alexa kann immer unterbrochen werden
 
-### Funktionen - Was man bei dem Mensaasukunft-Skill fragen kann?
-#### Essenplan
-Gibt den Essenplan von einer bestimmten Mensa, Datum oder Ingredient aus. 
+### Funktionen - Wonach man den Mensaasukunft-Skill fragen kann?
+#### Essensplan
+Gibt den Essensplan von einer bestimmten Mensa für ein bestimmtes Datum aus. Optional kann eine Zutat angegeben werden, die enthalten sein soll. 
 
 Beispieläußerungen:
 
@@ -92,8 +92,8 @@ Beispieläußerungen:
 "suche mensas in {city}"  
 >"gibt es mensas in {city}"  
 
-#### Gericht ohne Ingrediens
-Nach dem Wunsch können nur die Gerichte ohne bestimmtes Ingrediens gesucht werden. 
+#### Gerichte ohne Zutat
+Sucht Gerichte in einer bestimmten Mensa für ein bestimmtes Datum ohne eine bestimmte Zutat. 
 
 Beispieläußerungen:
 
@@ -106,4 +106,4 @@ Beispieläußerungen:
 <img src="mermaid-diagram-20190715215538.svg" alt="drawing" width="500" align="middle"/>
 
 #### Tests
-???
+Getestet wurde der Skill mithilfe von *Flask* und *ngrok* lokal auf unseren eigenen Rechnern, um Status- und Fehlermeldungen angezeigt bekommen zu können und direkt nachvollzogen werden zu können. 
