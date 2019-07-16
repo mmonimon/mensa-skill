@@ -104,6 +104,3 @@ Beispieläußerungen:
 #### Technisches Umfeld
 
 <img src="mermaid-diagram-20190715215538.svg" alt="drawing" width="500" align="middle"/>
-
-#### Tests
-???
