@@ -56,15 +56,15 @@ def get_resolved_value(request, slot_name):
         return (request.intent.slots[slot_name].resolutions.
                 resolutions_per_authority[0].values[0].value.name)
     except (AttributeError, ValueError, KeyError, IndexError, TypeError) as e:
-        logger.info("Couldn't resolve {} for request: {}".format(slot_name, request))
-        logger.info(str(e))
+        print("Couldn't resolve {} for request: {}".format(slot_name, request))
+        # print(str(e))
         return None
 
 def get_slot_values(filled_slots):
     """Return slot values with additional info."""
     # type: (Dict[str, Slot]) -> Dict[str, Any]
     slot_values = {}
-    logger.info("Filled slots: {}".format(filled_slots))
+    # print("Filled slots: {}".format(filled_slots))
     
     for key, slot_item in six.iteritems(filled_slots):
         name = slot_item.name
@@ -88,8 +88,8 @@ def get_slot_values(filled_slots):
             else:
                 pass
         except (AttributeError, ValueError, KeyError, IndexError, TypeError) as e:
-            logger.info("Couldn't resolve status_code for slot item: {}".format(slot_item))
-            logger.info(e)
+            # print("Couldn't resolve status_code for slot item: {}".format(slot_item))
+            # print(e)
             slot_values[name] = {
                 "synonym": slot_item.value,
                     "resolved": slot_item.value,
@@ -118,12 +118,13 @@ SAMPLES1 = "Frag zum Beispiel: Gibt es morgen vegane Gerichte in der Mensa Golm?
 SAMPLES2 = "Sag zum Beispiel: Gib mir den Essensplan! Oder: Finde Gerichte ohne Fleisch! "
 SAMPLES3 = "Frag zum Beispiel: Wie ist die Adresse der Mensa Golm? Oder: Lies mir den Plan für Montag vor! "
 PRICE_QUESTION = 'Möchtest du den Preis eines dieser Gerichte erfahren? \
-            Frag zum Beispiel: Wie viel kostet das erste Gericht für Studenten? '
+            Frag zum Beispiel: Wie viel kostet Gericht Nummer 2 für Studenten? '
 PRICE_REPROMPT = 'Möchtest du noch einen anderen Preis erfahren? Sage bitte die Nummer des Gerichts. '
 
 ### DATA
 api_url_base = "https://openmensa.org/api/v2/canteens"
 all_mensas = http_get(api_url_base)
+# print(all_mensas)
 
 ##################################################
 # Request Handler classes ########################
@@ -138,6 +139,7 @@ def list_dishes(session_attr, current_date, optional_ingredient=None):
     count = 0
     dish_speech = ''
     optional_speech = ''
+    session_attr['all_dishes'] = []
     # build speech for existing dishes
     for dish in response:
         # if a user askes for optional ingredients
@@ -159,14 +161,18 @@ def list_dishes(session_attr, current_date, optional_ingredient=None):
         if optional_ingredient: optional_speech = 'mit {} '.format(optional_ingredient)
         question = PRICE_QUESTION
         speech = 'Es gibt {} Gerichte {}zur Auswahl: {}. {}'.format(count, optional_speech, dish_speech, question)
+        speech = speech.replace('&', 'und')
     # no dishes found, e.g. there is no dish containing the requested ingredient
     else: 
         question = 'Kann ich sonst noch helfen? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-        speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage. ' + question
+        if optional_ingredient:
+            speech = 'Leider gibt es keine passenden Gerichte zu deiner Suchanfrage "mit {}". Such doch mal nach einem Gericht ohne Fleisch! '.format(optional_ingredient)
+        else:
+            speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage.' + question
     return speech, question
 
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("ListDishesIntent")(input))
-def list_dishes_handler(handler_input, current_date=None):
+def list_dishes_intent_handler(handler_input, current_date=None):
     # type: (HandlerInput) -> Response
     print("In ListDishesIntent")
     # extract slot values
@@ -180,20 +186,21 @@ def list_dishes_handler(handler_input, current_date=None):
     session_attr = handler_input.attributes_manager.session_attributes
     session_attr['mensa_name'] = slot_values['mensa_name']['resolved']
     session_attr['mensa_id'] = slot_values['mensa_name']['id']
-    print(slot_values)
-
-    # saving session attributes to persistent attributes
-    #handler_input.attributes_manager.persistent_attributes = session_attr
-    persistent_attr = handler_input.attributes_manager.persistent_attributes
-    persistent_attr['mensa_name'] = session_attr['mensa_name']
-    persistent_attr['mensa_id'] = session_attr['mensa_id']
-    handler_input.attributes_manager.save_persistent_attributes()
-    session_attr['all_dishes'] = []
+    print(slot_values)    
 
     # Mensa does not exist => return error prompt
     if session_attr['mensa_id'] == None:
         speech = ERROR_PROMPT2.format(session_attr['mensa_name'])
         return handler_input.response_builder.speak(speech).response
+
+    # saving session attributes to persistent attributes
+    #handler_input.attributes_manager.persistent_attributes = session_attr
+    persistent_attr = handler_input.attributes_manager.persistent_attributes
+    # persistent_attr['mensa_name'] = session_attr['mensa_name']
+    persistent_attr['mensa_id'] = session_attr['mensa_id']
+    handler_input.attributes_manager.save_persistent_attributes()
+    print('Persistent attributes: ', persistent_attr)
+
     # try to find matching dishes
     try:
         speech, question = list_dishes(session_attr, current_date, optional_ingredient)
@@ -202,7 +209,7 @@ def list_dishes_handler(handler_input, current_date=None):
         speech = ERROR_PROMPT1.format(current_date, session_attr['mensa_name'])
         question = REPROMPT
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-    print(session_attr)
+    print('Session attributes: ',session_attr)
     # return the speech
     return handler_input.response_builder.speak(speech).ask(question).response
 
@@ -222,6 +229,7 @@ def price_intent_handler(handler_input):
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
     slot_values = get_slot_values(filled_slots)
+    print(slot_values)
     current_number = slot_values['number']['resolved']
     current_usergroup_id = slot_values['user_group']['id']
     current_user = slot_values['user_group']['resolved']
@@ -238,7 +246,6 @@ def price_intent_handler(handler_input):
             speech += build_price_speech(price, current_user)
         # if not: read all prices for each available user group
         else:
-            print(user_groups)
             for i in range(len(user_groups)):
                 price = dish_prices[user_groups[i]]
                 if price == None:
@@ -256,10 +263,11 @@ def price_intent_handler(handler_input):
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("WithoutIntent")(input))
 def without_intent_handler(handler_input) :
     # type: (HandlerInput) -> Response
-    logger.info("In WithoutIntent")
+    print("In WithoutIntent")
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
     slot_values = get_slot_values(filled_slots)
+    print(slot_values)
     current_date = slot_values['date']['resolved']
     undesired_ingredient = slot_values['ingredient']['resolved']
 
@@ -268,13 +276,6 @@ def without_intent_handler(handler_input) :
     session_attr['mensa_name'] = slot_values['mensa_name']['resolved']
     session_attr['mensa_id'] = slot_values['mensa_name']['id']
 
-    # saving session attributes to persistent attributes
-    persistent_attr = handler_input.attributes_manager.persistent_attributes
-    persistent_attr['mensa_name'] = session_attr['mensa_name']
-    persistent_attr['mensa_id'] = session_attr['mensa_id']
-    handler_input.attributes_manager.save_persistent_attributes()
-    session_attr['all_dishes'] = []
-
     # Dialog question
     question = PRICE_QUESTION
 
@@ -282,6 +283,14 @@ def without_intent_handler(handler_input) :
     if session_attr['mensa_id'] == None:
         speech = ERROR_PROMPT2.format(session_attr['mensa_name'])
         return handler_input.response_builder.speak(speech).response
+        
+    # saving session attributes to persistent attributes
+    persistent_attr = handler_input.attributes_manager.persistent_attributes
+    # persistent_attr['mensa_name'] = session_attr['mensa_name']
+    persistent_attr['mensa_id'] = session_attr['mensa_id']
+    handler_input.attributes_manager.save_persistent_attributes()
+    session_attr['all_dishes'] = []
+    
     # request OpenMensa-API
     mensa_url = create_mensa_url(mensa_id=session_attr['mensa_id'], date=current_date)
     try :
@@ -321,9 +330,10 @@ def without_intent_handler(handler_input) :
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AddressIntent")(input))
 def address_intent_handler(handler_input, json_data=all_mensas) :
     # type: (HandlerInput) -> Response
-    logger.info("In AddressIntent")
+    print("In AddressIntent")
     filled_slots = handler_input.request_envelope.request.intent.slots
     slot_values = get_slot_values(filled_slots)
+    print(slot_values)
     current_mensa_id = slot_values['mensa_name']['id']
     current_mensa_name = slot_values['mensa_name']['resolved']
     try:
@@ -338,9 +348,10 @@ def address_intent_handler(handler_input, json_data=all_mensas) :
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("ListMensasIntent")(input))
 def list_mensas_intent_handler(handler_input, all_mensas=all_mensas):
     # type: (HandlerInput) -> Response
-    logger.info("In ListMensasIntent")
+    print("In ListMensasIntent")
     filled_slots = handler_input.request_envelope.request.intent.slots
     slot_values = get_slot_values(filled_slots)
+    print(slot_values)
     city = slot_values['city']['resolved']
     try:
         speech = 'Es gibt die folgenden Mensas in {}:\n'.format(city)
@@ -378,45 +389,51 @@ def log_request(handler_input):
 
 ## AMAZON.WelcomeIntent
 @sb.request_handler(can_handle_func=lambda input: is_request_type("LaunchRequest")(input))
-def launch_request_handler(handler_input):
-        # type: (HandlerInput) -> Response
-        logger.info("In LaunchRequestHandler")
-        persist_attr = handler_input.attributes_manager.persistent_attributes
-        if persist_attr:
-            handler_input.attributes_manager.session_attributes = persist_attr
-            reprompt = 'Möchtest du wieder den Tagesplan für {} hören? '.format(persist_attr['mensa_name'])
-            speech = WELCOME_PROMPT + reprompt
-            return handler_input.response_builder.speak(speech).ask(reprompt).response
-        speech = WELCOME_PROMPT + HELP_PROMPT + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-        return handler_input.response_builder.speak(speech).ask(REPROMPT).response
+def launch_request_handler(handler_input, all_mensas=all_mensas):
+    # type: (HandlerInput) -> Response
+    print("In LaunchRequestHandler")
+    persist_attr = handler_input.attributes_manager.persistent_attributes
+    print(persist_attr)
+    if persist_attr:
+        handler_input.attributes_manager.session_attributes = persist_attr
+        session_attr = handler_input.attributes_manager.session_attributes
+        session_attr['mensa_name'] = [mensa['name'] for mensa in all_mensas if int(persist_attr['mensa_id']) == mensa['id']][0]
+        print('Previous Mensa:', session_attr['mensa_name'])
+        reprompt = 'Möchtest du wieder den Tagesplan für {} hören? '.format(session_attr['mensa_name'])
+        speech = WELCOME_PROMPT + reprompt
+        return handler_input.response_builder.speak(speech).ask(reprompt).response
+    speech = WELCOME_PROMPT + HELP_PROMPT + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
+    return handler_input.response_builder.speak(speech).ask(REPROMPT).response
 
 ## AMAZON.YesIntent
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.YesIntent")(input))
 def yes_intent_handler(handler_input):
     # type: (HandlerInput) -> Response
-    logger.info("In YesIntentHandler")
+    print("In YesIntentHandler")
     session_attr = handler_input.attributes_manager.session_attributes
+    print(session_attr)
 
     if not session_attr:
         speech = "Du musst zuerst eine Mensa auswählen! " + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-        return handler_input.response_builder.speak(speech).response
+        return handler_input.response_builder.speak(speech).ask(speech).response
     
     # current date should be today => TODO: maybe tomorrow? maybe asking the user again?
     current_date = datetime.now().strftime("%Y-%m-%d")
+    print(current_date)
     try:
         speech, question = list_dishes(session_attr, current_date)
+        print(speech, question)
     except Exception as e:
         speech = ERROR_PROMPT1.format(current_date, session_attr['mensa_name'])
         question = REPROMPT
-        logger.info("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-
+        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
     return handler_input.response_builder.speak(speech).ask(question).response
 
 ## AMAZON.NoIntent
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.NoIntent")(input))
 def no_intent_handler(handler_input):
     # type: (HandlerInput) -> Response
-    logger.info("In NoIntentHandler")
+    print("In NoIntentHandler")
     speech = 'Okay, was möchtest du tun? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
     handler_input.response_builder.speak(speech).ask(REPROMPT)
     return handler_input.response_builder.response
@@ -425,7 +442,7 @@ def no_intent_handler(handler_input):
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.FallbackIntent")(input))
 def fallback_intent_handler(handler_input):
     # type: (HandlerInput) -> Response
-    logger.info("In FallbackIntentHandler")
+    print("In FallbackIntentHandler")
     speech = SAD_PROMPT + REPROMPT + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
     handler_input.response_builder.speak(speech).ask(REPROMPT)
     return handler_input.response_builder.response
@@ -434,7 +451,7 @@ def fallback_intent_handler(handler_input):
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.HelpIntent")(input))
 def help_intent_handler(handler_input):
     # type: (HandlerInput) -> Response
-    logger.info("In HelpIntentHandler")
+    print("In HelpIntentHandler")
     speech = "Dies ist Mensa-Auskunft. "+ HELP_PROMPT + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
     handler_input.response_builder.speak(speech).ask(REPROMPT)
     return handler_input.response_builder.response
@@ -444,7 +461,7 @@ def help_intent_handler(handler_input):
                 is_intent_name("AMAZON.StopIntent")(input))
 def exit_intent_handler(handler_input):
     # type: (HandlerInput) -> Response
-    logger.info("In ExitIntentHandler")
+    print("In ExitIntentHandler")
     handler_input.response_builder.speak("Guten Hunger! ").set_should_end_session(True)
     return handler_input.response_builder.response
 
@@ -452,8 +469,8 @@ def exit_intent_handler(handler_input):
 @sb.request_handler(can_handle_func=lambda input: is_request_type("SessionEndedRequest")(input))
 def session_ended_request_handler(handler_input):
     # type: (HandlerInput) -> Response
-    logger.info("In SessionEndedRequestHandler")
-    logger.info("Session ended with reason: {}".format(handler_input.request_envelope.request.reason))
+    print("In SessionEndedRequestHandler")
+    print("Session ended with reason: {}".format(handler_input.request_envelope.request.reason))
     return handler_input.response_builder.response
 
 ## Exception Handler

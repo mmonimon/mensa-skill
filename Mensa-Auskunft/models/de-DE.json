@@ -254,6 +254,7 @@
                         }
                     ],
                     "samples": [
+                        "finde {synonyms_gericht} ohne {ingredient}",
                         "suche für {date} {synonyms_gericht} ohne {ingredient} in {mensa_name}",
                         "such mir bitte für {date} {synonyms_gericht} ohne {ingredient}",
                         "bitte such mir für {date} {synonyms_gericht} ohne {ingredient}",
