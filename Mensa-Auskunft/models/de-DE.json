@@ -60,6 +60,11 @@
                         }
                     ],
                     "samples": [
+                        "such mir bitte für {date} {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name}",
+                        "such mir {first_ingredient} {synonyms_gericht} {second_prep} {second_ingredient} für {date} von der {mensa_name}",
+                        "such {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} von {mensa_name}",
+                        "such {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} von {mensa_name}",
+                        "{first_prep} {first_ingredient} und {second_prep} {second_ingredient}",
                         "lies mir den plan für {date} vor",
                         "gibt es {date} {first_ingredient} {synonyms_gericht} in der {mensa_name}",
                         "gib mir den essensplan",
@@ -141,15 +146,11 @@
                         "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} für {date} in der {mensa_name}",
                         "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} für {date} für {mensa_name}",
                         "{first_prep} {first_ingredient} und {second_ingredient}",
-                        "{first_prep} {first_ingredient} und {second_prep} {second_ingredient}",
                         "{synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient}",
                         "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient}",
                         "gib mir {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient}",
                         "gib mir {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient}",
-                        "such {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} von {mensa_name}",
-                        "such {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} von {mensa_name}",
                         "{first_ingredient} {synonyms_gericht} {second_prep} {second_ingredient}",
-                        "such mir {first_ingredient} {synonyms_gericht} {second_prep} {second_ingredient} für {date} von der {mensa_name}",
                         "finde {synonyms_gericht} {first_prep} {first_ingredient}",
                         "finde {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient}",
                         "finde {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient}",
@@ -167,7 +168,6 @@
                         "bitte such mir für {date} {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient}",
                         "such mir bitte für {date} {synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name}",
                         "such mir bitte für {date} {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name}",
-                        "such mir bitte für {date} {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name}",
                         "bitte such mir für {date} {synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name}",
                         "bitte such mir für {date} {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name}",
                         "bitte such mir für {date} {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name}",
@@ -1499,6 +1499,34 @@
                         {
                             "name": "first_ingredient",
                             "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "second_ingredient",
+                            "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "first_prep",
+                            "type": "preposition",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "second_prep",
+                            "type": "preposition",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "synonyms_gericht",
+                            "type": "synonyms_gericht",
                             "confirmationRequired": false,
                             "elicitationRequired": false,
                             "prompts": {}
