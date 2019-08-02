@@ -22,6 +22,7 @@
                             "name": "date",
                             "type": "AMAZON.DATE",
                             "samples": [
+                                "für {date}",
                                 "{first_ingredient}",
                                 "{mensa_name}",
                                 "am {date}",
@@ -32,6 +33,7 @@
                             "name": "mensa_name",
                             "type": "mensa_name",
                             "samples": [
+                                "in {mensa_name}",
                                 "{first_ingredient}",
                                 "in der {mensa_name}",
                                 "{date}",
@@ -60,6 +62,7 @@
                         }
                     ],
                     "samples": [
+                        "essensplan  {date}",
                         "such mir bitte für {date} {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name}",
                         "such mir {first_ingredient} {synonyms_gericht} {second_prep} {second_ingredient} für {date} von der {mensa_name}",
                         "such {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} von {mensa_name}",
@@ -302,7 +305,67 @@
                         "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name} für {date} bitte",
                         "nach {synonyms_gericht} {first_prep} {first_ingredient} für {date} bitte",
                         "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} für {date} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} für {date} bitte"
+                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} für {date} bitte",
+                        "such mir bitte für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "such {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} von {mensa_name}",
+                        "{first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "gibt's heute {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "haben sie {date} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in der mensa",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date} in {mensa_name}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date} in der {mensa_name}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date} für {mensa_name}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "gib mir {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "finde {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "suche für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "suche für den {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "such mir bitte für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "bitte such mir für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "bitte such mir für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "such mir für {date} {synonyms_gericht} {first_prep} {second_prep} {second_ingredient} {first_ingredient}",
+                        "such mir {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "such mir für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "such mir bitte {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} {date} in {mensa_name}",
+                        "bitte such mir {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} {date} in {mensa_name}",
+                        "gibt es {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "gibt es {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "such mir {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} {date} in {mensa_name}",
+                        "such mir {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "was gibt es {date} {first_prep} {first_ingredient} in {second_prep} {second_ingredient} {mensa_name}",
+                        "gibt es {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "suche {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "suche {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "suche für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "bitte suche {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "bitte suche {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "bitte suche für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "suche bitte {synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name} {second_prep} {second_ingredient}",
+                        "suche bitte {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "suche bitte für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "suche {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} bitte",
+                        "suche {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} bitte",
+                        "suche für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} bitte",
+                        "such mir für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} bitte",
+                        "such mir {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} bitte",
+                        "such mir für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} bitte",
+                        "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} für {date}",
+                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date}",
+                        "für {date} bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "für {date} bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} für {date}",
+                        "bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date}",
+                        "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} bitte",
+                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} bitte",
+                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} bitte",
+                        "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} bitte",
+                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} für {date} bitte",
+                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date} bitte"
                     ]
                 },
                 {
@@ -1285,6 +1348,7 @@
                             "name": {
                                 "value": "Vegan",
                                 "synonyms": [
+                                    "veganen",
                                     "vegane",
                                     "veganes",
                                     "vegan"
@@ -1296,6 +1360,7 @@
                             "name": {
                                 "value": "Vegetarisch",
                                 "synonyms": [
+                                    "vegetarischen",
                                     "ohne fleisch",
                                     "vegetarische",
                                     "vegetarisches",
@@ -1501,7 +1566,14 @@
                             "type": "AMAZON.Food",
                             "confirmationRequired": false,
                             "elicitationRequired": false,
-                            "prompts": {}
+                            "prompts": {},
+                            "validations": [
+                                {
+                                    "type": "isNotInSet",
+                                    "prompt": "Slot.Validation.908090601702.293701516098.415858813138",
+                                    "values": []
+                                }
+                            ]
                         },
                         {
                             "name": "second_ingredient",
@@ -1674,6 +1746,10 @@
                         "value": "Welche Stadt?"
                     }
                 ]
+            },
+            {
+                "id": "Slot.Validation.908090601702.293701516098.415858813138",
+                "variations": []
             }
         ]
     }

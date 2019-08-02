@@ -16,10 +16,17 @@ from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model.slu.entityresolution import StatusCode
 from ask_sdk_model import Response
 
+####### LOGGER ##########
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-app = Flask(__name__)
+# handler = logging.StreamHandler()
+# handler.setLevel(logging.INFO)
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# handler.setFormatter(formatter)
+# logger.addHandler(handler)
+#########################
 
+app = Flask(__name__)
 
 # Skill Builder object
 sb = StandardSkillBuilder(table_name="Mensa-Auskunft", auto_create_table=True)
@@ -43,8 +50,18 @@ def http_get(url):
         response.raise_for_status()
     return response.json()
 
-def build_dish_speech(dish, count):
-    return '{}. {}, '.format(count, dish['name'])
+def build_dish_speech(dishlist):
+    dishlist_string = ''
+    for count, dish in enumerate(dishlist, 1):
+        if count == len(dishlist):
+            dishlist_string += '{}. {}'.format(count, dish['name'])
+        elif count == (len(dishlist) - 1):
+            dishlist_string += '{}. {} und '.format(count, dish['name'])
+        else:
+            dishlist_string += '{}. {}, '.format(count, dish['name'])
+
+    return dishlist_string
+
 
 def build_price_speech(price, user):
     return '{} Euro für {}, '.format(str(price).replace('.',','), user)
@@ -131,45 +148,178 @@ all_mensas = http_get(api_url_base)
 ##### OUR OWN SKILL INTENTS ######################
 ##################################################
 
-def list_dishes(session_attr, current_date, optional_ingredient=None):
+def list_dishes(session_attr, current_date, ingredients={'first' : None, 'second' : None}):
+    print("In ListDishes-Function")
+
     # create API link
     mensa_url = create_mensa_url(mensa_id=session_attr['mensa_id'], date=current_date)
     # request mensa plan from API
-    response = http_get(mensa_url)
+    response_dishes = http_get(mensa_url)
+
     count = 0
     dish_speech = ''
     optional_speech = ''
     session_attr['all_dishes'] = []
-    # build speech for existing dishes
-    for dish in response:
-        # if a user askes for optional ingredients
-        if optional_ingredient:
-            if [note for note in dish['notes'] if (optional_ingredient.lower() in note.lower())] or \
-            optional_ingredient in dish['name'].lower():
-                count += 1
-                # append dish to session attributes
-                session_attr['all_dishes'].append(dish)
-                dish_speech += build_dish_speech(dish, count)
-        # no ingredient mentioned
+
+    # create list of desired dishes
+    # user did not include optional (un)desired ingredient(s) in utterance --> list all dishes
+    if (not ingredients['first']) and (not ingredients['second']):
+        session_attr['all_dishes'] = response_dishes
+
+    # user included at least one (un)desired ingredient in utterance
+    elif ingredients['first']:
+        # first_ingredient is 'fleisch'
+        if ingredients['first'].lower() == 'fleisch':
+            session_attr['all_dishes'] = ingredient_fleisch(response_dishes, ingredients['first_prep'], None)
+
         else:
-            count += 1
-            # append dish to session attributes
-            session_attr['all_dishes'].append(dish)
-            dish_speech += build_dish_speech(dish, count)
+            # ingredient is undesired
+            # sample utterance: 
+            #   - "Suche Gerichte ohne {first_ingredient} ..."
+            if ingredients['first_prep'] == 'ohne':
+                undesired_ingredient = ingredients['first'].lower()
+                # add all dishes without undesired ingredient
+                session_attr['all_dishes'] = [dish 
+                                              for dish in response_dishes 
+                                              if not ingredient_in_dish(undesired_ingredient, dish)]
+
+            # ingredient is desired
+            # sample utterances:
+            #   - "Suche Gerichte mit {first_ingredient} ..."
+            #   - "Suche {first_ingredient} Gerichte ..."
+            else:
+                desired_ingredient = ingredients['first'].lower()
+                # add all dishes with desired ingredient
+                session_attr['all_dishes'] = [dish 
+                                              for dish in response_dishes 
+                                              if ingredient_in_dish(desired_ingredient, dish)]
+
+        # user included another (un)desired ingredient in utterance
+        if ingredients['second']:
+            if ingredients['second'].lower() == 'fleisch':
+                session_attr['all_dishes'] = ingredient_fleisch(session_attr['all_dishes'],
+                                                                ingredients['first_prep'],
+                                                                ingredients['second_prep'],
+                                                                is_first_ingredient=False)
+
+            else:
+                # ingredient is undesired
+                # sample utterances:
+                #   - "Suche Gerichte mit {first_ingredient} und ohne {second_ingredient}"
+                #   - "Suche {first_ingredient} Gerichte ohne {second_ingredient}"
+                #   - "Suche Gerichte ohne {first_ingredient} und {second_ingredient}"
+                if (ingredients['second_prep'] == 'ohne') or \
+                   ((ingredients['second_prep'] is None) and (ingredients['first_prep'] == 'ohne')):
+                    
+                    undesired_ingredient = ingredients['second'].lower()
+                    # remove all dishes with undesired ingredient
+                    session_attr['all_dishes'] = [dish
+                                                  for dish in session_attr['all_dishes']
+                                                  if not ingredient_in_dish(undesired_ingredient, dish)]
+
+                # ingredient is desired
+                # sample utterances:
+                #   - "Suche Gerichte mit {first_ingredient} und {second_ingredient}"
+                #   - "Suche {first_ingredient} Gerichte mit {second_ingredient}"
+                else:
+                    desired_ingredient = ingredients['second'].lower()
+                    # remove all dishes without desired ingredient
+                    session_attr['all_dishes'] = [dish
+                                                  for dish in session_attr['all_dishes']
+                                                  if ingredient_in_dish(desired_ingredient, dish)]
+
+
+    # build speech for dish list
+    dish_speech = build_dish_speech(session_attr['all_dishes'])
+
+    # build speech for first and second ingredient
+    ingredients_pre = ''
+    ingredients_post = ''
+    # user included one ingredient in utterance
+    if ingredients['first']:
+        if ingredients['first_prep']:
+            ingredients_post = '{} {}'.format(ingredients['first_prep'], ingredients['first'])
+        else:
+            ingredients_pre = ingredients['first']
+    # user included another ingredient in utterance
+    if ingredients['second']:
+        if ingredients['second_prep'] and ingredients['first_prep'] is None:
+            ingredients_post = '{} {}'.format(ingredients['second_prep'], ingredients['second'])
+        elif ingredients['second_prep']:
+            ingredients_post += ' und {} {}'.format(ingredients['second_prep'], ingredients['second'])
+        else:
+            ingredients_post += ' und {}'.format(ingredients['second'])
+
     # dishes found: build speech with a list of dishes
     if dish_speech:
-        if optional_ingredient: optional_speech = 'mit {} '.format(optional_ingredient)
         question = PRICE_QUESTION
-        speech = 'Es gibt {} Gerichte {}zur Auswahl: {}. {}'.format(count, optional_speech, dish_speech, question)
-        speech = speech.replace('&', 'und')
-    # no dishes found, e.g. there is no dish containing the requested ingredient
-    else: 
+        speech = 'Es gibt {} {} Gerichte {} zur Auswahl: {}. {}'.format(len(session_attr['all_dishes']),
+                                                                        ingredients_pre,
+                                                                        ingredients_post,
+                                                                        dish_speech,
+                                                                        question)
+        # speech = ' '.join(speech.split())
+
+    # no dishes found, e.g. there is no dish containing the requested ingredients
+    else:
         question = 'Kann ich sonst noch helfen? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-        if optional_ingredient:
-            speech = 'Leider gibt es keine passenden Gerichte zu deiner Suchanfrage "mit {}". Such doch mal nach einem Gericht ohne Fleisch! '.format(optional_ingredient)
+        if ingredients_post or ingredients_pre:
+            speech = 'Leider gibt es keine passenden {} Gerichte {}. Such doch mal nach einem Gericht ohne Fleisch!'.format(ingredients_pre,
+                                                                                                                            ingredients_post)
+            # speech = ' '.join(speech.split())
         else:
-            speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage.' + question
+            speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage.'
+
     return speech, question
+
+
+# returns True if a given ingredient is found in a dish (in 'notes' or in dish-string) 
+def ingredient_in_dish(ingredient, dish) :
+    # ingredient found in 'notes' ingredient is substring of 'name'
+    if [note for note in dish['notes'] if (ingredient in note.lower())] or \
+        ingredient in dish['name'].lower():
+
+        return True
+
+    # ingredient not found
+    return False
+
+# return dishes with / without meat (as this is not marked in a general way in API data)
+def ingredient_fleisch(dishlist, first_prep, second_prep, is_first_ingredient=True):
+    if is_first_ingredient:
+        # meat is undesired
+        if first_prep == 'ohne':
+            return [dish
+                    for dish in dishlist
+                    if ingredient_in_dish('vegan', dish) or \
+                       ingredient_in_dish('vegetarisch', dish) or \
+                       ingredient_in_dish('fisch', dish)]
+        # meat is desired
+        else:
+            return [dish
+                    for dish in dishlist
+                    if not(ingredient_in_dish('vegan', dish) or \
+                           ingredient_in_dish('vegetarisch', dish) or \
+                           ingredient_in_dish('fisch', dish))]
+
+    else:
+        # meat is undesired
+        if (second_prep == 'ohne') or \
+           ((second_prep is None) and first_prep  == 'ohne'):
+
+            return [dish
+                    for dish in dishlist
+                    if ingredient_in_dish('vegan', dish) or \
+                       ingredient_in_dish('vegetarisch', dish) or \
+                       ingredient_in_dish('fisch', dish)]
+        # meat is desired
+        else:
+            return [dish
+                    for dish in dishlist
+                    if not(ingredient_in_dish('vegan', dish) or \
+                           ingredient_in_dish('vegetarisch', dish) or \
+                           ingredient_in_dish('fisch', dish))]
+
 
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("ListDishesIntent")(input))
 def list_dishes_intent_handler(handler_input, current_date=None):
@@ -178,9 +328,14 @@ def list_dishes_intent_handler(handler_input, current_date=None):
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
     slot_values = get_slot_values(filled_slots)
-    if current_date == None:
+    if current_date is None:
         current_date = slot_values['date']['resolved']
-    optional_ingredient = slot_values['ingredient']['resolved']
+    # extract (un)desired ingredients
+    ingredients = {}
+    ingredients['first'] = slot_values['first_ingredient']['resolved']
+    ingredients['first_prep'] = slot_values['first_prep']['resolved']
+    ingredients['second'] = slot_values['second_ingredient']['resolved']
+    ingredients['second_prep'] = slot_values['second_prep']['resolved']    
 
     # assigning session attributes to the mensa_name slot values
     session_attr = handler_input.attributes_manager.session_attributes
@@ -189,7 +344,7 @@ def list_dishes_intent_handler(handler_input, current_date=None):
     print(slot_values)    
 
     # Mensa does not exist => return error prompt
-    if session_attr['mensa_id'] == None:
+    if session_attr['mensa_id'] is None:
         speech = ERROR_PROMPT2.format(session_attr['mensa_name'])
         return handler_input.response_builder.speak(speech).response
 
@@ -203,7 +358,7 @@ def list_dishes_intent_handler(handler_input, current_date=None):
 
     # try to find matching dishes
     try:
-        speech, question = list_dishes(session_attr, current_date, optional_ingredient)
+        speech, question = list_dishes(session_attr, current_date, ingredients)
     # No dishes found for requested date or API is down 
     except Exception as e:
         speech = ERROR_PROMPT1.format(current_date, session_attr['mensa_name'])
@@ -212,6 +367,7 @@ def list_dishes_intent_handler(handler_input, current_date=None):
     print('Session attributes: ',session_attr)
     # return the speech
     return handler_input.response_builder.speak(speech).ask(question).response
+    
 
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("PriceIntent")(input))
 def price_intent_handler(handler_input):
@@ -259,72 +415,6 @@ def price_intent_handler(handler_input):
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
     
     return handler_input.response_builder.speak(speech).ask(PRICE_REPROMPT).response
-
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("WithoutIntent")(input))
-def without_intent_handler(handler_input) :
-    # type: (HandlerInput) -> Response
-    print("In WithoutIntent")
-    # extract slot values
-    filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = get_slot_values(filled_slots)
-    print(slot_values)
-    current_date = slot_values['date']['resolved']
-    undesired_ingredient = slot_values['ingredient']['resolved']
-
-    # assigning session attributes to the mensa_name slot values
-    session_attr = handler_input.attributes_manager.session_attributes
-    session_attr['mensa_name'] = slot_values['mensa_name']['resolved']
-    session_attr['mensa_id'] = slot_values['mensa_name']['id']
-
-    # Dialog question
-    question = PRICE_QUESTION
-
-    # Mensa not available
-    if session_attr['mensa_id'] == None:
-        speech = ERROR_PROMPT2.format(session_attr['mensa_name'])
-        return handler_input.response_builder.speak(speech).response
-        
-    # saving session attributes to persistent attributes
-    persistent_attr = handler_input.attributes_manager.persistent_attributes
-    # persistent_attr['mensa_name'] = session_attr['mensa_name']
-    persistent_attr['mensa_id'] = session_attr['mensa_id']
-    handler_input.attributes_manager.save_persistent_attributes()
-    session_attr['all_dishes'] = []
-    
-    # request OpenMensa-API
-    mensa_url = create_mensa_url(mensa_id=session_attr['mensa_id'], date=current_date)
-    try :
-        all_dishes = http_get(mensa_url)
-        count = 0
-        dish_speech = ''
-
-        # add dishes without undesired ingredient to desired_dishes 
-        if (undesired_ingredient.lower() == 'fleisch') :
-            for dish in all_dishes :
-                if ('Vegetarisch' in dish['notes']) or ('Vegan' in dish['notes']) :
-                    count += 1
-                    session_attr['all_dishes'].append(dish)
-                    dish_speech += build_dish_speech(dish, count)
-
-        else :
-            for dish in all_dishes :
-                if not ([note for note in dish['notes'] if (undesired_ingredient.lower() in note.lower())] or
-                    undesired_ingredient.lower() in dish['name'].lower()) :
-
-                    count += 1
-                    session_attr['all_dishes'].append(dish)
-                    dish_speech += build_dish_speech(dish, count)
-
-        if dish_speech :
-            speech = 'Es gibt {} Gerichte ohne {} zur Auswahl: {}. {}'.format(count, undesired_ingredient, dish_speech, question)
-        else: 
-            question = 'Kann ich sonst noch helfen? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-            speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage. ' + question
-
-    except Exception as e :
-        speech = ERROR_PROMPT1.format(current_date, session_attr['mensa_name'])
-        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-    return handler_input.response_builder.speak(speech).ask(question).response
 
 
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AddressIntent")(input))
