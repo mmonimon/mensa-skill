@@ -10,7 +10,7 @@ from flask import Flask
 from ask_sdk_core.skill_builder import SkillBuilder
 from flask_ask_sdk.skill_adapter import SkillAdapter
 
-from ask_sdk.standard import StandardSkillBuilder
+# from ask_sdk.standard import StandardSkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model.slu.entityresolution import StatusCode
@@ -29,7 +29,7 @@ logger.setLevel(logging.INFO)
 app = Flask(__name__)
 
 # Skill Builder object
-sb = StandardSkillBuilder(table_name="Mensa-Auskunft", auto_create_table=True)
+sb = SkillBuilder()
 
 
 ################################################
@@ -348,13 +348,13 @@ def list_dishes_intent_handler(handler_input, current_date=None):
         speech = ERROR_PROMPT2.format(session_attr['mensa_name'])
         return handler_input.response_builder.speak(speech).response
 
-    # saving session attributes to persistent attributes
-    #handler_input.attributes_manager.persistent_attributes = session_attr
-    persistent_attr = handler_input.attributes_manager.persistent_attributes
-    # persistent_attr['mensa_name'] = session_attr['mensa_name']
-    persistent_attr['mensa_id'] = session_attr['mensa_id']
-    handler_input.attributes_manager.save_persistent_attributes()
-    print('Persistent attributes: ', persistent_attr)
+    # # saving session attributes to persistent attributes
+    # #handler_input.attributes_manager.persistent_attributes = session_attr
+    # persistent_attr = handler_input.attributes_manager.persistent_attributes
+    # # persistent_attr['mensa_name'] = session_attr['mensa_name']
+    # persistent_attr['mensa_id'] = session_attr['mensa_id']
+    # handler_input.attributes_manager.save_persistent_attributes()
+    # print('Persistent attributes: ', persistent_attr)
 
     # try to find matching dishes
     try:
@@ -482,16 +482,16 @@ def log_request(handler_input):
 def launch_request_handler(handler_input, all_mensas=all_mensas):
     # type: (HandlerInput) -> Response
     print("In LaunchRequestHandler")
-    persist_attr = handler_input.attributes_manager.persistent_attributes
-    print(persist_attr)
-    if persist_attr:
-        handler_input.attributes_manager.session_attributes = persist_attr
-        session_attr = handler_input.attributes_manager.session_attributes
-        session_attr['mensa_name'] = [mensa['name'] for mensa in all_mensas if int(persist_attr['mensa_id']) == mensa['id']][0]
-        print('Previous Mensa:', session_attr['mensa_name'])
-        reprompt = 'Möchtest du wieder den Tagesplan für {} hören? '.format(session_attr['mensa_name'])
-        speech = WELCOME_PROMPT + reprompt
-        return handler_input.response_builder.speak(speech).ask(reprompt).response
+    # persist_attr = handler_input.attributes_manager.persistent_attributes
+    # print(persist_attr)
+    # if persist_attr:
+    #     handler_input.attributes_manager.session_attributes = persist_attr
+    #     session_attr = handler_input.attributes_manager.session_attributes
+    #     session_attr['mensa_name'] = [mensa['name'] for mensa in all_mensas if int(persist_attr['mensa_id']) == mensa['id']][0]
+    #     print('Previous Mensa:', session_attr['mensa_name'])
+    #     reprompt = 'Möchtest du wieder den Tagesplan für {} hören? '.format(session_attr['mensa_name'])
+    #     speech = WELCOME_PROMPT + reprompt
+    #     return handler_input.response_builder.speak(speech).ask(reprompt).response
     speech = WELCOME_PROMPT + HELP_PROMPT + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
     return handler_input.response_builder.speak(speech).ask(REPROMPT).response
 
