@@ -1566,14 +1566,7 @@
                             "type": "AMAZON.Food",
                             "confirmationRequired": false,
                             "elicitationRequired": false,
-                            "prompts": {},
-                            "validations": [
-                                {
-                                    "type": "isNotInSet",
-                                    "prompt": "Slot.Validation.908090601702.293701516098.415858813138",
-                                    "values": []
-                                }
-                            ]
+                            "prompts": {}
                         },
                         {
                             "name": "second_ingredient",
@@ -1746,10 +1739,6 @@
                         "value": "Welche Stadt?"
                     }
                 ]
-            },
-            {
-                "id": "Slot.Validation.908090601702.293701516098.415858813138",
-                "variations": []
             }
         ]
     }
