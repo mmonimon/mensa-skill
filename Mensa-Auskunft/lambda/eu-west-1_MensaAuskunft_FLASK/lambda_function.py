@@ -44,10 +44,12 @@ def random_phrase(str_list):
     # type: List[str] -> str
     return random.choice(str_list)
 
-def http_get(url):
-    response = requests.get(url)
+def http_get(url, **kwargs):
+    response = requests.get(url, **kwargs)
     if response.status_code < 200 or response.status_code >= 300:
         response.raise_for_status()
+    if response.status_code == 204:
+        raise ValueError('Response is empty.')
     return response.json()
 
 def build_dish_speech(dishlist):
@@ -454,6 +456,43 @@ def list_mensas_intent_handler(handler_input, all_mensas=all_mensas):
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
 
     return handler_input.response_builder.speak(speech).response
+
+@sb.request_handler(can_handle_func=lambda input: is_intent_name("GetNearestMensaIntent")(input))
+def get_nearest_mensa_intent_handler(handler_input):
+    print("In GetNearestMensaIntent")
+    # device_id = handler_input.request_envelope.context.system.device.device_id
+    # access_token = handler_input.request_envelope.context.system.api_access_token
+    # print ("DeviceID:", device_id)
+    # print("AccessToken:", access_token)
+    # check if mobile device (to get current coordinates of user)
+    if handler_input.request_envelope.context.system.device.supported_interfaces.geolocation:
+        user_latitude = handler_input.request_envelope.context.geolocation.coordinate.latitude_in_degrees
+        user_longitude = handler_input.request_envelope.context.geolocation.coordinate.longitude_in_degrees
+        print("Latitude:", user_latitude)
+        print("Longitude", user_longitude)
+    
+    # if not mobile device, check if user has permitted to use their address
+    elif handler_input.request_envelope.context.system.user.permissions.consent_token:
+        device_id = handler_input.request_envelope.context.system.device.device_id
+        url = "https://api.eu.amazonalexa.com/v1/devices/{}/settings/address".format(device_id)
+
+        consent_token = handler_input.request_envelope.context.system.user.permissions.consent_token
+        http_header = {'Accept' : 'application/json',
+                       'Authorization' : 'Bearer {}'.format(consent_token)}
+
+        try:
+            address = http_get(url, headers=http_header)
+            print(address)
+        # user has not put in address information
+        except ValueError as e:
+            print("Please put in address information!")
+            print(e)
+        except Exception as e:
+            print("uh uh... seems like database not working...")
+            print(e)
+    else:
+        print("Missing Permission!!")
+
 
 ################################################
 # Request and Response Loggers #################
