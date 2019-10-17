@@ -50,6 +50,25 @@ def http_get(url, **kwargs):
         raise ValueError('Response is empty.')
     return response.json()
 
+def http_get_iterate(url):
+    results = []
+    response = requests.get(url)
+    if response.status_code < 200 or response.status_code >= 300:
+        response.raise_for_status()
+    data = response.json()
+
+    results = results + data
+
+    for i in range(2, int(response.headers['X-Total-Pages']) + 1):
+        next_url = url + "?page={}".format(i)
+        response = requests.get(next_url)
+        if response.status_code < 200 or response.status_code >= 300:
+            response.raise_for_status()
+        data = response.json()
+        results = results + data
+
+    return results
+
 def build_dish_speech(dishlist):
     dishlist_string = ''
     for count, dish in enumerate(dishlist, 1):
@@ -146,7 +165,7 @@ PRICE_REPROMPT = 'Möchtest du noch einen anderen Preis erfahren? Sage bitte die
 
 ### DATA
 api_url_base = "https://openmensa.org/api/v2/canteens"
-all_mensas = http_get(api_url_base)
+all_mensas = http_get_iterate(api_url_base)
 
 ##################################################
 # Request Handler classes ########################
