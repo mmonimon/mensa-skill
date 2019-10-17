@@ -16,6 +16,8 @@ from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model.slu.entityresolution import StatusCode
 from ask_sdk_model import Response
 
+from haversine import haversine
+
 ####### LOGGER ##########
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -464,34 +466,100 @@ def get_nearest_mensa_intent_handler(handler_input):
     # access_token = handler_input.request_envelope.context.system.api_access_token
     # print ("DeviceID:", device_id)
     # print("AccessToken:", access_token)
+
     # check if mobile device (to get current coordinates of user)
     if handler_input.request_envelope.context.system.device.supported_interfaces.geolocation:
-        user_latitude = handler_input.request_envelope.context.geolocation.coordinate.latitude_in_degrees
-        user_longitude = handler_input.request_envelope.context.geolocation.coordinate.longitude_in_degrees
-        print("Latitude:", user_latitude)
-        print("Longitude", user_longitude)
+        # check if coordinates are available
+        if handler_input.request_envelope.context.geolocation:
+            user_latitude = handler_input.request_envelope.context.geolocation.coordinate.latitude_in_degrees
+            user_longitude = handler_input.request_envelope.context.geolocation.coordinate.longitude_in_degrees
+            print("Latitude:", user_latitude)
+            print("Longitude", user_longitude)
+
+        # coordinates not available
+        else:
+            # check if user gave skill permissions to read location data
+            if handler_input.request_envelope.context.system.user.permissions.scopes['alexa::devices:all:geolocation:read'].status == 'GRANTED':
+                # check if location sharing is turned on on user's mobile device
+                if handler_input.request_envelope.context.geolocation.location_services.access == 'ENABLED' and
+                   handler_input.request_envelope.context.geolocation.location_services.status == 'RUNNING':
+                    
+                    # location is turned on -> something else must have gone wrong
+                    speech = "Oh je. Es scheint, als hätte ich zurzeit Probleme, deinen Standort ausfindig zu machen. Bitte versuche es später noch einmal."
+                    return handler_input.response_builder.speak(speech).response
+
+                # location sharing is turned off on user's device -> ask to turn on
+                else:
+                    speech = "Ich kann nicht auf deinen Standort zugreifen. Bitte gehe in die Einstellungen deines Geräts um das Teilen deines Standorts einzuschalten."
+                    return handler_input.response_builder.speak(speech).response
+
+            # user did not give permission to skill to share location data -> ask for permission
+            else:
+                speech = "Um die nächste Mensa zu finden, benötigen ich Deinen Standort. Bitte öffne die Alexa-App, um deinen Standort mit mir zu teilen."
+                handler_input.response_builder.speak(speech)
+                handler_input.response_builder.set_card(AskForPermissionsConsentCard(permissions=['alexa::devices:all:geolocation:read']))
+                return handler_input.response_builder.response
     
     # if not mobile device, check if user has permitted to use their address
-    elif handler_input.request_envelope.context.system.user.permissions.consent_token:
+    elif handler_input.request_envelope.context.system.api_access_token:
         device_id = handler_input.request_envelope.context.system.device.device_id
-        url = "https://api.eu.amazonalexa.com/v1/devices/{}/settings/address".format(device_id)
+        alexa_api = "https://api.eu.amazonalexa.com/v1/devices/{}/settings/address".format(device_id)
 
-        consent_token = handler_input.request_envelope.context.system.user.permissions.consent_token
+        api_access_token = handler_input.request_envelope.context.system.api_access_token
         http_header = {'Accept' : 'application/json',
-                       'Authorization' : 'Bearer {}'.format(consent_token)}
+                       'Authorization' : 'Bearer {}'.format(api_access_token)}
 
         try:
-            address = http_get(url, headers=http_header)
+            # retrieve user's address from Alexa API
+            address = http_get(alexa_api, headers=http_header)
             print(address)
-        # user has not put in address information
+        # user has not given their address information
         except ValueError as e:
-            print("Please put in address information!")
             print(e)
+            speech = "Um die nächste Mensa für Dich zu finden, benötige ich Deine Adresse. Bitte füge sie in der Alexa-App hinzu."
+            return handler_input.response_builder.speak(speech).response
+        # some error ocurred while trying to retrieve user's address
         except Exception as e:
-            print("uh uh... seems like database not working...")
             print(e)
+            speech = "Oh je. Es scheint, als würde dieser Service zurzeit nicht funktionieren. Bitte versuche es später noch einmal!"
+            return handler_input.response_builder.speak(speech).response
+
+        # get coordinates of user's address using nominatim
+        address_string = "{},{},{},{}".format(address.addressLine1, address.postalCode, address.city, address.countryCode)
+        nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
+        try:
+            location_data = http_get(nominatim_api)
+            user_latitude = location_data.lat
+            user_longitude = location_data.lon
+        except Exception as e:
+            print(e)
+            speech = "Oh je. Es scheint, als würde dieser Service zurzeit nicht funktionieren. Bitte versuche es später noch einmal!"
+            return handler_input.response_builder.speak(speech).response
+
+    
+    # user has not permitted to use their address -> ask for permission
     else:
-        print("Missing Permission!!")
+        speech "Um die nächste Mensa zu finden, benötige ich Deine Adresse. Bitte öffne die Alexa-App, um deine Adresse mit mir zu teilen."
+        handler_input.response_builder.speak(speech)
+        handler_input.response_builder.set_card(AskForPermissionsConsentCard(permissions=['read::alexa:device:all:address']))
+        return handler_input.response_builder.response
+
+    # calculate nearest mensa with haversine formula (airline distance)
+    nearest_mensa = None
+    shortest_distance = None
+    for mensa in all_mensas:
+        mensa_latitude = mensa['coordinates'][0]
+        mensa_longitude = mensa['coordinates'][1]
+        distance = haversine((user_latitude, user_longitude), (mensa_latitude,mensa_longitude))
+        if distance < shortest_distance or shortest_distance is None:
+            shortest_distance = distance
+            nearest_mensa = mensa
+
+    nearest_mensa_name = nearest_mensa['name']
+    nearest_mensa_address = nearest_mensa['address']
+
+    speech = "Die nächste Mensa ist {} in {}.".format(nearest_mensa_name, nearest_mensa_address)
+    return handler_input.response_builder.speak(speech).response
 
 
 ################################################
