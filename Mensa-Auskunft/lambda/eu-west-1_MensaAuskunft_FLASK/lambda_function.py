@@ -16,6 +16,9 @@ from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model.slu.entityresolution import StatusCode
 from ask_sdk_model import Response
 
+from ask_sdk_model.ui import AskForPermissionsConsentCard
+from haversine import haversine
+
 ####### LOGGER ##########
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -44,11 +47,33 @@ def random_phrase(str_list):
     # type: List[str] -> str
     return random.choice(str_list)
 
-def http_get(url):
+def http_get(url, **kwargs):
+    response = requests.get(url, **kwargs)
+    if response.status_code < 200 or response.status_code >= 300:
+        response.raise_for_status()
+    if response.status_code == 204:
+        raise ValueError('Response is empty.')
+    return response.json()
+
+def http_get_iterate(url):
+    results = []
     response = requests.get(url)
     if response.status_code < 200 or response.status_code >= 300:
         response.raise_for_status()
-    return response.json()
+    data = response.json()
+
+    results = results + data
+
+    for i in range(2, int(response.headers['X-Total-Pages']) + 1):
+        next_url = url + "?page={}".format(i)
+        response = requests.get(next_url)
+        if response.status_code < 200 or response.status_code >= 300:
+            response.raise_for_status()
+        data = response.json()
+        results = results + data
+
+    return results
+
 
 def build_dish_speech(dishlist):
     dishlist_string = ''
@@ -131,6 +156,12 @@ ERROR_PROMPT3 = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden.
 ERROR_PROMPT4 = "Die Adresse der angefragten Mensa konnte leider nicht wiedergefunden werden. "
 ERROR_PROMPT5 = "Leider keine Mensas gefunden. Du kannst eine andere Stadt wählen. "
 ERROR_PROMPT6 = "Du musst zuerst Gerichte erfragen, bevor du einen Preis erfahren kannst. "
+ERROR_PROMPT7 = "Oh je. Es scheint, als würde dieser Service zurzeit nicht funktionieren. Bitte versuche es später noch einmal! "
+ERROR_PROMPT_LOC1 = "Oh je. Es scheint, als hätte ich zurzeit Probleme, deinen Standort ausfindig zu machen. Bitte versuche es später noch einmal. "
+ERROR_PROMPT_LOC2 = "Ich kann nicht auf deinen Standort zugreifen. Bitte gehe in die Einstellungen deines Geräts und erlaube das Teilen deines Standorts. "
+ERROR_PROMPT_LOC3 = "Um die nächste Mensa zu finden, benötige ich Deinen Standort. Bitte öffne die Alexa-App, um deinen Standort mit mir zu teilen. "
+ERROR_PROMPT_LOC4 = "Um die nächste Mensa für Dich zu finden, benötige ich Deine Adresse. Bitte füge sie in der Alexa-App hinzu. "
+ERROR_PROMPT_LOC5 = "Um die nächste Mensa zu finden, benötige ich Deine Adresse. Bitte öffne die Alexa-App, um deine Adresse mit mir zu teilen. "
 SAMPLES1 = "Frag zum Beispiel: Gibt es morgen vegane Gerichte in der Mensa Golm? Oder: Welche Mensen gibt es in Berlin? "
 SAMPLES2 = "Sag zum Beispiel: Gib mir den Essensplan! Oder: Finde Gerichte ohne Fleisch! "
 SAMPLES3 = "Frag zum Beispiel: Wie ist die Adresse der Mensa Golm? Oder: Lies mir den Plan für Montag vor! "
@@ -140,8 +171,8 @@ PRICE_REPROMPT = 'Möchtest du noch einen anderen Preis erfahren? Sage bitte die
 
 ### DATA
 api_url_base = "https://openmensa.org/api/v2/canteens"
-all_mensas = http_get(api_url_base)
-# print(all_mensas)
+all_mensas = http_get_iterate(api_url_base)
+print(len(all_mensas))
 
 ##################################################
 # Request Handler classes ########################
@@ -454,6 +485,130 @@ def list_mensas_intent_handler(handler_input, all_mensas=all_mensas):
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
 
     return handler_input.response_builder.speak(speech).response
+
+@sb.request_handler(can_handle_func=lambda input: is_intent_name("GetNearestMensaIntent")(input))
+def get_nearest_mensa_intent_handler(handler_input):
+    print("In GetNearestMensaIntent")
+    # device_id = handler_input.request_envelope.context.system.device.device_id
+    # access_token = handler_input.request_envelope.context.system.api_access_token
+    # print ("DeviceID:", device_id)
+    # print("AccessToken:", access_token)
+
+    # check if mobile device (to get current coordinates of user)
+    if handler_input.request_envelope.context.system.device.supported_interfaces.geolocation:
+        # check if coordinates are available
+        if handler_input.request_envelope.context.geolocation:
+            user_latitude = float(handler_input.request_envelope.context.geolocation.coordinate.latitude_in_degrees)
+            user_longitude = float(handler_input.request_envelope.context.geolocation.coordinate.longitude_in_degrees)
+            print("Latitude:", user_latitude)
+            print("Longitude:", user_longitude)
+
+        # coordinates not available
+        else:
+            # check if user gave skill permissions to read location data
+            if handler_input.request_envelope.context.system.user.permissions.scopes['alexa::devices:all:geolocation:read'].status.to_str() == "'GRANTED'":
+                # check if location sharing is turned on on user's mobile device
+                if handler_input.request_envelope.context.geolocation:
+                    
+                    # location is turned on -> something else must have gone wrong
+                    print("ERROR: Cannot get location although turned on and permission available.")
+                    return handler_input.response_builder.speak(ERROR_PROMPT_LOC1).response
+
+                # location sharing is turned off on user's device -> ask to turn on
+                else:
+                    print("Location sharing is turned off on device.")
+                    return handler_input.response_builder.speak(ERROR_PROMPT_LOC2).response
+
+            # user did not give permission to skill to share location data -> ask for permission
+            else:
+                print("Alexa has no permission to get user's location.")
+                handler_input.response_builder.speak(ERROR_PROMPT_LOC3)
+                handler_input.response_builder.set_card(AskForPermissionsConsentCard(permissions=['alexa::devices:all:geolocation:read']))
+                return handler_input.response_builder.response
+
+    # if not mobile device, check if user has permitted to use their address
+    else:
+        device_id = handler_input.request_envelope.context.system.device.device_id
+        alexa_api = "https://api.eu.amazonalexa.com/v1/devices/{}/settings/address".format(device_id)
+
+        api_access_token = handler_input.request_envelope.context.system.api_access_token
+        http_header = {'Accept' : 'application/json',
+                       'Authorization' : 'Bearer {}'.format(api_access_token)}
+
+        try:
+            # retrieve user's address from Alexa API
+            address = http_get(alexa_api, headers=http_header)
+            print(address)
+        except requests.exceptions.HTTPError as e:
+            # user has not permitted to use their address -> ask for permission
+            if '403 Client Error' in str(e):
+                print("Alexa has no permission to get user's address.")
+                handler_input.response_builder.speak(ERROR_PROMPT_LOC5)
+                handler_input.response_builder.set_card(AskForPermissionsConsentCard(permissions=['read::alexa:device:all:address']))
+                return handler_input.response_builder.response
+            # some error ocurred while trying to retrieve user's address
+            else:
+                print("ERROR: Alexa has permission but still can't get user's address.")
+                print(e)
+                return handler_input.response_builder.speak(ERROR_PROMPT7).response
+        # user has permitted to use their address, but hasn't filled in address information -> ask to fill in
+        except ValueError as e:
+            print("Alexa has permission to get user address, but there is no address information.")
+            print(e)
+            return handler_input.response_builder.speak(ERROR_PROMPT_LOC4).response
+        # some error ocurred while trying to retrieve user's address
+        except Exception as e:
+            print("ERROR: Alexa has permission but still can't get user's address.")
+            print(e)
+            return handler_input.response_builder.speak(ERROR_PROMPT7).response
+
+        # get coordinates of user's address using nominatim api
+        address_string = "{},{},{},{}".format(address['addressLine1'], address['postalCode'], address['city'], address['countryCode'])
+        nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
+        try:
+            location_data = http_get(nominatim_api)[0]
+            user_latitude = float(location_data['lat'])
+            user_longitude = float(location_data['lon'])
+            print("Latitude:", user_latitude)
+            print("Longitude:", user_longitude)
+        except Exception as e:
+            print(e)
+            return handler_input.response_builder.speak(ERROR_PROMPT7).response
+
+    # calculate nearest mensa with haversine formula (airline distance)
+    nearest_mensa = None
+    shortest_distance = None
+    for mensa in all_mensas:
+        # check if coordinates availabe
+        if mensa['coordinates']:
+            mensa_latitude = mensa['coordinates'][0]
+            mensa_longitude = mensa['coordinates'][1]
+        # coordinates not available -> retrieve from address
+        else:
+            # get coordinates of mensa using nominatim api
+            address_string = mensa['address']
+            nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
+            try:
+                location_data = http_get(nominatim_api)[0]
+                mensa_latitude = float(location_data['lat'])
+                mensa_longitude = float(location_data['lon'])
+            except IndexError:
+                pass
+            except Exception as e:
+                print(e)
+                return handler_input.response_builder.speak(ERROR_PROMPT7).response
+
+        distance = haversine((user_latitude, user_longitude), (mensa_latitude,mensa_longitude))
+        if shortest_distance is None or distance < shortest_distance:
+            shortest_distance = distance
+            nearest_mensa = mensa
+
+    nearest_mensa_name = nearest_mensa['name']
+    nearest_mensa_address = nearest_mensa['address']
+
+    nearest_mensa_speech = "Die nächste Mensa ist {} in {}.".format(nearest_mensa_name, nearest_mensa_address)
+    return handler_input.response_builder.speak(nearest_mensa_speech).response
+
 
 ################################################
 # Request and Response Loggers #################
