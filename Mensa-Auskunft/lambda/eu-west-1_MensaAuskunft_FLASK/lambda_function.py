@@ -167,7 +167,6 @@ SAMPLES2 = "Sag zum Beispiel: Gib mir den Essensplan! Oder: Finde Gerichte ohne 
 SAMPLES3 = "Frag zum Beispiel: Wie ist die Adresse der Mensa Golm? Oder: Lies mir den Plan für Montag vor! "
 PRICE_QUESTION = 'Möchtest du den Preis eines dieser Gerichte erfahren? \
             Frag zum Beispiel: Wie viel kostet Gericht Nummer 2 für Studenten? '
-PRICE_REPROMPT = 'Möchtest du noch einen anderen Preis erfahren? Sage bitte die Nummer des Gerichts. '
 
 ### DATA
 api_url_base = "https://openmensa.org/api/v2/canteens"
@@ -421,7 +420,7 @@ def price_intent_handler(handler_input):
     current_usergroup_id = slot_values['user_group']['id']
     current_user = slot_values['user_group']['resolved']
 
-    # try do get dish by index
+    # try to get dish by index
     try:
         dish_name = session_attr['all_dishes'][int(current_number)-1]['name']
         dish_prices = session_attr['all_dishes'][int(current_number)-1]['prices']
@@ -438,14 +437,14 @@ def price_intent_handler(handler_input):
                 if price == None:
                     continue
                 speech += build_price_speech(price, user_groups_de[i])
-        speech += '. ' + PRICE_REPROMPT
+        speech += '. '
 
     # dish cannot be found any more: user may have used a higher number
     except Exception as e:
         speech = ERROR_PROMPT3.format(current_number)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
     
-    return handler_input.response_builder.speak(speech).ask(PRICE_REPROMPT).response
+    return handler_input.response_builder.speak(speech).response
 
 
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AddressIntent")(input))
