@@ -99,7 +99,7 @@ def get_resolved_value(request, slot_name):
                 resolutions_per_authority[0].values[0].value.name)
     except (AttributeError, ValueError, KeyError, IndexError, TypeError) as e:
         print("Couldn't resolve {} for request: {}".format(slot_name, request))
-        # print(str(e))
+        print(str(e))
         return None
 
 def get_slot_values(filled_slots):
@@ -131,7 +131,7 @@ def get_slot_values(filled_slots):
                 pass
         except (AttributeError, ValueError, KeyError, IndexError, TypeError) as e:
             # print("Couldn't resolve status_code for slot item: {}".format(slot_item))
-            # print(e)
+            print(e)
             slot_values[name] = {
                 "synonym": slot_item.value,
                     "resolved": slot_item.value,
@@ -145,28 +145,11 @@ def get_slot_values(filled_slots):
 ##################################################
 
 ### PROMPTS
-WELCOME_PROMPT = "Willkommen bei der Mensa-Auskunft! "
-HELP_PROMPT = "Ich kann dir dabei helfen, eine Auskunft über das Essen in der Mensa zu erhalten! "
-REPROMPT = "Suchst du nach dem Tagesplan, der Adresse einer Mensa oder eine Auflistung aller Mensen in deiner Stadt? "
-SAD_PROMPT = "Sorry, dabei kann Mensa-Auskunft leider nicht helfen. "
-ERROR_PROMPT = "Sorry, das kann Mensa-Auskunft leider nicht verstehen. Bitte versuche es erneut. "
-ERROR_PROMPT1 = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. "
-ERROR_PROMPT2 = "Sorry, Essenspläne für {} habe ich leider nicht im Angebot. "
-ERROR_PROMPT3 = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. "
-ERROR_PROMPT4 = "Die Adresse der angefragten Mensa konnte leider nicht wiedergefunden werden. "
-ERROR_PROMPT5 = "Leider keine Mensas gefunden. Du kannst eine andere Stadt wählen. "
-ERROR_PROMPT6 = "Du musst zuerst Gerichte erfragen, bevor du einen Preis erfahren kannst. "
-ERROR_PROMPT7 = "Oh je. Es scheint, als würde dieser Service zurzeit nicht funktionieren. Bitte versuche es später noch einmal! "
-ERROR_PROMPT_LOC1 = "Oh je. Es scheint, als hätte ich zurzeit Probleme, deinen Standort ausfindig zu machen. Bitte versuche es später noch einmal. "
-ERROR_PROMPT_LOC2 = "Ich kann nicht auf deinen Standort zugreifen. Bitte gehe in die Einstellungen deines Geräts und erlaube das Teilen deines Standorts. "
-ERROR_PROMPT_LOC3 = "Um die nächste Mensa zu finden, benötige ich Deinen Standort. Bitte öffne die Alexa-App, um deinen Standort mit mir zu teilen. "
-ERROR_PROMPT_LOC4 = "Um die nächste Mensa für Dich zu finden, benötige ich Deine Adresse. Bitte füge sie in der Alexa-App hinzu. "
-ERROR_PROMPT_LOC5 = "Um die nächste Mensa zu finden, benötige ich Deine Adresse. Bitte öffne die Alexa-App, um deine Adresse mit mir zu teilen. "
-SAMPLES1 = "Frag zum Beispiel: Gibt es morgen vegane Gerichte in der Mensa Golm? Oder: Welche Mensen gibt es in Berlin? "
-SAMPLES2 = "Sag zum Beispiel: Gib mir den Essensplan! Oder: Finde Gerichte ohne Fleisch! "
-SAMPLES3 = "Frag zum Beispiel: Wie ist die Adresse der Mensa Golm? Oder: Lies mir den Plan für Montag vor! "
-PRICE_QUESTION = 'Möchtest du den Preis eines dieser Gerichte erfahren? \
-            Frag zum Beispiel: Wie viel kostet Gericht Nummer 2 für Studenten? '
+ERROR_PROMPT = "Sorry, das kann Mensa-Auskunft leider nicht verstehen. Bitte formuliere deine Frage anders. "
+ERROR_PROMPT2 = "Oh je. Es scheint, als würde dieser Service zurzeit nicht funktionieren. Bitte versuche es später noch einmal! "
+# SAMPLES1 = "Frag zum Beispiel: Gibt es morgen vegane Gerichte in der Mensa Golm? Oder: Welche Mensen gibt es in Berlin? "
+# SAMPLES2 = "Sag zum Beispiel: Gib mir den Essensplan! Oder: Finde Gerichte ohne Fleisch! "
+# SAMPLES3 = "Frag zum Beispiel: Wie ist die Adresse der Mensa Golm? Oder: Lies mir den Plan für Montag vor! "
 
 ### DATA
 api_url_base = "https://openmensa.org/api/v2/canteens"
@@ -181,14 +164,18 @@ print(len(all_mensas))
 def list_dishes(session_attr, current_date, ingredients={'first' : None, 'second' : None}):
     print("In ListDishes-Function")
 
+    question = 'Kann ich sonst noch helfen? '
     # create API link
-    mensa_url = create_mensa_url(mensa_id=session_attr['mensa_id'], date=current_date)
-    # request mensa plan from API
-    response_dishes = http_get(mensa_url)
-
-    count = 0
+    try:
+        mensa_url = create_mensa_url(mensa_id=session_attr['mensa_id'], date=current_date)
+        # request mensa plan from API
+        response_dishes = http_get(mensa_url)
+    # No dishes found for requested date or API is down 
+    except Exception as e:
+        speech = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. ".format(current_date, session_attr['mensa_name'])
+        print("Intent: {}: message: {}".format('ListDishes-Funktion', str(e)))
+        return speech+question, question
     dish_speech = ''
-    optional_speech = ''
     session_attr['all_dishes'] = []
 
     # create list of desired dishes
@@ -282,21 +269,22 @@ def list_dishes(session_attr, current_date, ingredients={'first' : None, 'second
 
     # dishes found: build speech with a list of dishes
     if dish_speech:
-        question = PRICE_QUESTION
+        question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
+                    Sag zum Beispiel: \
+                    Details. \
+                    oder: Wie viel kostet Gericht Nummer 2 für Studenten. '
         speech = 'Es gibt {} {} Gerichte {} zur Auswahl: {}. {}'.format(len(session_attr['all_dishes']),
                                                                         ingredients_pre,
                                                                         ingredients_post,
                                                                         dish_speech,
                                                                         question)
-        # speech = ' '.join(speech.split())
 
     # no dishes found, e.g. there is no dish containing the requested ingredients
     else:
-        question = 'Kann ich sonst noch helfen? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
+        
         if ingredients_post or ingredients_pre:
-            speech = 'Leider gibt es keine passenden {} Gerichte {}. Such doch mal nach einem Gericht ohne Fleisch!'.format(ingredients_pre,
-                                                                                                                            ingredients_post)
-            # speech = ' '.join(speech.split())
+            speech = 'Leider gibt es keine passenden {} Gerichte {}.'.format(ingredients_pre,
+                                                                             ingredients_post)
         else:
             speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage.'
 
@@ -375,7 +363,7 @@ def list_dishes_intent_handler(handler_input, current_date=None):
 
     # Mensa does not exist => return error prompt
     if session_attr['mensa_id'] is None:
-        speech = ERROR_PROMPT2.format(session_attr['mensa_name'])
+        speech = "Sorry, Essenspläne für {} habe ich leider nicht im Angebot. ".format(session_attr['mensa_name'])
         return handler_input.response_builder.speak(speech).response
 
     # # saving session attributes to persistent attributes
@@ -387,17 +375,11 @@ def list_dishes_intent_handler(handler_input, current_date=None):
     # print('Persistent attributes: ', persistent_attr)
 
     # try to find matching dishes
-    try:
-        speech, question = list_dishes(session_attr, current_date, ingredients)
-    # No dishes found for requested date or API is down 
-    except Exception as e:
-        speech = ERROR_PROMPT1.format(current_date, session_attr['mensa_name'])
-        question = REPROMPT
-        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+    speech, question = list_dishes(session_attr, current_date, ingredients)
     print('Session attributes: ',session_attr)
-    # return the speech
     return handler_input.response_builder.speak(speech).ask(question).response
-    
+
+
 
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("PriceIntent")(input))
 def price_intent_handler(handler_input):
@@ -407,7 +389,8 @@ def price_intent_handler(handler_input):
     # get previous response from session attributes 
     session_attr = handler_input.attributes_manager.session_attributes
     if 'all_dishes' not in session_attr:
-        return handler_input.response_builder.speak(ERROR_PROMPT6).ask(SAMPLES2).response
+        return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
+                bevor du einen Preis erfahren kannst. ").response
     
     # define user group names
     user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studenten']
@@ -441,7 +424,7 @@ def price_intent_handler(handler_input):
 
     # dish cannot be found any more: user may have used a higher number
     except Exception as e:
-        speech = ERROR_PROMPT3.format(current_number)
+        speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
     
     return handler_input.response_builder.speak(speech).response
@@ -460,7 +443,7 @@ def address_intent_handler(handler_input, json_data=all_mensas) :
         address = [j['address'] for j in json_data if j['id'] == int(current_mensa_id)]
         speech = "Die Adresse der {} lautet {}".format(current_mensa_name,address[0])
     except Exception as e:
-        speech = ERROR_PROMPT4
+        speech = "Die Adresse der angefragten Mensa konnte leider nicht wiedergefunden werden. "
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
     
     return handler_input.response_builder.speak(speech).response
@@ -480,7 +463,7 @@ def list_mensas_intent_handler(handler_input, all_mensas=all_mensas):
                 speech += '{}, '.format(diction['name'])
         speech += '.'
     except Exception as e:
-        speech = ERROR_PROMPT5
+        speech = "Leider keine Mensas gefunden. Du kannst eine andere Stadt wählen. "
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
 
     return handler_input.response_builder.speak(speech).response
@@ -511,17 +494,20 @@ def get_nearest_mensa_intent_handler(handler_input):
                     
                     # location is turned on -> something else must have gone wrong
                     print("ERROR: Cannot get location although turned on and permission available.")
-                    return handler_input.response_builder.speak(ERROR_PROMPT_LOC1).response
+                    return handler_input.response_builder.speak("Oh je. Es scheint, als hätte ich zurzeit Probleme, \
+                            deinen Standort ausfindig zu machen. Bitte versuche es später noch einmal. ").response
 
                 # location sharing is turned off on user's device -> ask to turn on
                 else:
                     print("Location sharing is turned off on device.")
-                    return handler_input.response_builder.speak(ERROR_PROMPT_LOC2).response
+                    return handler_input.response_builder.speak("Ich kann nicht auf deinen Standort zugreifen. \
+                            Bitte gehe in die Einstellungen deines Geräts und erlaube das Teilen deines Standorts. ").response
 
             # user did not give permission to skill to share location data -> ask for permission
             else:
                 print("Alexa has no permission to get user's location.")
-                handler_input.response_builder.speak(ERROR_PROMPT_LOC3)
+                handler_input.response_builder.speak("Um die nächste Mensa zu finden, benötige ich Deinen Standort. \
+                                                    Bitte öffne die Alexa-App, um deinen Standort mit mir zu teilen. ")
                 handler_input.response_builder.set_card(AskForPermissionsConsentCard(permissions=['alexa::devices:all:geolocation:read']))
                 return handler_input.response_builder.response
 
@@ -542,24 +528,26 @@ def get_nearest_mensa_intent_handler(handler_input):
             # user has not permitted to use their address -> ask for permission
             if '403 Client Error' in str(e):
                 print("Alexa has no permission to get user's address.")
-                handler_input.response_builder.speak(ERROR_PROMPT_LOC5)
+                handler_input.response_builder.speak("Um die nächste Mensa zu finden, benötige ich Deine Adresse. \
+                                                    Bitte öffne die Alexa-App, um deine Adresse mit mir zu teilen. ")
                 handler_input.response_builder.set_card(AskForPermissionsConsentCard(permissions=['read::alexa:device:all:address']))
                 return handler_input.response_builder.response
             # some error ocurred while trying to retrieve user's address
             else:
                 print("ERROR: Alexa has permission but still can't get user's address.")
                 print(e)
-                return handler_input.response_builder.speak(ERROR_PROMPT7).response
+                return handler_input.response_builder.speak(ERROR_PROMPT2).response
         # user has permitted to use their address, but hasn't filled in address information -> ask to fill in
         except ValueError as e:
             print("Alexa has permission to get user address, but there is no address information.")
             print(e)
-            return handler_input.response_builder.speak(ERROR_PROMPT_LOC4).response
+            return handler_input.response_builder.speak("Um die nächste Mensa für Dich zu finden, benötige ich Deine Adresse. \
+                    Bitte füge sie in der Alexa-App hinzu. ").response
         # some error ocurred while trying to retrieve user's address
         except Exception as e:
             print("ERROR: Alexa has permission but still can't get user's address.")
             print(e)
-            return handler_input.response_builder.speak(ERROR_PROMPT7).response
+            return handler_input.response_builder.speak(ERROR_PROMPT2).response
 
         # get coordinates of user's address using nominatim api
         address_string = "{},{},{},{}".format(address['addressLine1'], address['postalCode'], address['city'], address['countryCode'])
@@ -572,7 +560,7 @@ def get_nearest_mensa_intent_handler(handler_input):
             print("Longitude:", user_longitude)
         except Exception as e:
             print(e)
-            return handler_input.response_builder.speak(ERROR_PROMPT7).response
+            return handler_input.response_builder.speak(ERROR_PROMPT2).response
 
     # calculate nearest mensa with haversine formula (airline distance)
     nearest_mensa = None
@@ -595,7 +583,7 @@ def get_nearest_mensa_intent_handler(handler_input):
                 pass
             except Exception as e:
                 print(e)
-                return handler_input.response_builder.speak(ERROR_PROMPT7).response
+                return handler_input.response_builder.speak(ERROR_PROMPT2).response
 
         distance = haversine((user_latitude, user_longitude), (mensa_latitude,mensa_longitude))
         if shortest_distance is None or distance < shortest_distance:
@@ -644,61 +632,62 @@ def launch_request_handler(handler_input, all_mensas=all_mensas):
     #     session_attr['mensa_name'] = [mensa['name'] for mensa in all_mensas if int(persist_attr['mensa_id']) == mensa['id']][0]
     #     print('Previous Mensa:', session_attr['mensa_name'])
     #     reprompt = 'Möchtest du wieder den Tagesplan für {} hören? '.format(session_attr['mensa_name'])
-    #     speech = WELCOME_PROMPT + reprompt
+    #     speech = "Willkommen bei der Mensa-Auskunft! " + reprompt
     #     return handler_input.response_builder.speak(speech).ask(reprompt).response
-    speech = WELCOME_PROMPT + HELP_PROMPT + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-    return handler_input.response_builder.speak(speech).ask(REPROMPT).response
+    speech = "Willkommen bei der Mensaauskunft! Wenn du Hilfe bei der Bedienung brauchst, \
+            sag bitte HILFE. Was möchtest du wissen? "
+    return handler_input.response_builder.speak(speech).ask("Suchst du nach dem Tagesplan, \
+                                                            der Adresse einer Mensa oder eine Auflistung \
+                                                            aller Mensen in deiner Stadt? ").response
 
-## AMAZON.YesIntent
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.YesIntent")(input))
-def yes_intent_handler(handler_input):
-    # type: (HandlerInput) -> Response
-    print("In YesIntentHandler")
-    session_attr = handler_input.attributes_manager.session_attributes
-    print(session_attr)
+# ## AMAZON.YesIntent
+# @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.YesIntent")(input))
+# def yes_intent_handler(handler_input):
+#     # type: (HandlerInput) -> Response
+#     print("In YesIntentHandler")
+#     session_attr = handler_input.attributes_manager.session_attributes
+#     print(session_attr)
 
-    if not session_attr:
-        speech = "Du musst zuerst eine Mensa auswählen! " + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-        return handler_input.response_builder.speak(speech).ask(speech).response
+#     if not session_attr:
+#         speech = "Du musst zuerst eine Mensa auswählen! " + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
+#         return handler_input.response_builder.speak(speech).ask(speech).response
     
-    # current date should be today => TODO: maybe tomorrow? maybe asking the user again?
-    current_date = datetime.now().strftime("%Y-%m-%d")
-    print(current_date)
-    try:
-        speech, question = list_dishes(session_attr, current_date)
-        print(speech, question)
-    except Exception as e:
-        speech = ERROR_PROMPT1.format(current_date, session_attr['mensa_name'])
-        question = REPROMPT
-        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-    return handler_input.response_builder.speak(speech).ask(question).response
+#     # current date should be today => TODO: maybe tomorrow? maybe asking the user again?
+#     current_date = datetime.now().strftime("%Y-%m-%d")
+#     print(current_date)
+#     try:
+#         speech, question = list_dishes(session_attr, current_date)
+#         print(speech, question)
+#     except Exception as e:
+#         speech = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. ".format(current_date, session_attr['mensa_name'])
+#         question = REPROMPT
+#         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+#     return handler_input.response_builder.speak(speech).ask(question).response
 
 ## AMAZON.NoIntent
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.NoIntent")(input))
 def no_intent_handler(handler_input):
     # type: (HandlerInput) -> Response
     print("In NoIntentHandler")
-    speech = 'Okay, was möchtest du tun? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-    handler_input.response_builder.speak(speech).ask(REPROMPT)
-    return handler_input.response_builder.response
+    # speech = 'Okay, was möchtest du tun? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
+    # handler_input.response_builder.speak(speech).ask(REPROMPT)
+    return handler_input.response_builder.speak('Okay, tschüss!').response
 
-## AMAZON.FallbackIntent
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.FallbackIntent")(input))
-def fallback_intent_handler(handler_input):
-    # type: (HandlerInput) -> Response
-    print("In FallbackIntentHandler")
-    speech = SAD_PROMPT + REPROMPT + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-    handler_input.response_builder.speak(speech).ask(REPROMPT)
-    return handler_input.response_builder.response
 
 ## AMAZON.HelpIntent
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.HelpIntent")(input))
 def help_intent_handler(handler_input):
     # type: (HandlerInput) -> Response
     print("In HelpIntentHandler")
-    speech = "Dies ist Mensa-Auskunft. "+ HELP_PROMPT + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-    handler_input.response_builder.speak(speech).ask(REPROMPT)
-    return handler_input.response_builder.response
+    speech = "Mensaauskunft kann dir dabei helfen, passende Gerichte in deiner Mensa zu finden! \
+            Du kannst nach dem Tagesplan, nach Mensen in deiner Nähe, Adressen und nach einem Gericht mit Zutaten deiner Wahl suchen. \
+            Sag zum Beispiel: \
+            Frage Mensaauskunft, wo die nächste Mensa ist. \
+            Sag Mensaauskunft, ich brauche die Adresse der Mensa Golm. \
+            Gib mir den Tagesplan von Mensaauskunft. \
+            Suche ein Gericht ohne Fleisch für morgen in der Mensa Golm mit Mensaauskunft. \
+            Frag Mensaauskunft Golm, was es morgen zu essen gibt."
+    return handler_input.response_builder.speak(speech).response
 
 ## AMAZON.StopIntent
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.CancelIntent")(input) or
@@ -717,18 +706,26 @@ def session_ended_request_handler(handler_input):
     print("Session ended with reason: {}".format(handler_input.request_envelope.request.reason))
     return handler_input.response_builder.response
 
+
+## AMAZON.FallbackIntent
+@sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.FallbackIntent")(input))
+def fallback_intent_handler(handler_input):
+    # type: (HandlerInput) -> Response
+    print("In FallbackIntentHandler")
+    return handler_input.response_builder.speak(ERROR_PROMPT).response
+
 ## Exception Handler
 @sb.exception_handler(can_handle_func=lambda i, e: True)
 def all_exception_handler(handler_input, exception):
     # type: (HandlerInput, Exception) -> Response
     logger.error(exception, exc_info=True)
-    return handler_input.response_builder.speak(ERROR_PROMPT).ask(REPROMPT).response
+    return handler_input.response_builder.speak(ERROR_PROMPT).response
 
 ## Unhandled handler
 @sb.request_handler(can_handle_func=lambda input: True)
 def unhandled_intent_handler(handler_input):
     # type: (HandlerInput) -> Response
-    return handler_input.response_builder.speak(ERROR_PROMPT).ask(REPROMPT).response
+    return handler_input.response_builder.speak(ERROR_PROMPT).response
 
 lambda_handler = sb.lambda_handler()
 
