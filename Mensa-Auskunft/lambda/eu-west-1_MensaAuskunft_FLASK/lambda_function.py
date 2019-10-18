@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import logging
-import requests
-import six
-import random
+import logging, requests
+import lambda_utility as utility
 from datetime import datetime
 
 from flask import Flask
@@ -13,9 +11,8 @@ from flask_ask_sdk.skill_adapter import SkillAdapter
 # from ask_sdk.standard import StandardSkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_core.handler_input import HandlerInput
-from ask_sdk_model.slu.entityresolution import StatusCode
-from ask_sdk_model import Response
 
+from ask_sdk_model import Response
 from ask_sdk_model.ui import AskForPermissionsConsentCard
 from haversine import haversine
 
@@ -34,112 +31,6 @@ app = Flask(__name__)
 # Skill Builder object
 sb = SkillBuilder()
 
-
-################################################
-# Utility functions ############################
-################################################
-
-def create_mensa_url(mensa_id, date):
-    return 'https://openmensa.org/api/v2/canteens/{}/days/{}/meals'.format(mensa_id, date)
-
-def random_phrase(str_list):
-    """Return random element from list."""
-    # type: List[str] -> str
-    return random.choice(str_list)
-
-def http_get(url, **kwargs):
-    response = requests.get(url, **kwargs)
-    if response.status_code < 200 or response.status_code >= 300:
-        response.raise_for_status()
-    if response.status_code == 204:
-        raise ValueError('Response is empty.')
-    return response.json()
-
-def http_get_iterate(url):
-    results = []
-    response = requests.get(url)
-    if response.status_code < 200 or response.status_code >= 300:
-        response.raise_for_status()
-    data = response.json()
-
-    results = results + data
-
-    for i in range(2, int(response.headers['X-Total-Pages']) + 1):
-        next_url = url + "?page={}".format(i)
-        response = requests.get(next_url)
-        if response.status_code < 200 or response.status_code >= 300:
-            response.raise_for_status()
-        data = response.json()
-        results = results + data
-
-    return results
-
-
-def build_dish_speech(dishlist):
-    dishlist_string = ''
-    for count, dish in enumerate(dishlist, 1):
-        if count == len(dishlist):
-            dishlist_string += '{}. {}'.format(count, dish['name'])
-        elif count == (len(dishlist) - 1):
-            dishlist_string += '{}. {} und '.format(count, dish['name'])
-        else:
-            dishlist_string += '{}. {}, '.format(count, dish['name'])
-
-    return dishlist_string
-
-
-def build_price_speech(price, user):
-    return '{} Euro für {}, '.format(str(price).replace('.',','), user)
-
-def get_resolved_value(request, slot_name):
-    """Resolve the slot name from the request using resolutions."""
-    # type: (IntentRequest, str) -> Union[str, None]
-    try:
-        return (request.intent.slots[slot_name].resolutions.
-                resolutions_per_authority[0].values[0].value.name)
-    except (AttributeError, ValueError, KeyError, IndexError, TypeError) as e:
-        print("Couldn't resolve {} for request: {}".format(slot_name, request))
-        print(str(e))
-        return None
-
-def get_slot_values(filled_slots):
-    """Return slot values with additional info."""
-    # type: (Dict[str, Slot]) -> Dict[str, Any]
-    slot_values = {}
-    # print("Filled slots: {}".format(filled_slots))
-    
-    for key, slot_item in six.iteritems(filled_slots):
-        name = slot_item.name
-        try:
-            status_code = slot_item.resolutions.resolutions_per_authority[0].status.code
-            
-            if status_code == StatusCode.ER_SUCCESS_MATCH:
-                slot_values[name] = {
-                    "synonym": slot_item.value,
-                    "resolved": slot_item.resolutions.resolutions_per_authority[0].values[0].value.name,
-                    "id": slot_item.resolutions.resolutions_per_authority[0].values[0].value.id,
-                    "is_validated": True,
-            }
-            elif status_code == StatusCode.ER_SUCCESS_NO_MATCH:
-                slot_values[name] = {
-                    "synonym": slot_item.value,
-                    "resolved": slot_item.value,
-                    "id": None,
-                    "is_validated": False,
-            }
-            else:
-                pass
-        except (AttributeError, ValueError, KeyError, IndexError, TypeError) as e:
-            # print("Couldn't resolve status_code for slot item: {}".format(slot_item))
-            print(e)
-            slot_values[name] = {
-                "synonym": slot_item.value,
-                    "resolved": slot_item.value,
-                        "id": None,
-                        "is_validated": False,
-                }
-    return slot_values
-
 ##################################################
 # DATA  ##########################################
 ##################################################
@@ -153,7 +44,7 @@ ERROR_PROMPT2 = "Oh je. Es scheint, als würde dieser Service zurzeit nicht funk
 
 ### DATA
 api_url_base = "https://openmensa.org/api/v2/canteens"
-all_mensas = http_get_iterate(api_url_base)
+all_mensas = utility.http_get_iterate(api_url_base)
 print(len(all_mensas))
 
 ##################################################
@@ -161,183 +52,56 @@ print(len(all_mensas))
 ##### OUR OWN SKILL INTENTS ######################
 ##################################################
 
-def list_dishes(session_attr, current_date, ingredients={'first' : None, 'second' : None}):
-    print("In ListDishes-Function")
+@sb.request_handler(can_handle_func=lambda input: is_intent_name("DetailsIntent")(input))
+def details_intent_handler(handler_input):
+    # type: (HandlerInput) -> Response
+    print("In DetailsIntent")
+    # extract slot values
+    filled_slots = handler_input.request_envelope.request.intent.slots
+    # get previous response from session attributes 
+    session_attr = handler_input.attributes_manager.session_attributes
+    user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studenten']
 
-    question = 'Kann ich sonst noch helfen? '
-    # create API link
+    if 'all_dishes' not in session_attr:
+        return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
+                bevor du Details erfahren kannst. ").response
+    
+    # extract slot values
+    filled_slots = handler_input.request_envelope.request.intent.slots
+    slot_values = utility.get_slot_values(filled_slots)
+    print(slot_values)
+    print(session_attr)
+    current_number = slot_values['number']['resolved']
+    
+    # try to get dish by index
     try:
-        mensa_url = create_mensa_url(mensa_id=session_attr['mensa_id'], date=current_date)
-        # request mensa plan from API
-        response_dishes = http_get(mensa_url)
-    # No dishes found for requested date or API is down 
+        dish_name = session_attr['all_dishes'][int(current_number)-1]['name']
+        dish_prices = session_attr['all_dishes'][int(current_number)-1]['prices']
+        dish_cat = session_attr['all_dishes'][int(current_number)-1]['category']
+        dish_notes = session_attr['all_dishes'][int(current_number)-1]['notes']
+        user_groups = list(dish_prices.keys())
+        speech = "Du hast das Gericht {} ausgewählt. ".format(dish_name)
+        speech += "Es kostet "
+        # read all prices for each available user group
+        for i in range(len(user_groups)):
+            price = dish_prices[user_groups[i]]
+            if price == None:
+                continue
+            speech += utility.build_price_speech(price, user_groups_de[i])
+        speech += '. Es gehört zur Kategorie: {} und enthält bzw. ist, '.format(dish_cat)
+        for i in range(len(dish_notes)):
+            if i == len(dish_notes)-2:
+                speech += dish_notes[i] + 'und '
+            else:
+                speech += dish_notes[i] + ', '
+        speech += '. '
+
+
+    # dish cannot be found any more: user may have used a higher number
     except Exception as e:
-        speech = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. ".format(current_date, session_attr['mensa_name'])
-        print("Intent: {}: message: {}".format('ListDishes-Funktion', str(e)))
-        return speech+question, question
-    dish_speech = ''
-    session_attr['all_dishes'] = []
-
-    # create list of desired dishes
-    # user did not include optional (un)desired ingredient(s) in utterance --> list all dishes
-    if (not ingredients['first']) and (not ingredients['second']):
-        session_attr['all_dishes'] = response_dishes
-
-    # user included at least one (un)desired ingredient in utterance
-    elif ingredients['first']:
-        # first_ingredient is 'fleisch'
-        if ingredients['first'].lower() == 'fleisch':
-            session_attr['all_dishes'] = ingredient_fleisch(response_dishes, ingredients['first_prep'], None)
-
-        else:
-            # ingredient is undesired
-            # sample utterance: 
-            #   - "Suche Gerichte ohne {first_ingredient} ..."
-            if ingredients['first_prep'] == 'ohne':
-                undesired_ingredient = ingredients['first'].lower()
-                # add all dishes without undesired ingredient
-                session_attr['all_dishes'] = [dish 
-                                              for dish in response_dishes 
-                                              if not ingredient_in_dish(undesired_ingredient, dish)]
-
-            # ingredient is desired
-            # sample utterances:
-            #   - "Suche Gerichte mit {first_ingredient} ..."
-            #   - "Suche {first_ingredient} Gerichte ..."
-            else:
-                desired_ingredient = ingredients['first'].lower()
-                # add all dishes with desired ingredient
-                session_attr['all_dishes'] = [dish 
-                                              for dish in response_dishes 
-                                              if ingredient_in_dish(desired_ingredient, dish)]
-
-        # user included another (un)desired ingredient in utterance
-        if ingredients['second']:
-            if ingredients['second'].lower() == 'fleisch':
-                session_attr['all_dishes'] = ingredient_fleisch(session_attr['all_dishes'],
-                                                                ingredients['first_prep'],
-                                                                ingredients['second_prep'],
-                                                                is_first_ingredient=False)
-
-            else:
-                # ingredient is undesired
-                # sample utterances:
-                #   - "Suche Gerichte mit {first_ingredient} und ohne {second_ingredient}"
-                #   - "Suche {first_ingredient} Gerichte ohne {second_ingredient}"
-                #   - "Suche Gerichte ohne {first_ingredient} und {second_ingredient}"
-                if (ingredients['second_prep'] == 'ohne') or \
-                   ((ingredients['second_prep'] is None) and (ingredients['first_prep'] == 'ohne')):
-                    
-                    undesired_ingredient = ingredients['second'].lower()
-                    # remove all dishes with undesired ingredient
-                    session_attr['all_dishes'] = [dish
-                                                  for dish in session_attr['all_dishes']
-                                                  if not ingredient_in_dish(undesired_ingredient, dish)]
-
-                # ingredient is desired
-                # sample utterances:
-                #   - "Suche Gerichte mit {first_ingredient} und {second_ingredient}"
-                #   - "Suche {first_ingredient} Gerichte mit {second_ingredient}"
-                else:
-                    desired_ingredient = ingredients['second'].lower()
-                    # remove all dishes without desired ingredient
-                    session_attr['all_dishes'] = [dish
-                                                  for dish in session_attr['all_dishes']
-                                                  if ingredient_in_dish(desired_ingredient, dish)]
-
-
-    # build speech for dish list
-    dish_speech = build_dish_speech(session_attr['all_dishes'])
-
-    # build speech for first and second ingredient
-    ingredients_pre = ''
-    ingredients_post = ''
-    # user included one ingredient in utterance
-    if ingredients['first']:
-        if ingredients['first_prep']:
-            ingredients_post = '{} {}'.format(ingredients['first_prep'], ingredients['first'])
-        else:
-            ingredients_pre = ingredients['first']
-    # user included another ingredient in utterance
-    if ingredients['second']:
-        if ingredients['second_prep'] and ingredients['first_prep'] is None:
-            ingredients_post = '{} {}'.format(ingredients['second_prep'], ingredients['second'])
-        elif ingredients['second_prep']:
-            ingredients_post += ' und {} {}'.format(ingredients['second_prep'], ingredients['second'])
-        else:
-            ingredients_post += ' und {}'.format(ingredients['second'])
-
-    # dishes found: build speech with a list of dishes
-    if dish_speech:
-        question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
-                    Sag zum Beispiel: \
-                    Details. \
-                    oder: Wie viel kostet Gericht Nummer 2 für Studenten. '
-        speech = 'Es gibt {} {} Gerichte {} zur Auswahl: {}. {}'.format(len(session_attr['all_dishes']),
-                                                                        ingredients_pre,
-                                                                        ingredients_post,
-                                                                        dish_speech,
-                                                                        question)
-
-    # no dishes found, e.g. there is no dish containing the requested ingredients
-    else:
-        
-        if ingredients_post or ingredients_pre:
-            speech = 'Leider gibt es keine passenden {} Gerichte {}.'.format(ingredients_pre,
-                                                                             ingredients_post)
-        else:
-            speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage.'
-
-    return speech, question
-
-
-# returns True if a given ingredient is found in a dish (in 'notes' or in dish-string) 
-def ingredient_in_dish(ingredient, dish) :
-    # ingredient found in 'notes' ingredient is substring of 'name'
-    if [note for note in dish['notes'] if (ingredient in note.lower())] or \
-        ingredient in dish['name'].lower():
-
-        return True
-
-    # ingredient not found
-    return False
-
-# return dishes with / without meat (as this is not marked in a general way in API data)
-def ingredient_fleisch(dishlist, first_prep, second_prep, is_first_ingredient=True):
-    if is_first_ingredient:
-        # meat is undesired
-        if first_prep == 'ohne':
-            return [dish
-                    for dish in dishlist
-                    if ingredient_in_dish('vegan', dish) or \
-                       ingredient_in_dish('vegetarisch', dish) or \
-                       ingredient_in_dish('fisch', dish)]
-        # meat is desired
-        else:
-            return [dish
-                    for dish in dishlist
-                    if not(ingredient_in_dish('vegan', dish) or \
-                           ingredient_in_dish('vegetarisch', dish) or \
-                           ingredient_in_dish('fisch', dish))]
-
-    else:
-        # meat is undesired
-        if (second_prep == 'ohne') or \
-           ((second_prep is None) and first_prep  == 'ohne'):
-
-            return [dish
-                    for dish in dishlist
-                    if ingredient_in_dish('vegan', dish) or \
-                       ingredient_in_dish('vegetarisch', dish) or \
-                       ingredient_in_dish('fisch', dish)]
-        # meat is desired
-        else:
-            return [dish
-                    for dish in dishlist
-                    if not(ingredient_in_dish('vegan', dish) or \
-                           ingredient_in_dish('vegetarisch', dish) or \
-                           ingredient_in_dish('fisch', dish))]
-
+        speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
+        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+    return handler_input.response_builder.speak(speech).response
 
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("ListDishesIntent")(input))
 def list_dishes_intent_handler(handler_input, current_date=None):
@@ -345,7 +109,7 @@ def list_dishes_intent_handler(handler_input, current_date=None):
     print("In ListDishesIntent")
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = get_slot_values(filled_slots)
+    slot_values = utility.get_slot_values(filled_slots)
     if current_date is None:
         current_date = slot_values['date']['resolved']
     # extract (un)desired ingredients
@@ -375,11 +139,9 @@ def list_dishes_intent_handler(handler_input, current_date=None):
     # print('Persistent attributes: ', persistent_attr)
 
     # try to find matching dishes
-    speech, question = list_dishes(session_attr, current_date, ingredients)
+    speech, question = utility.list_dishes(session_attr, current_date, ingredients)
     print('Session attributes: ',session_attr)
     return handler_input.response_builder.speak(speech).ask(question).response
-
-
 
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("PriceIntent")(input))
 def price_intent_handler(handler_input):
@@ -397,7 +159,7 @@ def price_intent_handler(handler_input):
 
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = get_slot_values(filled_slots)
+    slot_values = utility.get_slot_values(filled_slots)
     print(slot_values)
     current_number = slot_values['number']['resolved']
     current_usergroup_id = slot_values['user_group']['id']
@@ -412,14 +174,14 @@ def price_intent_handler(handler_input):
         # if user asked for a specific user group, only read this price
         if current_usergroup_id:
             price = dish_prices[current_usergroup_id]
-            speech += build_price_speech(price, current_user)
+            speech += utility.build_price_speech(price, current_user)
         # if not: read all prices for each available user group
         else:
             for i in range(len(user_groups)):
                 price = dish_prices[user_groups[i]]
                 if price == None:
                     continue
-                speech += build_price_speech(price, user_groups_de[i])
+                speech += utility.build_price_speech(price, user_groups_de[i])
         speech += '. '
 
     # dish cannot be found any more: user may have used a higher number
@@ -435,7 +197,7 @@ def address_intent_handler(handler_input, json_data=all_mensas) :
     # type: (HandlerInput) -> Response
     print("In AddressIntent")
     filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = get_slot_values(filled_slots)
+    slot_values = utility.get_slot_values(filled_slots)
     print(slot_values)
     current_mensa_id = slot_values['mensa_name']['id']
     current_mensa_name = slot_values['mensa_name']['resolved']
@@ -453,7 +215,7 @@ def list_mensas_intent_handler(handler_input, all_mensas=all_mensas):
     # type: (HandlerInput) -> Response
     print("In ListMensasIntent")
     filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = get_slot_values(filled_slots)
+    slot_values = utility.get_slot_values(filled_slots)
     print(slot_values)
     city = slot_values['city']['resolved']
     try:
@@ -476,21 +238,23 @@ def get_nearest_mensa_intent_handler(handler_input):
     # print ("DeviceID:", device_id)
     # print("AccessToken:", access_token)
 
+    system_context = handler_input.request_envelope.context.system
     # check if mobile device (to get current coordinates of user)
-    if handler_input.request_envelope.context.system.device.supported_interfaces.geolocation:
+    if system_context.device.supported_interfaces.geolocation:
+        geo_location = handler_input.request_envelope.context.geolocation
         # check if coordinates are available
-        if handler_input.request_envelope.context.geolocation:
-            user_latitude = float(handler_input.request_envelope.context.geolocation.coordinate.latitude_in_degrees)
-            user_longitude = float(handler_input.request_envelope.context.geolocation.coordinate.longitude_in_degrees)
+        if geo_location:
+            user_latitude = float(geo_location.coordinate.latitude_in_degrees)
+            user_longitude = float(geo_location.coordinate.longitude_in_degrees)
             print("Latitude:", user_latitude)
             print("Longitude:", user_longitude)
 
         # coordinates not available
         else:
             # check if user gave skill permissions to read location data
-            if handler_input.request_envelope.context.system.user.permissions.scopes['alexa::devices:all:geolocation:read'].status.to_str() == "'GRANTED'":
+            if system_context.user.permissions.scopes['alexa::devices:all:geolocation:read'].status.to_str() == "'GRANTED'":
                 # check if location sharing is turned on on user's mobile device
-                if handler_input.request_envelope.context.geolocation:
+                if geo_location:
                     
                     # location is turned on -> something else must have gone wrong
                     print("ERROR: Cannot get location although turned on and permission available.")
@@ -513,16 +277,16 @@ def get_nearest_mensa_intent_handler(handler_input):
 
     # if not mobile device, check if user has permitted to use their address
     else:
-        device_id = handler_input.request_envelope.context.system.device.device_id
+        device_id = system_context.device.device_id
         alexa_api = "https://api.eu.amazonalexa.com/v1/devices/{}/settings/address".format(device_id)
 
-        api_access_token = handler_input.request_envelope.context.system.api_access_token
+        api_access_token = system_context.api_access_token
         http_header = {'Accept' : 'application/json',
                        'Authorization' : 'Bearer {}'.format(api_access_token)}
 
         try:
             # retrieve user's address from Alexa API
-            address = http_get(alexa_api, headers=http_header)
+            address = utility.http_get(alexa_api, headers=http_header)
             print(address)
         except requests.exceptions.HTTPError as e:
             # user has not permitted to use their address -> ask for permission
@@ -553,7 +317,7 @@ def get_nearest_mensa_intent_handler(handler_input):
         address_string = "{},{},{},{}".format(address['addressLine1'], address['postalCode'], address['city'], address['countryCode'])
         nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
         try:
-            location_data = http_get(nominatim_api)[0]
+            location_data = utility.http_get(nominatim_api)[0]
             user_latitude = float(location_data['lat'])
             user_longitude = float(location_data['lon'])
             print("Latitude:", user_latitude)
@@ -576,7 +340,7 @@ def get_nearest_mensa_intent_handler(handler_input):
             address_string = mensa['address']
             nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
             try:
-                location_data = http_get(nominatim_api)[0]
+                location_data = utility.http_get(nominatim_api)[0]
                 mensa_latitude = float(location_data['lat'])
                 mensa_longitude = float(location_data['lon'])
             except IndexError:
