@@ -743,6 +743,22 @@
                         "details für nummer {number}",
                         "details"
                     ]
+                },
+                {
+                    "name": "AMAZON.NextIntent",
+                    "samples": [
+                        "ja",
+                        "weitere gerichte vorlesen",
+                        "mehr gerichte",
+                        "lies mir weitere gerichte vor",
+                        "gib mir mehr gerichte",
+                        "wie geht es weiter",
+                        "sprich weiter",
+                        "lies weiter",
+                        "weitere gerichte",
+                        "mehr",
+                        "weiter"
+                    ]
                 }
             ],
             "types": [
@@ -853,13 +869,13 @@
                         {
                             "id": "10",
                             "name": {
-                                "value": "mensa tiho-tower",
+                                "value": "mensa tiho tower",
                                 "synonyms": [
-                                    "mensa tiho-tower hannover",
-                                    "mensa hannover tiho-tower",
-                                    "hannover tiho-tower",
-                                    "tiho-tower hannover",
-                                    "tiho-tower"
+                                    "mensa tiho tower hannover",
+                                    "mensa hannover tiho tower",
+                                    "hannover tiho tower",
+                                    "tiho tower hannover",
+                                    "tiho tower"
                                 ]
                             }
                         },
@@ -999,24 +1015,26 @@
                         {
                             "id": "27",
                             "name": {
-                                "value": "mensa fu ii otto-von-simson-straße",
+                                "value": "mensa fu zwei otto von simson straße",
                                 "synonyms": [
-                                    "mensa otto-von-simson-straße",
-                                    "otto-von-simson-straße",
-                                    "mensa f. u. zwei otto-von-simson-straße",
+                                    "mensa der f. u. berlin",
+                                    "f. u. berlin",
+                                    "mensa otto von simson straße",
+                                    "otto von simson straße",
+                                    "mensa f. u. zwei otto von simson straße",
                                     "freie uni mensa zwei",
                                     "mensa zwei f. u. ",
                                     "mensa zwei f. u. berlin",
                                     "f. u. berlin mensa zwei",
                                     "freie universität mensa zwei",
                                     "mensa zwei freie universität",
-                                    "mensa f. u. ii otto-von-simson-straße",
-                                    "freie uni mensa 2",
-                                    "mensa 2 fu",
-                                    "mensa 2 fu berlin",
-                                    "fu berlin mensa 2",
-                                    "freie universität mensa 2",
-                                    "mensa 2 freie universität"
+                                    "mensa f. u. ii otto von simson straße",
+                                    "freie uni mensa zwei",
+                                    "mensa zwei fu",
+                                    "mensa zwei fu berlin",
+                                    "fu berlin mensa zwei",
+                                    "freie universität mensa zwei",
+                                    "mensa zwei freie universität"
                                 ]
                             }
                         },
@@ -1545,7 +1563,7 @@
                         {
                             "id": "72",
                             "name": {
-                                "value": "leipzig cafeteria philipp-rosenthal-straße"
+                                "value": "leipzig cafeteria philipp rosenthal straße"
                             }
                         },
                         {
@@ -1557,13 +1575,13 @@
                         {
                             "id": "75",
                             "name": {
-                                "value": "mensa ernst-abbe-platz"
+                                "value": "mensa ernst abbe platz"
                             }
                         },
                         {
                             "id": "76",
                             "name": {
-                                "value": "mensa carl-zeiss-promenade"
+                                "value": "mensa carl zeiss promenade"
                             }
                         },
                         {
@@ -1617,7 +1635,7 @@
                         {
                             "id": "86",
                             "name": {
-                                "value": "dresden mensa stimm-gabel"
+                                "value": "dresden mensa stimm gabel"
                             }
                         },
                         {
@@ -1629,7 +1647,7 @@
                         {
                             "id": "88",
                             "name": {
-                                "value": "dresden biomensa u-boot"
+                                "value": "dresden biomensa u boot"
                             }
                         },
                         {
@@ -1743,7 +1761,7 @@
                         {
                             "id": "111",
                             "name": {
-                                "value": "würzburg mensa josef-schneider-straße "
+                                "value": "würzburg mensa josef schneider straße "
                             }
                         },
                         {
@@ -2019,7 +2037,7 @@
                         {
                             "id": "161",
                             "name": {
-                                "value": "bistro-shop lübecker straße"
+                                "value": "bistro shop lübecker straße"
                             }
                         },
                         {
@@ -2235,7 +2253,7 @@
                         {
                             "id": "203",
                             "name": {
-                                "value": "uni-bielefeld mensa"
+                                "value": "uni bielefeld mensa"
                             }
                         },
                         {
@@ -2355,7 +2373,7 @@
                         {
                             "id": "231",
                             "name": {
-                                "value": "freising stucafé mensa-wst"
+                                "value": "freising stucafé mensa wst"
                             }
                         },
                         {
@@ -2559,19 +2577,19 @@
                         {
                             "id": "280",
                             "name": {
-                                "value": "künzelsau mensa reinhold-würth-hochschule"
+                                "value": "künzelsau mensa reinhold würth hochschule"
                             }
                         },
                         {
                             "id": "281",
                             "name": {
-                                "value": "heidelberg triplex-mensa am uniplatz"
+                                "value": "heidelberg triplex mensa am uniplatz"
                             }
                         },
                         {
                             "id": "282",
                             "name": {
-                                "value": "heidelberg zeughaus-mensa im marstall"
+                                "value": "heidelberg zeughaus mensa im marstall"
                             }
                         },
                         {
@@ -2697,7 +2715,7 @@
                         {
                             "id": "315",
                             "name": {
-                                "value": "cafeteria philosophie-theologie (pt) regensburg"
+                                "value": "cafeteria philosophie theologie (pt) regensburg"
                             }
                         },
                         {
@@ -2757,7 +2775,7 @@
                         {
                             "id": "334",
                             "name": {
-                                "value": "mensa ruhr-universität bochum"
+                                "value": "mensa ruhr universität bochum"
                             }
                         },
                         {
@@ -2769,7 +2787,7 @@
                         {
                             "id": "340",
                             "name": {
-                                "value": "mensa kamp-lintfort"
+                                "value": "mensa kamp lintfort"
                             }
                         },
                         {
@@ -2847,7 +2865,7 @@
                         {
                             "id": "370",
                             "name": {
-                                "value": "rostock mensa st.-georg-straße"
+                                "value": "rostock mensa st. georg straße"
                             }
                         },
                         {
@@ -2889,7 +2907,7 @@
                         {
                             "id": "379",
                             "name": {
-                                "value": "uni-bielefeld westend"
+                                "value": "uni bielefeld westend"
                             }
                         },
                         {
@@ -2919,7 +2937,7 @@
                         {
                             "id": "386",
                             "name": {
-                                "value": "köln mensa robert-koch-straße"
+                                "value": "köln mensa robert koch straße"
                             }
                         },
                         {
@@ -2979,7 +2997,7 @@
                         {
                             "id": "396",
                             "name": {
-                                "value": "esslingen mensa stadtmitte - kanalstraße"
+                                "value": "esslingen mensa stadtmitte   kanalstraße"
                             }
                         },
                         {
@@ -2997,7 +3015,7 @@
                         {
                             "id": "579",
                             "name": {
-                                "value": "coffeebar hwr alt-friedrichsfelde"
+                                "value": "coffeebar hwr alt friedrichsfelde"
                             }
                         },
                         {
@@ -3165,7 +3183,7 @@
                         {
                             "id": "634",
                             "name": {
-                                "value": "restaurant optik-hus"
+                                "value": "restaurant optik hus"
                             }
                         },
                         {
@@ -3195,7 +3213,7 @@
                         {
                             "id": "639",
                             "name": {
-                                "value": "personalrestaurant time-out"
+                                "value": "personalrestaurant time out"
                             }
                         },
                         {
@@ -3207,7 +3225,7 @@
                         {
                             "id": "641",
                             "name": {
-                                "value": "restaurant pwc-inn"
+                                "value": "restaurant pwc inn"
                             }
                         },
                         {
@@ -3483,7 +3501,7 @@
                         {
                             "id": "744",
                             "name": {
-                                "value": "bistro gymnasium und wms thun-schadau"
+                                "value": "bistro gymnasium und wms thun schadau"
                             }
                         },
                         {
@@ -3501,7 +3519,7 @@
                         {
                             "id": "747",
                             "name": {
-                                "value": "restaurant campus fhnw brugg-windisch"
+                                "value": "restaurant campus fhnw brugg windisch"
                             }
                         },
                         {
@@ -3639,7 +3657,7 @@
                         {
                             "id": "770",
                             "name": {
-                                "value": "g-essbar"
+                                "value": "g essbar"
                             }
                         },
                         {
@@ -3651,7 +3669,7 @@
                         {
                             "id": "774",
                             "name": {
-                                "value": "konradhofer catering - betriebskantine ipp"
+                                "value": "konradhofer catering   betriebskantine ipp"
                             }
                         },
                         {
@@ -3729,7 +3747,7 @@
                         {
                             "id": "804",
                             "name": {
-                                "value": "mensa hs neu-ulm"
+                                "value": "mensa hs neu ulm"
                             }
                         },
                         {
@@ -3813,7 +3831,7 @@
                         {
                             "id": "819",
                             "name": {
-                                "value": "mensa udk „jazz-mensa“"
+                                "value": "mensa udk „jazz mensa“"
                             }
                         },
                         {
@@ -3825,13 +3843,13 @@
                         {
                             "id": "821",
                             "name": {
-                                "value": "mensa veggie № 1 - die grüne mensa"
+                                "value": "mensa veggie № 1   die grüne mensa"
                             }
                         },
                         {
                             "id": "828",
                             "name": {
-                                "value": "mensa htw saar alt-saarbrücken"
+                                "value": "mensa htw saar alt saarbrücken"
                             }
                         },
                         {
@@ -3897,7 +3915,7 @@
                         {
                             "id": "840",
                             "name": {
-                                "value": "caféteria uni-hauptgebäude"
+                                "value": "caféteria uni hauptgebäude"
                             }
                         },
                         {
@@ -3921,7 +3939,7 @@
                         {
                             "id": "844",
                             "name": {
-                                "value": "cafeteria anna-amalia-bibliothek"
+                                "value": "cafeteria anna amalia bibliothek"
                             }
                         },
                         {
@@ -3981,7 +3999,7 @@
                         {
                             "id": "854",
                             "name": {
-                                "value": "mensa max-ophüls-platz"
+                                "value": "mensa max ophüls platz"
                             }
                         },
                         {
@@ -4035,7 +4053,7 @@
                         {
                             "id": "864",
                             "name": {
-                                "value": "q-west ruhr-universität bochum"
+                                "value": "q west ruhr universität bochum"
                             }
                         },
                         {
@@ -4095,7 +4113,7 @@
                         {
                             "id": "875",
                             "name": {
-                                "value": "mensa veggie 2.0 - die tiefgrüne mensa"
+                                "value": "mensa veggie 2.0   die tiefgrüne mensa"
                             }
                         },
                         {
