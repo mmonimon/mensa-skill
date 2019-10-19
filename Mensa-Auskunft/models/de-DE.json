@@ -721,6 +721,28 @@
                         "wo sich eine mensa in der nähe befindet bitte",
                         "wo eine mensa in der nähe ist bitte"
                     ]
+                },
+                {
+                    "name": "DetailsIntent",
+                    "slots": [
+                        {
+                            "name": "number",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "gericht nummer {number}",
+                                "nummer {number}",
+                                "{number}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "gib mir details für {number}",
+                        "details für gericht nummer {number} bitte",
+                        "details für gericht nummer {number}",
+                        "gib mir details",
+                        "details für nummer {number}",
+                        "details"
+                    ]
                 }
             ],
             "types": [
@@ -1489,6 +1511,2646 @@
                                     "leipzig am elsterbecken"
                                 ]
                             }
+                        },
+                        {
+                            "id": "66",
+                            "name": {
+                                "value": "leipzig mensa an den tierkliniken"
+                            }
+                        },
+                        {
+                            "id": "67",
+                            "name": {
+                                "value": "leipzig mensa liebigstraße"
+                            }
+                        },
+                        {
+                            "id": "68",
+                            "name": {
+                                "value": "leipzig mensa peterssteinweg"
+                            }
+                        },
+                        {
+                            "id": "69",
+                            "name": {
+                                "value": "leipzig mensacafetaria schönauer straße"
+                            }
+                        },
+                        {
+                            "id": "70",
+                            "name": {
+                                "value": "leipzig cafeteria dittrichring"
+                            }
+                        },
+                        {
+                            "id": "72",
+                            "name": {
+                                "value": "leipzig cafeteria philipp-rosenthal-straße"
+                            }
+                        },
+                        {
+                            "id": "74",
+                            "name": {
+                                "value": "mensa philosophenweg"
+                            }
+                        },
+                        {
+                            "id": "75",
+                            "name": {
+                                "value": "mensa ernst-abbe-platz"
+                            }
+                        },
+                        {
+                            "id": "76",
+                            "name": {
+                                "value": "mensa carl-zeiss-promenade"
+                            }
+                        },
+                        {
+                            "id": "78",
+                            "name": {
+                                "value": "dresden zeltschloesschen"
+                            }
+                        },
+                        {
+                            "id": "79",
+                            "name": {
+                                "value": "dresden alte mensa"
+                            }
+                        },
+                        {
+                            "id": "80",
+                            "name": {
+                                "value": "dresden mensa reichenbachstraße"
+                            }
+                        },
+                        {
+                            "id": "81",
+                            "name": {
+                                "value": "dresden mensologie"
+                            }
+                        },
+                        {
+                            "id": "82",
+                            "name": {
+                                "value": "dresden mensa siedepunkt"
+                            }
+                        },
+                        {
+                            "id": "83",
+                            "name": {
+                                "value": "tharandt mensa tellerrandt"
+                            }
+                        },
+                        {
+                            "id": "84",
+                            "name": {
+                                "value": "dresden mensa palucca schule"
+                            }
+                        },
+                        {
+                            "id": "85",
+                            "name": {
+                                "value": "dresden mensa wueins"
+                            }
+                        },
+                        {
+                            "id": "86",
+                            "name": {
+                                "value": "dresden mensa stimm-gabel"
+                            }
+                        },
+                        {
+                            "id": "87",
+                            "name": {
+                                "value": "dresden mensa johannesstadt"
+                            }
+                        },
+                        {
+                            "id": "88",
+                            "name": {
+                                "value": "dresden biomensa u-boot"
+                            }
+                        },
+                        {
+                            "id": "89",
+                            "name": {
+                                "value": "mensa zittau"
+                            }
+                        },
+                        {
+                            "id": "91",
+                            "name": {
+                                "value": "dresden mensa sport"
+                            }
+                        },
+                        {
+                            "id": "92",
+                            "name": {
+                                "value": "dresden mensa kreuzgymnasium"
+                            }
+                        },
+                        {
+                            "id": "93",
+                            "name": {
+                                "value": "aachen forum cafete"
+                            }
+                        },
+                        {
+                            "id": "94",
+                            "name": {
+                                "value": "aachen bistro templergraben"
+                            }
+                        },
+                        {
+                            "id": "95",
+                            "name": {
+                                "value": "aachen mensa ahorn"
+                            }
+                        },
+                        {
+                            "id": "96",
+                            "name": {
+                                "value": "aachen mensa vita"
+                            }
+                        },
+                        {
+                            "id": "97",
+                            "name": {
+                                "value": "aachen mensa bayernallee"
+                            }
+                        },
+                        {
+                            "id": "98",
+                            "name": {
+                                "value": "aachen mensa eups"
+                            }
+                        },
+                        {
+                            "id": "99",
+                            "name": {
+                                "value": "aachen gastro goethe"
+                            }
+                        },
+                        {
+                            "id": "100",
+                            "name": {
+                                "value": "mensa jülich"
+                            }
+                        },
+                        {
+                            "id": "102",
+                            "name": {
+                                "value": "bamberg mensa feldkirchenstraße"
+                            }
+                        },
+                        {
+                            "id": "103",
+                            "name": {
+                                "value": "mensa aschaffenburg"
+                            }
+                        },
+                        {
+                            "id": "104",
+                            "name": {
+                                "value": "bistro tasty studio babelsberg"
+                            }
+                        },
+                        {
+                            "id": "105",
+                            "name": {
+                                "value": "mensa schweinfurt"
+                            }
+                        },
+                        {
+                            "id": "106",
+                            "name": {
+                                "value": "würzburg mensa burse"
+                            }
+                        },
+                        {
+                            "id": "109",
+                            "name": {
+                                "value": "würzburg mensa am studentenhaus"
+                            }
+                        },
+                        {
+                            "id": "110",
+                            "name": {
+                                "value": "würzburg mensa augenklinik"
+                            }
+                        },
+                        {
+                            "id": "111",
+                            "name": {
+                                "value": "würzburg mensa josef-schneider-straße "
+                            }
+                        },
+                        {
+                            "id": "112",
+                            "name": {
+                                "value": "ulf's café (hpi cafeteria)"
+                            }
+                        },
+                        {
+                            "id": "113",
+                            "name": {
+                                "value": "marburg mensa erlenring"
+                            }
+                        },
+                        {
+                            "id": "114",
+                            "name": {
+                                "value": "marburg mensa lahnberge"
+                            }
+                        },
+                        {
+                            "id": "115",
+                            "name": {
+                                "value": "marburg philipps bistro"
+                            }
+                        },
+                        {
+                            "id": "116",
+                            "name": {
+                                "value": "marburg mo's diner"
+                            }
+                        },
+                        {
+                            "id": "117",
+                            "name": {
+                                "value": "hamburg mensa armgartstraße"
+                            }
+                        },
+                        {
+                            "id": "118",
+                            "name": {
+                                "value": "hamburg mensa bergedorf"
+                            }
+                        },
+                        {
+                            "id": "119",
+                            "name": {
+                                "value": "hamburg mensa berliner tor"
+                            }
+                        },
+                        {
+                            "id": "121",
+                            "name": {
+                                "value": "hamburg mensa botanischer garten"
+                            }
+                        },
+                        {
+                            "id": "122",
+                            "name": {
+                                "value": "hamburg mensa bucerius law school"
+                            }
+                        },
+                        {
+                            "id": "123",
+                            "name": {
+                                "value": "hamburg café jungiusstraße"
+                            }
+                        },
+                        {
+                            "id": "124",
+                            "name": {
+                                "value": "hamburg café alexanderstraße"
+                            }
+                        },
+                        {
+                            "id": "125",
+                            "name": {
+                                "value": "hamburg mensa campus"
+                            }
+                        },
+                        {
+                            "id": "127",
+                            "name": {
+                                "value": "hamburg mensa finkenau"
+                            }
+                        },
+                        {
+                            "id": "128",
+                            "name": {
+                                "value": "hamburg mensa geomatikum"
+                            }
+                        },
+                        {
+                            "id": "129",
+                            "name": {
+                                "value": "hamburg mensa harburg   "
+                            }
+                        },
+                        {
+                            "id": "130",
+                            "name": {
+                                "value": "hamburg mensa philosophenturm"
+                            }
+                        },
+                        {
+                            "id": "131",
+                            "name": {
+                                "value": "hamburg mensa stellingen"
+                            }
+                        },
+                        {
+                            "id": "132",
+                            "name": {
+                                "value": "hamburg mensa studierendenhaus"
+                            }
+                        },
+                        {
+                            "id": "133",
+                            "name": {
+                                "value": "münchen mensa leopoldstraße"
+                            }
+                        },
+                        {
+                            "id": "134",
+                            "name": {
+                                "value": "münchen mensa martinsried"
+                            }
+                        },
+                        {
+                            "id": "135",
+                            "name": {
+                                "value": "münchen mensaria großhadern"
+                            }
+                        },
+                        {
+                            "id": "136",
+                            "name": {
+                                "value": "münchen stubistro schellingstraße"
+                            }
+                        },
+                        {
+                            "id": "138",
+                            "name": {
+                                "value": "münchen mensa arcisstraße"
+                            }
+                        },
+                        {
+                            "id": "139",
+                            "name": {
+                                "value": "garching mensa garching"
+                            }
+                        },
+                        {
+                            "id": "140",
+                            "name": {
+                                "value": "freising mensa weihenstephan"
+                            }
+                        },
+                        {
+                            "id": "141",
+                            "name": {
+                                "value": "münchen mensa lothstraße"
+                            }
+                        },
+                        {
+                            "id": "142",
+                            "name": {
+                                "value": "münchen mensa pasing"
+                            }
+                        },
+                        {
+                            "id": "144",
+                            "name": {
+                                "value": "garching cafeteria mensa garching"
+                            }
+                        },
+                        {
+                            "id": "145",
+                            "name": {
+                                "value": "freising cafeteria akademie"
+                            }
+                        },
+                        {
+                            "id": "146",
+                            "name": {
+                                "value": "garching cafeteria boltzmannstraße"
+                            }
+                        },
+                        {
+                            "id": "147",
+                            "name": {
+                                "value": "mensa nordhäuser straße"
+                            }
+                        },
+                        {
+                            "id": "148",
+                            "name": {
+                                "value": "mensa altonaer straße"
+                            }
+                        },
+                        {
+                            "id": "149",
+                            "name": {
+                                "value": "nanoteria"
+                            }
+                        },
+                        {
+                            "id": "150",
+                            "name": {
+                                "value": "mensa ehrenberg"
+                            }
+                        },
+                        {
+                            "id": "151",
+                            "name": {
+                                "value": "mensa am park"
+                            }
+                        },
+                        {
+                            "id": "152",
+                            "name": {
+                                "value": "mensa berufsakademie gera "
+                            }
+                        },
+                        {
+                            "id": "153",
+                            "name": {
+                                "value": "mensa 1 (mittag)"
+                            }
+                        },
+                        {
+                            "id": "154",
+                            "name": {
+                                "value": "mensa 1 (abend)"
+                            }
+                        },
+                        {
+                            "id": "155",
+                            "name": {
+                                "value": "mensa 2"
+                            }
+                        },
+                        {
+                            "id": "156",
+                            "name": {
+                                "value": "kantina kreativa"
+                            }
+                        },
+                        {
+                            "id": "157",
+                            "name": {
+                                "value": "magdeburg mensa unicampus oben"
+                            }
+                        },
+                        {
+                            "id": "158",
+                            "name": {
+                                "value": "mensa clausthal"
+                            }
+                        },
+                        {
+                            "id": "159",
+                            "name": {
+                                "value": "mensa universität"
+                            }
+                        },
+                        {
+                            "id": "160",
+                            "name": {
+                                "value": "mensa hohnsen (hawk)"
+                            }
+                        },
+                        {
+                            "id": "161",
+                            "name": {
+                                "value": "bistro-shop lübecker straße"
+                            }
+                        },
+                        {
+                            "id": "162",
+                            "name": {
+                                "value": "mensa hawk"
+                            }
+                        },
+                        {
+                            "id": "163",
+                            "name": {
+                                "value": "mensa campus"
+                            }
+                        },
+                        {
+                            "id": "165",
+                            "name": {
+                                "value": "mensa suderburg"
+                            }
+                        },
+                        {
+                            "id": "166",
+                            "name": {
+                                "value": "mensa ostfalia"
+                            }
+                        },
+                        {
+                            "id": "167",
+                            "name": {
+                                "value": "uni mensa"
+                            }
+                        },
+                        {
+                            "id": "168",
+                            "name": {
+                                "value": "mensa neustadtswall"
+                            }
+                        },
+                        {
+                            "id": "169",
+                            "name": {
+                                "value": "mensa werderstrasse"
+                            }
+                        },
+                        {
+                            "id": "170",
+                            "name": {
+                                "value": "mensa am airport"
+                            }
+                        },
+                        {
+                            "id": "171",
+                            "name": {
+                                "value": "mensa bremerhaven"
+                            }
+                        },
+                        {
+                            "id": "172",
+                            "name": {
+                                "value": "cafeteria gw2"
+                            }
+                        },
+                        {
+                            "id": "173",
+                            "name": {
+                                "value": "darmstadt mensa stadtmitte"
+                            }
+                        },
+                        {
+                            "id": "174",
+                            "name": {
+                                "value": "darmstadt mensa lichtwiese"
+                            }
+                        },
+                        {
+                            "id": "175",
+                            "name": {
+                                "value": "darmstadt mensa schöfferstraße"
+                            }
+                        },
+                        {
+                            "id": "176",
+                            "name": {
+                                "value": "darmstadt mensa dieburg"
+                            }
+                        },
+                        {
+                            "id": "177",
+                            "name": {
+                                "value": "darmstadt bistro haardtring"
+                            }
+                        },
+                        {
+                            "id": "178",
+                            "name": {
+                                "value": "360 grad"
+                            }
+                        },
+                        {
+                            "id": "179",
+                            "name": {
+                                "value": "göttingen zentralmensa"
+                            }
+                        },
+                        {
+                            "id": "180",
+                            "name": {
+                                "value": "göttingen nordmensa"
+                            }
+                        },
+                        {
+                            "id": "182",
+                            "name": {
+                                "value": "göttingen mensa italia"
+                            }
+                        },
+                        {
+                            "id": "183",
+                            "name": {
+                                "value": "göttingen bistro hawk"
+                            }
+                        },
+                        {
+                            "id": "184",
+                            "name": {
+                                "value": "hamburg cafe am mittelweg"
+                            }
+                        },
+                        {
+                            "id": "185",
+                            "name": {
+                                "value": "hamburg cafe cfel"
+                            }
+                        },
+                        {
+                            "id": "186",
+                            "name": {
+                                "value": "hamburg mensa hcu"
+                            }
+                        },
+                        {
+                            "id": "187",
+                            "name": {
+                                "value": "aachen mensa academica"
+                            }
+                        },
+                        {
+                            "id": "188",
+                            "name": {
+                                "value": "kochwerk elbe"
+                            }
+                        },
+                        {
+                            "id": "193",
+                            "name": {
+                                "value": "konstanz htwg"
+                            }
+                        },
+                        {
+                            "id": "194",
+                            "name": {
+                                "value": "mensa uni regensburg"
+                            }
+                        },
+                        {
+                            "id": "195",
+                            "name": {
+                                "value": "mensa oth regensburg"
+                            }
+                        },
+                        {
+                            "id": "196",
+                            "name": {
+                                "value": "mensa uni passau"
+                            }
+                        },
+                        {
+                            "id": "197",
+                            "name": {
+                                "value": "mensa hs landshut"
+                            }
+                        },
+                        {
+                            "id": "198",
+                            "name": {
+                                "value": "mensa th deggendorf"
+                            }
+                        },
+                        {
+                            "id": "199",
+                            "name": {
+                                "value": "kochwerk alster"
+                            }
+                        },
+                        {
+                            "id": "200",
+                            "name": {
+                                "value": "dresden mensa brühl"
+                            }
+                        },
+                        {
+                            "id": "201",
+                            "name": {
+                                "value": "mensa nw 1"
+                            }
+                        },
+                        {
+                            "id": "202",
+                            "name": {
+                                "value": "mensa rüsselsheim"
+                            }
+                        },
+                        {
+                            "id": "203",
+                            "name": {
+                                "value": "uni-bielefeld mensa"
+                            }
+                        },
+                        {
+                            "id": "204",
+                            "name": {
+                                "value": "mensa accent"
+                            }
+                        },
+                        {
+                            "id": "205",
+                            "name": {
+                                "value": "mensa pi x gaumen"
+                            }
+                        },
+                        {
+                            "id": "206",
+                            "name": {
+                                "value": "mensa casino"
+                            }
+                        },
+                        {
+                            "id": "207",
+                            "name": {
+                                "value": "cafeteria level"
+                            }
+                        },
+                        {
+                            "id": "208",
+                            "name": {
+                                "value": "cafeteria darwins"
+                            }
+                        },
+                        {
+                            "id": "209",
+                            "name": {
+                                "value": "mensa anbau casino"
+                            }
+                        },
+                        {
+                            "id": "210",
+                            "name": {
+                                "value": "cafeteria dasein"
+                            }
+                        },
+                        {
+                            "id": "211",
+                            "name": {
+                                "value": "cafeteria bockenheim"
+                            }
+                        },
+                        {
+                            "id": "212",
+                            "name": {
+                                "value": "café hochform"
+                            }
+                        },
+                        {
+                            "id": "213",
+                            "name": {
+                                "value": "mensa esswerk"
+                            }
+                        },
+                        {
+                            "id": "214",
+                            "name": {
+                                "value": "mensa hfmdk"
+                            }
+                        },
+                        {
+                            "id": "215",
+                            "name": {
+                                "value": "cafeteria hfg"
+                            }
+                        },
+                        {
+                            "id": "216",
+                            "name": {
+                                "value": "mensa point"
+                            }
+                        },
+                        {
+                            "id": "225",
+                            "name": {
+                                "value": "mensa am ring"
+                            }
+                        },
+                        {
+                            "id": "226",
+                            "name": {
+                                "value": "mensa am aasee"
+                            }
+                        },
+                        {
+                            "id": "227",
+                            "name": {
+                                "value": "bistro denkpause"
+                            }
+                        },
+                        {
+                            "id": "228",
+                            "name": {
+                                "value": "mensa da vinci"
+                            }
+                        },
+                        {
+                            "id": "229",
+                            "name": {
+                                "value": "rosenheim stubistro mensa rosenheim"
+                            }
+                        },
+                        {
+                            "id": "230",
+                            "name": {
+                                "value": "stucafé adalbertstraße"
+                            }
+                        },
+                        {
+                            "id": "231",
+                            "name": {
+                                "value": "freising stucafé mensa-wst"
+                            }
+                        },
+                        {
+                            "id": "232",
+                            "name": {
+                                "value": "münchen stucafé karlstraße"
+                            }
+                        },
+                        {
+                            "id": "233",
+                            "name": {
+                                "value": "mensa bispinghof"
+                            }
+                        },
+                        {
+                            "id": "234",
+                            "name": {
+                                "value": "erfrischungshalle"
+                            }
+                        },
+                        {
+                            "id": "235",
+                            "name": {
+                                "value": "mensa burg"
+                            }
+                        },
+                        {
+                            "id": "236",
+                            "name": {
+                                "value": "mensa franckesche stiftungen"
+                            }
+                        },
+                        {
+                            "id": "237",
+                            "name": {
+                                "value": "mensa merseburg"
+                            }
+                        },
+                        {
+                            "id": "238",
+                            "name": {
+                                "value": "heidemensa"
+                            }
+                        },
+                        {
+                            "id": "239",
+                            "name": {
+                                "value": "mensa neuwerk"
+                            }
+                        },
+                        {
+                            "id": "240",
+                            "name": {
+                                "value": "weinbergmensa"
+                            }
+                        },
+                        {
+                            "id": "241",
+                            "name": {
+                                "value": "mensa bernburg"
+                            }
+                        },
+                        {
+                            "id": "242",
+                            "name": {
+                                "value": "mensa dessau"
+                            }
+                        },
+                        {
+                            "id": "243",
+                            "name": {
+                                "value": "harzmensa"
+                            }
+                        },
+                        {
+                            "id": "244",
+                            "name": {
+                                "value": "mensa fasanerieallee"
+                            }
+                        },
+                        {
+                            "id": "245",
+                            "name": {
+                                "value": "mensa tulpe"
+                            }
+                        },
+                        {
+                            "id": "246",
+                            "name": {
+                                "value": "kantine kit campus nord"
+                            }
+                        },
+                        {
+                            "id": "256",
+                            "name": {
+                                "value": "erlangen südmensa"
+                            }
+                        },
+                        {
+                            "id": "259",
+                            "name": {
+                                "value": "würz­burg mensateria campus nord"
+                            }
+                        },
+                        {
+                            "id": "260",
+                            "name": {
+                                "value": "mensa und cafeteria lübeck"
+                            }
+                        },
+                        {
+                            "id": "261",
+                            "name": {
+                                "value": "mensa  mensacafe saarbrücken"
+                            }
+                        },
+                        {
+                            "id": "264",
+                            "name": {
+                                "value": "mensa langemarckplatz"
+                            }
+                        },
+                        {
+                            "id": "265",
+                            "name": {
+                                "value": "mensa insel schütt"
+                            }
+                        },
+                        {
+                            "id": "266",
+                            "name": {
+                                "value": "mensa regensburger straße"
+                            }
+                        },
+                        {
+                            "id": "267",
+                            "name": {
+                                "value": "ausgabemensa st. paul"
+                            }
+                        },
+                        {
+                            "id": "268",
+                            "name": {
+                                "value": "mensateria ohm"
+                            }
+                        },
+                        {
+                            "id": "269",
+                            "name": {
+                                "value": "cafeteria \"come in\" hohfederstraße"
+                            }
+                        },
+                        {
+                            "id": "270",
+                            "name": {
+                                "value": "cafeteria bärenschanzstraße"
+                            }
+                        },
+                        {
+                            "id": "271",
+                            "name": {
+                                "value": "cafeteria eichstätt"
+                            }
+                        },
+                        {
+                            "id": "272",
+                            "name": {
+                                "value": "cafeteria ingolstadt"
+                            }
+                        },
+                        {
+                            "id": "273",
+                            "name": {
+                                "value": "mensateria gastwirtschaft zum adler triesdorf"
+                            }
+                        },
+                        {
+                            "id": "274",
+                            "name": {
+                                "value": "mensa ansbach"
+                            }
+                        },
+                        {
+                            "id": "277",
+                            "name": {
+                                "value": "heilbronn mensa bildungscampuseuropaplatz"
+                            }
+                        },
+                        {
+                            "id": "278",
+                            "name": {
+                                "value": "heilbronn mensa sontheim"
+                            }
+                        },
+                        {
+                            "id": "279",
+                            "name": {
+                                "value": "heidelberg mensa im neuenheimer feld 304"
+                            }
+                        },
+                        {
+                            "id": "280",
+                            "name": {
+                                "value": "künzelsau mensa reinhold-würth-hochschule"
+                            }
+                        },
+                        {
+                            "id": "281",
+                            "name": {
+                                "value": "heidelberg triplex-mensa am uniplatz"
+                            }
+                        },
+                        {
+                            "id": "282",
+                            "name": {
+                                "value": "heidelberg zeughaus-mensa im marstall"
+                            }
+                        },
+                        {
+                            "id": "283",
+                            "name": {
+                                "value": "mannheim mensaria metropol"
+                            }
+                        },
+                        {
+                            "id": "284",
+                            "name": {
+                                "value": "mannheim cafeteria kubus"
+                            }
+                        },
+                        {
+                            "id": "285",
+                            "name": {
+                                "value": "mannheim mensa am schloss"
+                            }
+                        },
+                        {
+                            "id": "286",
+                            "name": {
+                                "value": "mannheim cafeteria musikhochschule"
+                            }
+                        },
+                        {
+                            "id": "287",
+                            "name": {
+                                "value": "mannheim mensaria wohlgelegen"
+                            }
+                        },
+                        {
+                            "id": "288",
+                            "name": {
+                                "value": "mannheim eo (schloss ehrenhof)"
+                            }
+                        },
+                        {
+                            "id": "289",
+                            "name": {
+                                "value": "mannheim mensa hochschule mannheim"
+                            }
+                        },
+                        {
+                            "id": "291",
+                            "name": {
+                                "value": "kiel mensa i am westring"
+                            }
+                        },
+                        {
+                            "id": "292",
+                            "name": {
+                                "value": "kiel mensa ii"
+                            }
+                        },
+                        {
+                            "id": "296",
+                            "name": {
+                                "value": "chemnitz reichenhainer straße mensa"
+                            }
+                        },
+                        {
+                            "id": "297",
+                            "name": {
+                                "value": "chemnitz straße der nationen mensa"
+                            }
+                        },
+                        {
+                            "id": "298",
+                            "name": {
+                                "value": "zwickau ring cafeteria"
+                            }
+                        },
+                        {
+                            "id": "300",
+                            "name": {
+                                "value": "abendmensa oth regensburg"
+                            }
+                        },
+                        {
+                            "id": "303",
+                            "name": {
+                                "value": "chemnitz reichenhainer straße cafeteria"
+                            }
+                        },
+                        {
+                            "id": "304",
+                            "name": {
+                                "value": "chemnitz straße der nationen cafeteria"
+                            }
+                        },
+                        {
+                            "id": "305",
+                            "name": {
+                                "value": "zwickau ring mensa"
+                            }
+                        },
+                        {
+                            "id": "306",
+                            "name": {
+                                "value": "zwickau scheffelberg mensa"
+                            }
+                        },
+                        {
+                            "id": "310",
+                            "name": {
+                                "value": "mensa wz straubing"
+                            }
+                        },
+                        {
+                            "id": "313",
+                            "name": {
+                                "value": "cafeteria nikolakloster passau"
+                            }
+                        },
+                        {
+                            "id": "314",
+                            "name": {
+                                "value": "cafeteria prüfening regensburg"
+                            }
+                        },
+                        {
+                            "id": "315",
+                            "name": {
+                                "value": "cafeteria philosophie-theologie (pt) regensburg"
+                            }
+                        },
+                        {
+                            "id": "316",
+                            "name": {
+                                "value": "cafeteria chemie regensburg"
+                            }
+                        },
+                        {
+                            "id": "319",
+                            "name": {
+                                "value": "cafeteria sport regensburg"
+                            }
+                        },
+                        {
+                            "id": "320",
+                            "name": {
+                                "value": "mensa flensburg"
+                            }
+                        },
+                        {
+                            "id": "326",
+                            "name": {
+                                "value": "bistro durchblick"
+                            }
+                        },
+                        {
+                            "id": "327",
+                            "name": {
+                                "value": "bistro frieden"
+                            }
+                        },
+                        {
+                            "id": "329",
+                            "name": {
+                                "value": "bistro kabu"
+                            }
+                        },
+                        {
+                            "id": "330",
+                            "name": {
+                                "value": "bistro katholische hochschule"
+                            }
+                        },
+                        {
+                            "id": "331",
+                            "name": {
+                                "value": "bistro oeconomicum"
+                            }
+                        },
+                        {
+                            "id": "332",
+                            "name": {
+                                "value": "mensa steinfurt"
+                            }
+                        },
+                        {
+                            "id": "334",
+                            "name": {
+                                "value": "mensa ruhr-universität bochum"
+                            }
+                        },
+                        {
+                            "id": "339",
+                            "name": {
+                                "value": "mensa universitätsstraße düsseldorf"
+                            }
+                        },
+                        {
+                            "id": "340",
+                            "name": {
+                                "value": "mensa kamp-lintfort"
+                            }
+                        },
+                        {
+                            "id": "341",
+                            "name": {
+                                "value": "mensa campus derendorf"
+                            }
+                        },
+                        {
+                            "id": "343",
+                            "name": {
+                                "value": "mensa obergath krefeld"
+                            }
+                        },
+                        {
+                            "id": "344",
+                            "name": {
+                                "value": "mensa frankenring krefeld"
+                            }
+                        },
+                        {
+                            "id": "345",
+                            "name": {
+                                "value": "mensa sommerdeich kleve"
+                            }
+                        },
+                        {
+                            "id": "346",
+                            "name": {
+                                "value": "mensa rheydter straße mönchengladbach"
+                            }
+                        },
+                        {
+                            "id": "347",
+                            "name": {
+                                "value": "restaurant & bar campus vita düsseldorf"
+                            }
+                        },
+                        {
+                            "id": "348",
+                            "name": {
+                                "value": "essenausgabe süd düsseldorf"
+                            }
+                        },
+                        {
+                            "id": "349",
+                            "name": {
+                                "value": "kunstakademie düsseldorf"
+                            }
+                        },
+                        {
+                            "id": "350",
+                            "name": {
+                                "value": "musikhochschule düsseldorf"
+                            }
+                        },
+                        {
+                            "id": "352",
+                            "name": {
+                                "value": "mensa westerberg"
+                            }
+                        },
+                        {
+                            "id": "368",
+                            "name": {
+                                "value": "rostock mensa süd"
+                            }
+                        },
+                        {
+                            "id": "369",
+                            "name": {
+                                "value": "rostock mensa e1nstein"
+                            }
+                        },
+                        {
+                            "id": "370",
+                            "name": {
+                                "value": "rostock mensa st.-georg-straße"
+                            }
+                        },
+                        {
+                            "id": "371",
+                            "name": {
+                                "value": "rostock mensa multiple choice"
+                            }
+                        },
+                        {
+                            "id": "372",
+                            "name": {
+                                "value": "rostock mensa ulme"
+                            }
+                        },
+                        {
+                            "id": "374",
+                            "name": {
+                                "value": "wismar campus mensa"
+                            }
+                        },
+                        {
+                            "id": "376",
+                            "name": {
+                                "value": "cafeteria fh lampingstraße"
+                            }
+                        },
+                        {
+                            "id": "377",
+                            "name": {
+                                "value": "mensa hochschule owl lemgo"
+                            }
+                        },
+                        {
+                            "id": "378",
+                            "name": {
+                                "value": "mensa hochschule owl höxter"
+                            }
+                        },
+                        {
+                            "id": "379",
+                            "name": {
+                                "value": "uni-bielefeld westend"
+                            }
+                        },
+                        {
+                            "id": "381",
+                            "name": {
+                                "value": "casino cafeteria"
+                            }
+                        },
+                        {
+                            "id": "383",
+                            "name": {
+                                "value": "köln mensa südstadt"
+                            }
+                        },
+                        {
+                            "id": "384",
+                            "name": {
+                                "value": "köln mensa zülpicher straße"
+                            }
+                        },
+                        {
+                            "id": "385",
+                            "name": {
+                                "value": "köln mensa kunsthochschule medien"
+                            }
+                        },
+                        {
+                            "id": "386",
+                            "name": {
+                                "value": "köln mensa robert-koch-straße"
+                            }
+                        },
+                        {
+                            "id": "387",
+                            "name": {
+                                "value": "köln mensa deutz"
+                            }
+                        },
+                        {
+                            "id": "388",
+                            "name": {
+                                "value": "köln mensa musikhochschule"
+                            }
+                        },
+                        {
+                            "id": "389",
+                            "name": {
+                                "value": "köln mensa am sportpark müngersdorf"
+                            }
+                        },
+                        {
+                            "id": "390",
+                            "name": {
+                                "value": "gummersbach mensa gummersbach"
+                            }
+                        },
+                        {
+                            "id": "391",
+                            "name": {
+                                "value": "köln café himmelsblick claudiusstraße"
+                            }
+                        },
+                        {
+                            "id": "392",
+                            "name": {
+                                "value": "stuttgart mitte mensa 1 (holzgartenstraße)"
+                            }
+                        },
+                        {
+                            "id": "393",
+                            "name": {
+                                "value": "ludwigsburg mensa ludwigsburg"
+                            }
+                        },
+                        {
+                            "id": "394",
+                            "name": {
+                                "value": "stuttgart nord mensa kunstakademie"
+                            }
+                        },
+                        {
+                            "id": "395",
+                            "name": {
+                                "value": "stuttgart mitte mensa musikhochschule"
+                            }
+                        },
+                        {
+                            "id": "396",
+                            "name": {
+                                "value": "esslingen mensa stadtmitte - kanalstraße"
+                            }
+                        },
+                        {
+                            "id": "397",
+                            "name": {
+                                "value": "esslingen mensa flandernstraße"
+                            }
+                        },
+                        {
+                            "id": "399",
+                            "name": {
+                                "value": "stuttgart vaihingen mensa 2"
+                            }
+                        },
+                        {
+                            "id": "579",
+                            "name": {
+                                "value": "coffeebar hwr alt-friedrichsfelde"
+                            }
+                        },
+                        {
+                            "id": "607",
+                            "name": {
+                                "value": "foodorama restaurant coffeebar & lounge"
+                            }
+                        },
+                        {
+                            "id": "608",
+                            "name": {
+                                "value": "personalrestaurant aubrücke"
+                            }
+                        },
+                        {
+                            "id": "609",
+                            "name": {
+                                "value": "personalrestaurant amag"
+                            }
+                        },
+                        {
+                            "id": "610",
+                            "name": {
+                                "value": "restaurant visavis"
+                            }
+                        },
+                        {
+                            "id": "611",
+                            "name": {
+                                "value": "restaurant berner technologiepark"
+                            }
+                        },
+                        {
+                            "id": "612",
+                            "name": {
+                                "value": "personalrestaurant bruker biospin"
+                            }
+                        },
+                        {
+                            "id": "613",
+                            "name": {
+                                "value": "personalrestaurant viva"
+                            }
+                        },
+                        {
+                            "id": "614",
+                            "name": {
+                                "value": "sv restaurant cockpit"
+                            }
+                        },
+                        {
+                            "id": "615",
+                            "name": {
+                                "value": "restaurant touch and go"
+                            }
+                        },
+                        {
+                            "id": "616",
+                            "name": {
+                                "value": "restaurant daylis dübendorf"
+                            }
+                        },
+                        {
+                            "id": "617",
+                            "name": {
+                                "value": "personalrestaurant fliegertreff"
+                            }
+                        },
+                        {
+                            "id": "618",
+                            "name": {
+                                "value": "sv restaurant basf kaisten"
+                            }
+                        },
+                        {
+                            "id": "619",
+                            "name": {
+                                "value": "restaurant empaeawag"
+                            }
+                        },
+                        {
+                            "id": "620",
+                            "name": {
+                                "value": "restaurant giardino"
+                            }
+                        },
+                        {
+                            "id": "621",
+                            "name": {
+                                "value": "restaurant «neuland»"
+                            }
+                        },
+                        {
+                            "id": "622",
+                            "name": {
+                                "value": "ristoreta"
+                            }
+                        },
+                        {
+                            "id": "623",
+                            "name": {
+                                "value": "cafeteria ewz"
+                            }
+                        },
+                        {
+                            "id": "624",
+                            "name": {
+                                "value": "personalrestaurant garaventa ag"
+                            }
+                        },
+                        {
+                            "id": "625",
+                            "name": {
+                                "value": "restaurant casaroma"
+                            }
+                        },
+                        {
+                            "id": "626",
+                            "name": {
+                                "value": "personalrestaurant vetropick"
+                            }
+                        },
+                        {
+                            "id": "627",
+                            "name": {
+                                "value": "restaurant giardino"
+                            }
+                        },
+                        {
+                            "id": "628",
+                            "name": {
+                                "value": "restaurant hp dübendorf"
+                            }
+                        },
+                        {
+                            "id": "629",
+                            "name": {
+                                "value": "personalrestaurant aarehuus"
+                            }
+                        },
+                        {
+                            "id": "630",
+                            "name": {
+                                "value": "restaurant reiterstrasse"
+                            }
+                        },
+                        {
+                            "id": "631",
+                            "name": {
+                                "value": "restaurant daylis erziehungsdirektion des kantons bern"
+                            }
+                        },
+                        {
+                            "id": "632",
+                            "name": {
+                                "value": "restaurant aabächli"
+                            }
+                        },
+                        {
+                            "id": "633",
+                            "name": {
+                                "value": "restaurant five moods"
+                            }
+                        },
+                        {
+                            "id": "634",
+                            "name": {
+                                "value": "restaurant optik-hus"
+                            }
+                        },
+                        {
+                            "id": "635",
+                            "name": {
+                                "value": "sv restaurant siesta"
+                            }
+                        },
+                        {
+                            "id": "636",
+                            "name": {
+                                "value": "restaurant meyer burger ag"
+                            }
+                        },
+                        {
+                            "id": "637",
+                            "name": {
+                                "value": "cafeteria gourmetro"
+                            }
+                        },
+                        {
+                            "id": "638",
+                            "name": {
+                                "value": "restaurant tiergarten"
+                            }
+                        },
+                        {
+                            "id": "639",
+                            "name": {
+                                "value": "personalrestaurant time-out"
+                            }
+                        },
+                        {
+                            "id": "640",
+                            "name": {
+                                "value": "sv restaurant manegg"
+                            }
+                        },
+                        {
+                            "id": "641",
+                            "name": {
+                                "value": "restaurant pwc-inn"
+                            }
+                        },
+                        {
+                            "id": "642",
+                            "name": {
+                                "value": "restaurant oase"
+                            }
+                        },
+                        {
+                            "id": "643",
+                            "name": {
+                                "value": "restaurant engehalde"
+                            }
+                        },
+                        {
+                            "id": "644",
+                            "name": {
+                                "value": "level3"
+                            }
+                        },
+                        {
+                            "id": "645",
+                            "name": {
+                                "value": "eat&meet"
+                            }
+                        },
+                        {
+                            "id": "646",
+                            "name": {
+                                "value": "postwest"
+                            }
+                        },
+                        {
+                            "id": "647",
+                            "name": {
+                                "value": "personalrestaurant insieme"
+                            }
+                        },
+                        {
+                            "id": "648",
+                            "name": {
+                                "value": "restaurant bella vista"
+                            }
+                        },
+                        {
+                            "id": "649",
+                            "name": {
+                                "value": "sbb stadtbistro brig"
+                            }
+                        },
+                        {
+                            "id": "650",
+                            "name": {
+                                "value": "sv restaurant scintilla"
+                            }
+                        },
+                        {
+                            "id": "651",
+                            "name": {
+                                "value": "personalrestaurant luppmenoase"
+                            }
+                        },
+                        {
+                            "id": "652",
+                            "name": {
+                                "value": "restaurant hangar 11"
+                            }
+                        },
+                        {
+                            "id": "653",
+                            "name": {
+                                "value": "restaurant daylis strassenverkehrsamt des kantons zürich"
+                            }
+                        },
+                        {
+                            "id": "654",
+                            "name": {
+                                "value": "the headquarters"
+                            }
+                        },
+                        {
+                            "id": "655",
+                            "name": {
+                                "value": "restaurant t@zino"
+                            }
+                        },
+                        {
+                            "id": "656",
+                            "name": {
+                                "value": "eat & meet"
+                            }
+                        },
+                        {
+                            "id": "657",
+                            "name": {
+                                "value": "personalrestaurant repos"
+                            }
+                        },
+                        {
+                            "id": "658",
+                            "name": {
+                                "value": "wipfrestaurant"
+                            }
+                        },
+                        {
+                            "id": "659",
+                            "name": {
+                                "value": "restaurant chez würth"
+                            }
+                        },
+                        {
+                            "id": "660",
+                            "name": {
+                                "value": "mensa alte kantonsschule aarau"
+                            }
+                        },
+                        {
+                            "id": "661",
+                            "name": {
+                                "value": "mensa neue kantonsschule aarau"
+                            }
+                        },
+                        {
+                            "id": "662",
+                            "name": {
+                                "value": "mensa bäumlihof"
+                            }
+                        },
+                        {
+                            "id": "663",
+                            "name": {
+                                "value": "restaurant biozentrum"
+                            }
+                        },
+                        {
+                            "id": "664",
+                            "name": {
+                                "value": "mensa departement für physik"
+                            }
+                        },
+                        {
+                            "id": "665",
+                            "name": {
+                                "value": "cafeteria la strada"
+                            }
+                        },
+                        {
+                            "id": "666",
+                            "name": {
+                                "value": "mensa uni basel"
+                            }
+                        },
+                        {
+                            "id": "667",
+                            "name": {
+                                "value": "mensa freies gymnasium bern"
+                            }
+                        },
+                        {
+                            "id": "668",
+                            "name": {
+                                "value": "bistro gymnasium lerbermatt"
+                            }
+                        },
+                        {
+                            "id": "669",
+                            "name": {
+                                "value": "bistro medi bern"
+                            }
+                        },
+                        {
+                            "id": "670",
+                            "name": {
+                                "value": "mensa bfh ahb biel"
+                            }
+                        },
+                        {
+                            "id": "671",
+                            "name": {
+                                "value": "mensa kantonsschule zürcher unterland"
+                            }
+                        },
+                        {
+                            "id": "672",
+                            "name": {
+                                "value": "ebz gourmetina"
+                            }
+                        },
+                        {
+                            "id": "673",
+                            "name": {
+                                "value": "restaurant baumeister kurszentrum"
+                            }
+                        },
+                        {
+                            "id": "674",
+                            "name": {
+                                "value": "mensa bbz grenchen"
+                            }
+                        },
+                        {
+                            "id": "675",
+                            "name": {
+                                "value": "mensa kantonsschule heerbrugg"
+                            }
+                        },
+                        {
+                            "id": "676",
+                            "name": {
+                                "value": "mensa gymnasium immensee"
+                            }
+                        },
+                        {
+                            "id": "730",
+                            "name": {
+                                "value": "hochschule kempten"
+                            }
+                        },
+                        {
+                            "id": "732",
+                            "name": {
+                                "value": "uni bremen nw1"
+                            }
+                        },
+                        {
+                            "id": "734",
+                            "name": {
+                                "value": "mensa uni bremen"
+                            }
+                        },
+                        {
+                            "id": "737",
+                            "name": {
+                                "value": "sv (schweiz ag) restaurant ambrosia"
+                            }
+                        },
+                        {
+                            "id": "738",
+                            "name": {
+                                "value": "mensa gymnasium münchenstein"
+                            }
+                        },
+                        {
+                            "id": "739",
+                            "name": {
+                                "value": "mensa fhnw"
+                            }
+                        },
+                        {
+                            "id": "740",
+                            "name": {
+                                "value": "cafeteria bbz olten"
+                            }
+                        },
+                        {
+                            "id": "741",
+                            "name": {
+                                "value": "mensa kantonsschule olten"
+                            }
+                        },
+                        {
+                            "id": "742",
+                            "name": {
+                                "value": "mensa hsr hochschule rapperswil"
+                            }
+                        },
+                        {
+                            "id": "743",
+                            "name": {
+                                "value": "bzf rheinfelden"
+                            }
+                        },
+                        {
+                            "id": "744",
+                            "name": {
+                                "value": "bistro gymnasium und wms thun-schadau"
+                            }
+                        },
+                        {
+                            "id": "745",
+                            "name": {
+                                "value": "restaurant «incontro» berufsfachschulen thun"
+                            }
+                        },
+                        {
+                            "id": "746",
+                            "name": {
+                                "value": "mensa kantonsschule limmattal"
+                            }
+                        },
+                        {
+                            "id": "747",
+                            "name": {
+                                "value": "restaurant campus fhnw brugg-windisch"
+                            }
+                        },
+                        {
+                            "id": "748",
+                            "name": {
+                                "value": "berufsfachschule bfs winterthur"
+                            }
+                        },
+                        {
+                            "id": "749",
+                            "name": {
+                                "value": "mensa kantonsschule im lee"
+                            }
+                        },
+                        {
+                            "id": "750",
+                            "name": {
+                                "value": "mensa kantonsschule rychenberg"
+                            }
+                        },
+                        {
+                            "id": "751",
+                            "name": {
+                                "value": "mensa zag"
+                            }
+                        },
+                        {
+                            "id": "752",
+                            "name": {
+                                "value": "restaurant tbz technische berufsschule zürich"
+                            }
+                        },
+                        {
+                            "id": "753",
+                            "name": {
+                                "value": "sv (schweiz) ag mensa kantonsschule zug"
+                            }
+                        },
+                        {
+                            "id": "754",
+                            "name": {
+                                "value": "restaurant axa museumstrasse"
+                            }
+                        },
+                        {
+                            "id": "755",
+                            "name": {
+                                "value": "restaurant grüze"
+                            }
+                        },
+                        {
+                            "id": "756",
+                            "name": {
+                                "value": "culinarium st. alban"
+                            }
+                        },
+                        {
+                            "id": "757",
+                            "name": {
+                                "value": "culinarium time out"
+                            }
+                        },
+                        {
+                            "id": "758",
+                            "name": {
+                                "value": "ubs restaurant elite"
+                            }
+                        },
+                        {
+                            "id": "759",
+                            "name": {
+                                "value": "gewerbliche berufsschule chur"
+                            }
+                        },
+                        {
+                            "id": "760",
+                            "name": {
+                                "value": "culinarium berner kantonalbank"
+                            }
+                        },
+                        {
+                            "id": "761",
+                            "name": {
+                                "value": "mensa polyterrasse mittag"
+                            }
+                        },
+                        {
+                            "id": "762",
+                            "name": {
+                                "value": "clausiusbar"
+                            }
+                        },
+                        {
+                            "id": "763",
+                            "name": {
+                                "value": "personalrestaurant bucher"
+                            }
+                        },
+                        {
+                            "id": "764",
+                            "name": {
+                                "value": "kv zürich business school"
+                            }
+                        },
+                        {
+                            "id": "765",
+                            "name": {
+                                "value": "postgusto"
+                            }
+                        },
+                        {
+                            "id": "766",
+                            "name": {
+                                "value": "restaurant giallo"
+                            }
+                        },
+                        {
+                            "id": "767",
+                            "name": {
+                                "value": "cafeteria westpark"
+                            }
+                        },
+                        {
+                            "id": "768",
+                            "name": {
+                                "value": "restaurant biopark"
+                            }
+                        },
+                        {
+                            "id": "769",
+                            "name": {
+                                "value": "restaurant gioia"
+                            }
+                        },
+                        {
+                            "id": "770",
+                            "name": {
+                                "value": "g-essbar"
+                            }
+                        },
+                        {
+                            "id": "773",
+                            "name": {
+                                "value": "wilhelm gastronomie im fmi gebäude der tum garching"
+                            }
+                        },
+                        {
+                            "id": "774",
+                            "name": {
+                                "value": "konradhofer catering - betriebskantine ipp"
+                            }
+                        },
+                        {
+                            "id": "775",
+                            "name": {
+                                "value": "hauptmensa tu dortmund"
+                            }
+                        },
+                        {
+                            "id": "777",
+                            "name": {
+                                "value": "mensa homburg"
+                            }
+                        },
+                        {
+                            "id": "778",
+                            "name": {
+                                "value": "cafeteria hochschule für musik saar"
+                            }
+                        },
+                        {
+                            "id": "779",
+                            "name": {
+                                "value": "cafeteria htw göttelborn"
+                            }
+                        },
+                        {
+                            "id": "780",
+                            "name": {
+                                "value": "mensagarten saarbrücken"
+                            }
+                        },
+                        {
+                            "id": "789",
+                            "name": {
+                                "value": "stubistro oettingenstraße"
+                            }
+                        },
+                        {
+                            "id": "795",
+                            "name": {
+                                "value": "mannheim eppelheim mensa dhbw"
+                            }
+                        },
+                        {
+                            "id": "798",
+                            "name": {
+                                "value": "mensa schlossgarten"
+                            }
+                        },
+                        {
+                            "id": "799",
+                            "name": {
+                                "value": "mensa vechta"
+                            }
+                        },
+                        {
+                            "id": "800",
+                            "name": {
+                                "value": "mensa haste"
+                            }
+                        },
+                        {
+                            "id": "802",
+                            "name": {
+                                "value": "mensa uni augsburg"
+                            }
+                        },
+                        {
+                            "id": "803",
+                            "name": {
+                                "value": "mensa hs augsburg"
+                            }
+                        },
+                        {
+                            "id": "804",
+                            "name": {
+                                "value": "mensa hs neu-ulm"
+                            }
+                        },
+                        {
+                            "id": "805",
+                            "name": {
+                                "value": "cafeteria hs augsburg"
+                            }
+                        },
+                        {
+                            "id": "806",
+                            "name": {
+                                "value": "coffeebar der mensa tu hauptgebäude „wetterleuchten“"
+                            }
+                        },
+                        {
+                            "id": "808",
+                            "name": {
+                                "value": "coffeebar hu „jacob und wilhelm grimm zentrum“"
+                            }
+                        },
+                        {
+                            "id": "809",
+                            "name": {
+                                "value": "mensa charité zahnklinik"
+                            }
+                        },
+                        {
+                            "id": "810",
+                            "name": {
+                                "value": "mensa fu ihnestraße"
+                            }
+                        },
+                        {
+                            "id": "811",
+                            "name": {
+                                "value": "mensa fu koserstraße"
+                            }
+                        },
+                        {
+                            "id": "812",
+                            "name": {
+                                "value": "mensa fu pharmazie"
+                            }
+                        },
+                        {
+                            "id": "813",
+                            "name": {
+                                "value": "mensa fu rechtswissenschaft"
+                            }
+                        },
+                        {
+                            "id": "814",
+                            "name": {
+                                "value": "mensa hfm „neuer marstall“"
+                            }
+                        },
+                        {
+                            "id": "815",
+                            "name": {
+                                "value": "mensa tu ackerstraße"
+                            }
+                        },
+                        {
+                            "id": "816",
+                            "name": {
+                                "value": "mensa tu architektur"
+                            }
+                        },
+                        {
+                            "id": "817",
+                            "name": {
+                                "value": "mensa tu marchstraße"
+                            }
+                        },
+                        {
+                            "id": "818",
+                            "name": {
+                                "value": "mensa tu „skyline“"
+                            }
+                        },
+                        {
+                            "id": "819",
+                            "name": {
+                                "value": "mensa udk „jazz-mensa“"
+                            }
+                        },
+                        {
+                            "id": "820",
+                            "name": {
+                                "value": "mensa udk lietzenburger straße"
+                            }
+                        },
+                        {
+                            "id": "821",
+                            "name": {
+                                "value": "mensa veggie № 1 - die grüne mensa"
+                            }
+                        },
+                        {
+                            "id": "828",
+                            "name": {
+                                "value": "mensa htw saar alt-saarbrücken"
+                            }
+                        },
+                        {
+                            "id": "829",
+                            "name": {
+                                "value": "mensa htw saar rotenbühl"
+                            }
+                        },
+                        {
+                            "id": "830",
+                            "name": {
+                                "value": "würz­burg in­te­rims­men­sa spra­chen­zen­trum"
+                            }
+                        },
+                        {
+                            "id": "831",
+                            "name": {
+                                "value": "würz­burg essensausgabe philo"
+                            }
+                        },
+                        {
+                            "id": "833",
+                            "name": {
+                                "value": "mensa am wartenberg 2"
+                            }
+                        },
+                        {
+                            "id": "834",
+                            "name": {
+                                "value": "cafeteria schlüterstraße"
+                            }
+                        },
+                        {
+                            "id": "835",
+                            "name": {
+                                "value": "cafeteria leipziger straße"
+                            }
+                        },
+                        {
+                            "id": "836",
+                            "name": {
+                                "value": "mensa an der berufsakademie"
+                            }
+                        },
+                        {
+                            "id": "837",
+                            "name": {
+                                "value": "cafeteria röntgenbau"
+                            }
+                        },
+                        {
+                            "id": "838",
+                            "name": {
+                                "value": "cafeteria eah"
+                            }
+                        },
+                        {
+                            "id": "839",
+                            "name": {
+                                "value": "pasta basta"
+                            }
+                        },
+                        {
+                            "id": "840",
+                            "name": {
+                                "value": "caféteria uni-hauptgebäude"
+                            }
+                        },
+                        {
+                            "id": "841",
+                            "name": {
+                                "value": "cafeteria bibliothek"
+                            }
+                        },
+                        {
+                            "id": "842",
+                            "name": {
+                                "value": "mensa weinberghof"
+                            }
+                        },
+                        {
+                            "id": "843",
+                            "name": {
+                                "value": "mensa blechhammer"
+                            }
+                        },
+                        {
+                            "id": "844",
+                            "name": {
+                                "value": "cafeteria anna-amalia-bibliothek"
+                            }
+                        },
+                        {
+                            "id": "845",
+                            "name": {
+                                "value": "cafeteria coudraystraße"
+                            }
+                        },
+                        {
+                            "id": "846",
+                            "name": {
+                                "value": "cafeteria mensa ehrenberg"
+                            }
+                        },
+                        {
+                            "id": "847",
+                            "name": {
+                                "value": "cafeteria zur rosen"
+                            }
+                        },
+                        {
+                            "id": "848",
+                            "name": {
+                                "value": "cafeteria am horn"
+                            }
+                        },
+                        {
+                            "id": "849",
+                            "name": {
+                                "value": "mensa süd tu dortmund"
+                            }
+                        },
+                        {
+                            "id": "850",
+                            "name": {
+                                "value": "vital tu dortmund"
+                            }
+                        },
+                        {
+                            "id": "851",
+                            "name": {
+                                "value": "archeteria tu dortmund"
+                            }
+                        },
+                        {
+                            "id": "852",
+                            "name": {
+                                "value": "restaurant calla tu dortmund"
+                            }
+                        },
+                        {
+                            "id": "853",
+                            "name": {
+                                "value": "food fakultät tu dortmund"
+                            }
+                        },
+                        {
+                            "id": "854",
+                            "name": {
+                                "value": "mensa max-ophüls-platz"
+                            }
+                        },
+                        {
+                            "id": "855",
+                            "name": {
+                                "value": "mensa sonnenstraße"
+                            }
+                        },
+                        {
+                            "id": "856",
+                            "name": {
+                                "value": "mensa kostbar"
+                            }
+                        },
+                        {
+                            "id": "857",
+                            "name": {
+                                "value": "mensa der ism dortmund"
+                            }
+                        },
+                        {
+                            "id": "858",
+                            "name": {
+                                "value": "mensa der fernuni hagen"
+                            }
+                        },
+                        {
+                            "id": "859",
+                            "name": {
+                                "value": "mensa snack it hagen"
+                            }
+                        },
+                        {
+                            "id": "860",
+                            "name": {
+                                "value": "mensa canapé iserlohn"
+                            }
+                        },
+                        {
+                            "id": "861",
+                            "name": {
+                                "value": "mensa da vinci meschede"
+                            }
+                        },
+                        {
+                            "id": "862",
+                            "name": {
+                                "value": "mensa soest"
+                            }
+                        },
+                        {
+                            "id": "864",
+                            "name": {
+                                "value": "q-west ruhr-universität bochum"
+                            }
+                        },
+                        {
+                            "id": "865",
+                            "name": {
+                                "value": "ulm mensa in der uni"
+                            }
+                        },
+                        {
+                            "id": "866",
+                            "name": {
+                                "value": "ulm uni bistro"
+                            }
+                        },
+                        {
+                            "id": "867",
+                            "name": {
+                                "value": "ulm cafeteria uni west"
+                            }
+                        },
+                        {
+                            "id": "868",
+                            "name": {
+                                "value": "ulm hochschule ulm mensa"
+                            }
+                        },
+                        {
+                            "id": "869",
+                            "name": {
+                                "value": "ulm westside diner"
+                            }
+                        },
+                        {
+                            "id": "870",
+                            "name": {
+                                "value": "ulm cafeteria b eingang nord"
+                            }
+                        },
+                        {
+                            "id": "871",
+                            "name": {
+                                "value": "ulm cafeteria southside mit burgerbar eingang süd"
+                            }
+                        },
+                        {
+                            "id": "872",
+                            "name": {
+                                "value": "bistro friesenring"
+                            }
+                        },
+                        {
+                            "id": "874",
+                            "name": {
+                                "value": "mensa hfs \"ernst busch\""
+                            }
+                        },
+                        {
+                            "id": "875",
+                            "name": {
+                                "value": "mensa veggie 2.0 - die tiefgrüne mensa"
+                            }
+                        },
+                        {
+                            "id": "879",
+                            "name": {
+                                "value": "rostock mensa kantilene"
+                            }
+                        },
+                        {
+                            "id": "881",
+                            "name": {
+                                "value": "h130 technologiepark"
+                            }
+                        },
+                        {
+                            "id": "883",
+                            "name": {
+                                "value": "mensa heide"
+                            }
+                        },
+                        {
+                            "id": "884",
+                            "name": {
+                                "value": "cafeteria musikhochschule lübeck"
+                            }
+                        },
+                        {
+                            "id": "895",
+                            "name": {
+                                "value": "bistro nff"
+                            }
+                        },
+                        {
+                            "id": "898",
+                            "name": {
+                                "value": "mensa salzgitter"
+                            }
+                        },
+                        {
+                            "id": "900",
+                            "name": {
+                                "value": "bistro wolfsburg"
+                            }
+                        },
+                        {
+                            "id": "902",
+                            "name": {
+                                "value": "interimsmensa markusplatz"
+                            }
+                        },
+                        {
+                            "id": "903",
+                            "name": {
+                                "value": "cafeteria mensa 2"
+                            }
                         }
                     ]
                 },
@@ -1829,6 +4491,22 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "DetailsIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "number",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.249093957736.573736832731"
+                            }
+                        }
+                    ]
                 }
             ],
             "delegationStrategy": "ALWAYS"
@@ -1953,6 +4631,23 @@
                     {
                         "type": "PlainText",
                         "value": "Welche Stadt?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.249093957736.573736832731",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Wie ist die Nummer des Gerichts?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Welches Gericht?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Welche Gerichtnummer?"
                     }
                 ]
             }
