@@ -41,18 +41,44 @@ def http_get_iterate(url):
     return results
 
 
-def build_dish_speech(dishlist):
+def build_dish_speech(dishlist, start_idx):
     dishlist_string = ''
-    for count, dish in enumerate(dishlist, 1):
+    last_idx = start_idx + 3 # TODO
+
+    for i in range(start_idx, len(dishlist)):
+        count = i+1
+        if i == last_idx:
+            dishlist_string += '{}. {}. '.format(count, dishlist[i]['name'])
+            break
         if count == len(dishlist):
-            dishlist_string += '{}. {}'.format(count, dish['name'])
-        elif count == (len(dishlist) - 1):
-            dishlist_string += '{}. {} und '.format(count, dish['name'])
+            dishlist_string += '{}. {}. '.format(count, dishlist[i]['name'])
+        elif count == (len(dishlist) - 1) or count == last_idx:
+            dishlist_string += '{}. {} und '.format(count, dishlist[i]['name'])
         else:
-            dishlist_string += '{}. {}, '.format(count, dish['name'])
+            dishlist_string += '{}. {}, '.format(count, dishlist[i]['name'])
+    print(dishlist_string)
+    return dishlist_string, last_idx+1
 
-    return dishlist_string
 
+def build_preposition_speech(ingredients):
+    # build speech for first and second ingredient
+    ingredients_pre = ''
+    ingredients_post = ''
+    # user included one ingredient in utterance
+    if ingredients['first']:
+        if ingredients['first_prep']:
+            ingredients_post = '{} {}'.format(ingredients['first_prep'], ingredients['first'])
+        else:
+            ingredients_pre = ingredients['first']
+    # user included another ingredient in utterance
+    if ingredients['second']:
+        if ingredients['second_prep'] and ingredients['first_prep'] is None:
+            ingredients_post = '{} {}'.format(ingredients['second_prep'], ingredients['second'])
+        elif ingredients['second_prep']:
+            ingredients_post += ' und {} {}'.format(ingredients['second_prep'], ingredients['second'])
+        else:
+            ingredients_post += ' und {}'.format(ingredients['second'])
+    return ingredients_pre, ingredients_post
 
 def build_price_speech(price, user):
     return '{} Euro für {}, '.format(str(price).replace('.',','), user)
@@ -108,33 +134,20 @@ def get_slot_values(filled_slots):
 
 
 
-def list_dishes(session_attr, current_date, ingredients={'first' : None, 'second' : None}):
+def find_matching_dishes(api_response, ingredients={'first' : None, 'second' : None}):
     print("In ListDishes-Function")
-
-    question = 'Kann ich sonst noch helfen? '
-    # create API link
-    try:
-        mensa_url = create_mensa_url(mensa_id=session_attr['mensa_id'], date=current_date)
-        # request mensa plan from API
-        response_dishes = http_get(mensa_url)
-    # No dishes found for requested date or API is down 
-    except Exception as e:
-        speech = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. ".format(current_date, session_attr['mensa_name'])
-        print("Intent: {}: message: {}".format('ListDishes-Funktion', str(e)))
-        return speech+question, question
-    dish_speech = ''
-    session_attr['all_dishes'] = []
+    all_dishes = []
 
     # create list of desired dishes
     # user did not include optional (un)desired ingredient(s) in utterance --> list all dishes
     if (not ingredients['first']) and (not ingredients['second']):
-        session_attr['all_dishes'] = response_dishes
+        all_dishes = api_response
 
     # user included at least one (un)desired ingredient in utterance
     elif ingredients['first']:
         # first_ingredient is 'fleisch'
         if ingredients['first'].lower() == 'fleisch':
-            session_attr['all_dishes'] = ingredient_fleisch(response_dishes, ingredients['first_prep'], None)
+            all_dishes = ingredient_fleisch(api_response, ingredients['first_prep'], None)
 
         else:
             # ingredient is undesired
@@ -143,9 +156,9 @@ def list_dishes(session_attr, current_date, ingredients={'first' : None, 'second
             if ingredients['first_prep'] == 'ohne':
                 undesired_ingredient = ingredients['first'].lower()
                 # add all dishes without undesired ingredient
-                session_attr['all_dishes'] = [dish 
-                                              for dish in response_dishes 
-                                              if not ingredient_in_dish(undesired_ingredient, dish)]
+                all_dishes = [dish 
+                            for dish in api_response 
+                            if not ingredient_in_dish(undesired_ingredient, dish)]
 
             # ingredient is desired
             # sample utterances:
@@ -154,17 +167,17 @@ def list_dishes(session_attr, current_date, ingredients={'first' : None, 'second
             else:
                 desired_ingredient = ingredients['first'].lower()
                 # add all dishes with desired ingredient
-                session_attr['all_dishes'] = [dish 
-                                              for dish in response_dishes 
-                                              if ingredient_in_dish(desired_ingredient, dish)]
+                all_dishes = [dish 
+                            for dish in api_response 
+                            if ingredient_in_dish(desired_ingredient, dish)]
 
         # user included another (un)desired ingredient in utterance
         if ingredients['second']:
             if ingredients['second'].lower() == 'fleisch':
-                session_attr['all_dishes'] = ingredient_fleisch(session_attr['all_dishes'],
-                                                                ingredients['first_prep'],
-                                                                ingredients['second_prep'],
-                                                                is_first_ingredient=False)
+                all_dishes = ingredient_fleisch(all_dishes,
+                                                ingredients['first_prep'],
+                                                ingredients['second_prep'],
+                                                is_first_ingredient=False)
 
             else:
                 # ingredient is undesired
@@ -177,9 +190,9 @@ def list_dishes(session_attr, current_date, ingredients={'first' : None, 'second
                     
                     undesired_ingredient = ingredients['second'].lower()
                     # remove all dishes with undesired ingredient
-                    session_attr['all_dishes'] = [dish
-                                                  for dish in session_attr['all_dishes']
-                                                  if not ingredient_in_dish(undesired_ingredient, dish)]
+                    all_dishes = [dish
+                                for dish in all_dishes
+                                if not ingredient_in_dish(undesired_ingredient, dish)]
 
                 # ingredient is desired
                 # sample utterances:
@@ -188,54 +201,11 @@ def list_dishes(session_attr, current_date, ingredients={'first' : None, 'second
                 else:
                     desired_ingredient = ingredients['second'].lower()
                     # remove all dishes without desired ingredient
-                    session_attr['all_dishes'] = [dish
-                                                  for dish in session_attr['all_dishes']
-                                                  if ingredient_in_dish(desired_ingredient, dish)]
+                    all_dishes = [dish
+                                for dish in all_dishes
+                                if ingredient_in_dish(desired_ingredient, dish)]
+    return all_dishes
 
-
-    # build speech for dish list
-    dish_speech = build_dish_speech(session_attr['all_dishes'])
-
-    # build speech for first and second ingredient
-    ingredients_pre = ''
-    ingredients_post = ''
-    # user included one ingredient in utterance
-    if ingredients['first']:
-        if ingredients['first_prep']:
-            ingredients_post = '{} {}'.format(ingredients['first_prep'], ingredients['first'])
-        else:
-            ingredients_pre = ingredients['first']
-    # user included another ingredient in utterance
-    if ingredients['second']:
-        if ingredients['second_prep'] and ingredients['first_prep'] is None:
-            ingredients_post = '{} {}'.format(ingredients['second_prep'], ingredients['second'])
-        elif ingredients['second_prep']:
-            ingredients_post += ' und {} {}'.format(ingredients['second_prep'], ingredients['second'])
-        else:
-            ingredients_post += ' und {}'.format(ingredients['second'])
-
-    # dishes found: build speech with a list of dishes
-    if dish_speech:
-        question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
-                    Sag zum Beispiel: \
-                    Details. \
-                    oder: Wie viel kostet Gericht Nummer 2 für Studenten. '
-        speech = 'Es gibt {} {} Gerichte {} zur Auswahl: {}. {}'.format(len(session_attr['all_dishes']),
-                                                                        ingredients_pre,
-                                                                        ingredients_post,
-                                                                        dish_speech,
-                                                                        question)
-
-    # no dishes found, e.g. there is no dish containing the requested ingredients
-    else:
-        
-        if ingredients_post or ingredients_pre:
-            speech = 'Leider gibt es keine passenden {} Gerichte {}.'.format(ingredients_pre,
-                                                                             ingredients_post)
-        else:
-            speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage.'
-
-    return speech, question
 
 
 # returns True if a given ingredient is found in a dish (in 'notes' or in dish-string) 
