@@ -166,7 +166,7 @@ def list_dishes_intent_handler(handler_input):
     # dishes found: build speech with a list of dishes
     if dish_speech:
         if session_attr['last_idx'] < len(session_attr['all_dishes']):
-            question = 'Möchtest du mehr Gerichte hören? Sag: Weiter! oder: Mehr!'
+            question = 'Möchtest du mehr Gerichte hören oder Details? '
         else: 
             question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
                         Sag zum Beispiel: \
@@ -505,7 +505,7 @@ def next_intent_handler(handler_input):
     
     more_dish_speech, session_attr['last_idx'] = utility.build_dish_speech(session_attr['all_dishes'], session_attr['last_idx'])
     if session_attr['last_idx'] < len(session_attr['all_dishes'])+1:
-        question = 'Möchtest du mehr Gerichte hören? '
+        question = 'Möchtest du mehr Gerichte hören oder Details? '
     else:
         question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
                 Sag zum Beispiel: \
