@@ -40,22 +40,31 @@ def http_get_iterate(url):
 
     return results
 
+# chunking for shorter lists of dishes
+# ',' are not cut because they belong to the previous string
+def chunking(j):
+    dish = j.split(' ')
+    preposition_list = ['dazu', '\ndazu', 'oder', 'und', '\nmit', 'mit']
+    for prep in preposition_list:
+        if prep in dish:
+            dish = dish[:dish.index(prep)]
+    return ' '.join(dish)
 
 def build_dish_speech(dishlist, start_idx):
     dishlist_string = ''
     last_idx = start_idx + 3 # TODO
-
     for i in range(start_idx, len(dishlist)):
+        current_dish = chunking(dishlist[i]['name'])
         count = i+1
         if i == last_idx:
-            dishlist_string += '{}. {}. '.format(count, dishlist[i]['name'])
+            dishlist_string += '{}. {}. '.format(count, current_dish)
             break
         if count == len(dishlist):
-            dishlist_string += '{}. {}. '.format(count, dishlist[i]['name'])
+            dishlist_string += '{}. {}. '.format(count, current_dish)
         elif count == (len(dishlist) - 1) or count == last_idx:
-            dishlist_string += '{}. {} und '.format(count, dishlist[i]['name'])
+            dishlist_string += '{}. {} und '.format(count, current_dish)
         else:
-            dishlist_string += '{}. {}, '.format(count, dishlist[i]['name'])
+            dishlist_string += '{}. {}, '.format(count, current_dish)
     print(dishlist_string)
     return dishlist_string, last_idx+1
 
