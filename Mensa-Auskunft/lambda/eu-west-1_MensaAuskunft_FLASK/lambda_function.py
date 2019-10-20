@@ -363,13 +363,14 @@ def list_mensas_intent_handler(handler_input):
     print(slot_values)
     city = slot_values['city']['resolved']
     try:
-        speech = 'Es gibt die folgenden Mensas in {}:\n'.format(city)
-        for diction in all_mensas:
-            if diction['city'].lower() == city:
-                speech += '{}, '.format(diction['name'])
-        speech += '.'
+        prefix = 'Es gibt die folgenden Mensas in {}:\n'.format(city)
+        city_mensas = [d['name'] for d in all_mensas if d['city'].lower() == city]
+        city_mensas[-1] = city_mensas[-1] + '.'
+        for mensa in city_mensas:
+            prefix += '{}, '.format(mensa)
+        speech = prefix.rstrip(', ')
     except Exception as e:
-        speech = "Leider keine Mensas in {} gefunden. Du kannst eine andere Stadt wählen. ".format(city)
+        speech = "Leider keine Mensas in {} gefunden. Du kannst eine andere Stadt in Deutschland wählen. ".format(city)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
 
     return handler_input.response_builder.speak(speech).response
