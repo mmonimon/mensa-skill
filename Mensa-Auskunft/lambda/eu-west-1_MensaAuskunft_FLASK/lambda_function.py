@@ -336,7 +336,7 @@ def address_intent_handler(handler_input) :
         address = [j['address'] for j in all_mensas if j['id'] == int(current_mensa_id)]
         speech = "Die Adresse der {} lautet {}".format(current_mensa_name,address[0])
     except Exception as e:
-        speech = "Die Adresse der angefragten Mensa konnte leider nicht wiedergefunden werden. "
+        speech = "Die Adresse der angefragten Mensa {} konnte leider nicht gefunden werden. ".format(current_mensa_name)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
     
     return handler_input.response_builder.speak(speech).response
