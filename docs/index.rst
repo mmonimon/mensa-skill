@@ -10,9 +10,9 @@ Welcome to Mensa-Auskunft's documentation!
    :maxdepth: 4
    :caption: Contents:
 
-    lambda_function
-    lambda_utility
-    interaction_models
+   lambda_function
+   lambda_utility
+   interaction_models
 
 Indices and tables
 ==================
