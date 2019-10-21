@@ -1,4 +1,9 @@
+# -*- coding: utf-8 -*-
+
 import random, requests, six
+import string
+import itertools
+
 from ask_sdk_model.slu.entityresolution import StatusCode
 
 ################################################
@@ -73,22 +78,124 @@ def http_get_iterate(url):
 
     return results
 
-# chunking for shorter lists of dishes
-# ',' are not cut because they belong to the previous string
-def chunking(j):
-    """Sucht nach Präpositionen in einem String, um ab dieser den Rest wegzuschneiden.
+###################### CHUNKING ######################
 
-    :param j: Der zu schneidende String.
-    :type j: str
-    :return: Gibt den geschnittenen String zurück
+def longestSubstringFinder(string1, string2):
+    """Funktion such nach einem größten ähnlichsten Teil beider Strings.
+
+    :param string1: der Name des 1. Gerichts als String
+    :type string1: str
+    :param string2: der Name des 2. Gerichts als String
+    :type string2: string
+    :return: Der größte Substring, der in beiden String vorkommt.
     :rtype: str
     """
-    dish = j.split(' ')
-    preposition_list = ['dazu', '\ndazu', 'oder', 'und', '\nmit', 'mit']
-    for prep in preposition_list:
-        if prep in dish:
-            dish = dish[:dish.index(prep)]
+    answer = ""
+    len1, len2 = len(string1), len(string2)
+    for i in range(len1):
+        match = ""
+        for j in range(len2):
+            if (i + j < len1 and string1[i + j] == string2[j]):
+                match += string2[j]
+            else:
+                if (len(match) > len(answer)): answer = match
+                match = ""
+
+    return answer
+
+
+def overlap(dish1, dish2, cutoff):
+    """Funktion überprüft, ob Paar gegebener Gerichte ähnlich ist.
+    Je größer cutoff, desto strenger wird die Ähnlichkeit gemessen und
+    desto kürzer werden die Namen der Gerichte in der endgültigen Liste.
+
+    :param dish1: der Name des 1. Gerichts als list
+    :type dish1: list
+    :param dish2: der Name des 2. Gerichts als list
+    :type dish2: list
+    :return: Sagt, ob zwei Namen der Gerichte im Vergleich zu cutoff ähnlich sind.
+    :rtype: bool
+    """
+    set1 = set(dish1)
+    set2 = set(dish2)
+    if (len(set1.intersection(dish2))
+        / len(set1 | set2) * 100) >= cutoff:
+        return True
+    return False
+
+
+def find_similar_dishes(all_disheslist):
+    """Hilfsfunktion sucht auf die ähnlichen Gerichte in der Liste.
+
+    :param all_disheslist: globale Liste aller Gerichte
+    :type all_disheslist: list
+    :return: Gibt die abgekurzten ähnlichen Namen der Gerichte zurück
+    und auch die Liste mit originalen Namen der ähnlichen Gerichte.
+    :rtype: tuple
+    """
+    similar_chunked = []
+    similar_original = []
+
+    # creates pairs: ['A', 'B', 'C'] --> [('A', 'B'), ('A', 'C'), ('B', 'C')]
+    dishes_pairs = itertools.combinations(all_disheslist, 2)
+
+    for pair in dishes_pairs:
+        if overlap(pair[0].split(' '), pair[1].split(' '), 65):
+            dish1 = pair[0]
+            dish2 = pair[1]
+
+            dish1_set = set(dish1.split(' '))
+            dish2_set = set(dish2.split(' '))
+
+            common = longestSubstringFinder(dish1, dish2)
+            diff1, diff2 = list(dish1_set - dish2_set), list(dish2_set - dish1_set)
+            common_part = chunking(common) + ' mit '
+            chunked_dish1 = common_part + (' ').join(diff1)
+            chunked_dish2 = common_part + (' ').join(diff2)
+            similar_chunked.extend([chunked_dish1, chunked_dish2])
+            similar_original.extend([dish1, dish2])
+    return similar_chunked, similar_original
+
+
+def chunking(meal):
+    """Hilfsfunktion wendet naive Chunking auf die Gerichte an,
+    die keine ähnliche Gerichte in der globale Liste haben.
+
+    :param meal: Name des Gerichts auf den Chunking angewendet wird.
+    :type meal: str
+    :return: Gibt den abgekurzten String zurück.
+    :rtype: str
+    """
+    dish = meal.split(' ')
+    preposition_list = ['aus', 'dazu', '\ndazu', 'oder', '\noder', 'mit', "\nmit", '\n', 'im', 'auf']
+    first_prep_found = next((word for word in dish if word in preposition_list), None)
+    if first_prep_found != None:
+        dish = dish[:dish.index(first_prep_found)]
+
     return ' '.join(dish)
+
+
+def make_chunking(all_dishes):
+    """Hauptfunktion der Chunking.
+    Die Länge der Namen der Gerichte in der endgültigen Liste wird durch
+    parameter cutoff von overlap-Funktion kontrolliert.
+
+    :param all_dishes: Liste aller Gerichte.
+    :type all_dishes: list
+    :return: Gibt die Liste mit schon geschnittenen Namen der Gerichte
+    :rtype: list
+    """
+    similar_dishes_chunked, similar_dishes_original = find_similar_dishes(all_dishes)
+    remaining_dishes_chunked = [chunking(meal) for meal in all_dishes if meal not in similar_dishes_original]
+    all_chunked = list(set(similar_dishes_chunked + remaining_dishes_chunked))
+
+    # removing punctuation signs from each string
+    final_list = [i.translate(str.maketrans(i, i, string.punctuation))
+                  for i in all_chunked]
+
+    return final_list
+
+#######################################################
 
 def build_dish_speech(dishlist, start_idx):
     """Baut den String, der anschließend für den Prompt benutzt wird.
@@ -108,8 +215,11 @@ def build_dish_speech(dishlist, start_idx):
 
     dishlist_string = ''
     last_idx = start_idx + 3 # TODO
-    for i in range(start_idx, len(dishlist)):
-        current_dish = chunking(dishlist[i]['name'])
+
+    chunked_dishes = make_chunking(dishlist)
+    for i in range(start_idx, len(chunked_dishes)):
+        #current_dish = chunking(dishlist[i]['name'])
+        current_dish = chunked_dishes[i]
         count = i+1
         if i == last_idx:
             dishlist_string += '{}. {}. '.format(count, current_dish)
