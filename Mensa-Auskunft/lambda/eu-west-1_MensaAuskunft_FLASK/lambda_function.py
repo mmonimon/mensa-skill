@@ -388,17 +388,19 @@ def get_nearest_mensa_intent_handler(handler_input):
     Es wird also die Mensa mit der kleinsten Luftlinie zum Nutzer zurückgegeben. 
 
     Die Koordinaten des Nutzer werden folgendermaßen extrahiert:
-        - Benutzer benutzt ein mobiles Gerät: aktuelle Koordinaten aus dem GPS-Sensor 
-          des verwendeten Geräts
-        - Benutzer benutzt ein stationäres Gerät: Extraktion der Adresse des Benutzers
-          aus der Alexa-API; anschließend Extraktion der Koordinaten der extrahierten 
-          Adresse aus der Nominatim-API
+        a) Falls der Benutzer ein mobiles Gerät verwendet, werden die aktuellen Koordinaten aus 
+           dem GPS-Sensor des Geräts des Nutzers aus dem von Alexa an das Backend gesendete 
+           Request-JSON-Objekt extrahiert.
+        b) Falls der Benutzer ein stationäres Gerät verwendet, wird die vom Benutzer in der Alexa-App
+           bzw. angegebene Adresse aus der Alexa-API extrahiert. Anschließend werden die Koordinaten
+           der extrahierten Adresses mithilfe der Nominatim-API ermittelt.
 
-    Um dies zu ermäglichen, muss der Nutzer Zugriff auf seinen aktuellen Standort 
+    Um dies zu ermöglichen, muss der Nutzer Zugriff auf seinen aktuellen Standort 
     bzw. auf seine Adressdaten in der Alexa-App erlauben.
 
-    Wenn der Benutzer seinen Standort nicht freigegeben hat oder dieser gerade nicht extrahierbar
-    ist (z.B. kein GPS-Signal), werden je nach Errortype unterschiedliche Fehlermeldungen ausgegeben.
+    Wenn der Benutzer seinen Standort nicht freigegeben hat oder dieser gerade nicht extrahierbar ist, 
+    weil z.B. kein GPS-Signal verfügbar ist, werden je nach Errortype unterschiedliche Fehlermeldungen 
+    ausgegeben.
 
     :param handler_input: HandlerInput
     :type handler_input: (HandlerInput) -> Response
