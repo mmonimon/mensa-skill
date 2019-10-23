@@ -604,7 +604,7 @@ def no_intent_handler(handler_input):
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.NextIntent")(input))
 def next_intent_handler(handler_input):
     """
-    Der Intent listet den ListDishesIntent weiter und listet weitere Gerichte auf.
+    Der Intent führt den ListDishesIntent weiter und listet weitere Gerichte auf.
     Die benötigten Daten werden aus den Session-Attributes entnommen.
 
     Jeder Turn gibt nur vier Gerichte aus. Will der Nutzer mehr Gerichte erfahren, 
