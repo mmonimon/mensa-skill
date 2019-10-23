@@ -642,7 +642,7 @@ def next_intent_handler(handler_input):
                 bevor du weitere Gerichte hören kannst. ").response
     
     more_dish_speech, session_attr['last_idx'] = utility.build_dish_speech(session_attr['all_dishes'], session_attr['last_idx'])
-    if session_attr['last_idx'] < len(session_attr['all_dishes'])+1:
+    if session_attr['last_idx'] < len(session_attr['all_dishes']):
         question = 'Möchtest du mehr Gerichte hören oder Details? '
     else:
         question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
