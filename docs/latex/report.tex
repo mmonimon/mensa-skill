@@ -1,0 +1,408 @@
+\documentclass[12pt]{article}
+
+% XeLaTeX
+\usepackage{fontspec}
+\usepackage[german]{babel}
+% images
+\usepackage{graphicx}
+% spacing
+\usepackage[onehalfspacing]{setspace}
+% layout
+\usepackage{placeins}
+\setlength{\parindent}{0em}
+\usepackage[a4paper,left=4cm,right=3cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{soul}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{3}
+
+
+% BibLaTeX
+\usepackage[bibencoding=auto, backend=biber, style=apa]{biblatex}
+\bibliography{refs.bib}
+\DeclareLanguageMapping{german}{german-apa}
+\usepackage{csquotes}
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% TITELSEITE %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{titlepage}
+\begin{singlespacing}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\begin{center}
+\textsc{\LARGE Universität Potsdam}\\[0.5cm]
+\textsc{\large Department Linguistik}\\[1.5cm]
+\HRule \\[0.4cm]
+{\huge \bfseries Dokumentation des Skills\\[0.2cm] “Mensa-Auskunft”}\\[0.5cm]
+{\Large Projektbericht über eine Funktionserweiterung von Amazons digitalem Assistenten \emph{Alexa}}\\[0.2cm]
+\HRule \\[1cm]
+
+\end{center}
+\begin{tabular}{rl}
+	\emph{Modul:}&
+	ANW A / AM 4 – Anwendungen der CL\\[0.1cm]
+	\emph{Seminar:}&
+	Praktische Dialogmodellierung: Ein Dialogsystem erstellen\\[0.1cm]
+	\emph{Semester:}&
+	Sommersemester 2019\\[0.1cm]
+	\emph{Dozent:}&
+	Prof.~Dr.~David \textsc{Schlangen}\\[2cm]
+
+	\emph{Autoren:}&
+	Bogdan \textsc{Kostić},
+	MATRIKELNUMMER\\&
+	
+	Maria \textsc{Lomaeva},
+	MATRIKELNUMMER\\&
+	
+	Monique \textsc{Noss},
+	MATRIKELNUMMER\\&
+	
+	Olha \textsc{Zolotarenko},
+	MATRIKELNUMMER\\[1.75cm]
+\end{tabular}
+
+\begin{center}
+{\large \today}\\[2cm]
+
+\includegraphics[width=3cm]{uni_potsdam_logo.pdf}\\[1cm]
+\end{center}
+
+\end{singlespacing}
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% INHALTSVERZEICHNIS %%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\thispagestyle{empty}
+\newpage	
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% INHALT %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Zusammenfassung}
+...
+\section{Projektziele und Funktionen}
+Im Nachfolgenden werden die erreichten Projektziele und Anforderungen erläutert. 
+Darüber hinaus werden die Funktionen des Skills anhand von Beispieldialogen gezeigt.
+
+\subsection{Anwendungsbereich und Zielgruppe}
+Bei einem Mensa-Skill, dessen Hauptaufgabe es ist, über den Essensplan einer Mensa zu informieren, sind vor allem Studierende, aber auch Dozierende die Zielgruppe.
+Eine kleine, aber keinesfalls unwichtige Teilgruppe dieser doch recht großen Zielgruppe sind blinde Studierende und Beschäftigte der Universitäten.
+Dieser Skill ermöglicht es Menschen mit Sehbehinderung leichter an Informationen über das Essensangebot an deutschen Hochschulen zu kommen und macht damit die deutsche Hochschullandschaft noch ein wenig barriefreier.
+
+Eine weitere kleine Zielgruppe dieses Skills könnten Beschäftigte eines Studienakkreditierungsinstituts sein, die oft durch ganz Deutschland reisen und viel Zeit an den unterschiedlichsten Hochschulen verbringen.
+Dementsprechend könnten diese Beschäftigte an den Speiseplänen vieler verschiedener Universitäten und Fachhochschulen interessiert sein.
+Da wir versucht haben, die ganze Bandbreite der OpenMensa API zu nutzen und somit Informationen für 490 verschiedene Mensen bereitstellen können, ist dieser Skill dazu in der Lage, diesem Interesse entgegenzukommen.
+
+Das Informationsbedürfnis dieser Zielgruppen ist es einerseits, eine grobe Übersicht über das Angebot zu erhalten, andererseits aber auch nach bestimmten Zutaten gefilterte Ergebnisse zu erhalten, falls Allergien oder besondere Ernährungsweisen vorliegen (z.B. Veganismus).
+Auch der Preis eines bestimmten Gerichtes könnte für eine finale Auswahl entscheidend sein, da das Budget eines Studierenden selten großzügig ausfällt.
+Diese und weitere verschiedene Funktionen wurden eingebaut, um die in der OpenMensa API angebotenen Daten ausgiebig zu nutzen.
+
+Dazu gehören auch die folgenden Lokationsfunktionen:
+\begin{itemize}
+	\setlength\itemsep{0em}
+	\item Adresse von Mensen
+	\item Koordinaten, um die nächste Mensa zu finden
+	\item Mensen nach Stadt finden
+\end{itemize}
+
+Neben den oben genannten Funktionen, die durch selbsterstellte Intents des Skills umgesetzt wurden, bietet Amazon den Skill-Entwicklern an, dynamische, auf den Benutzer zugeschnittene Funktionen einzubauen. 
+Ein Beispiel hierfür sind die "Persist Attributes" (= "bleibende Attribute").
+Persist Attributes dienen dazu, bestimmte Daten in einer Session zu speichern, damit sie in der nächsten wieder abgerufen werden können.
+So müsste ein Benutzer nicht bei jedem Launch mit erwähnen, für welche Mensa ein Essensplan ausgegeben werden soll.
+Während die Implementierung und Einbettung über AWS DynamoDB einfach vorgenommen werden kann, könnten diese beim Entwickler Kosten verursachen, weshalb wir in diesem Skill auf die Benutzung dieser Attribute verzichtet haben.
+Auch könnten User Accounts angelegt werden, um persönliche Vorlieben des Users speichern zu können. 
+
+Eine weitere mögliche Verbesserung haben wir während der zweiten Projektphase, also nach der ersten Vorstellung der Projekte, umsetzen können.
+Es handelt sich hierbei um syntaktisches Parsing der Gerichte, um nur den Kopf der "Gerichtsphrase" auszugeben und somit die Antworten des Skills zu kürzen, um den Nutzer nicht mit Informationen zu überhäufen.
+Aus demselben Grund werden nun immer nur vier Gerichte in einem Prompt vorgelesen.
+Möchte der Nutzer weitere Gerichte erfahren, kann einfach "weiter" gescrollt werden. Mit einem Intent für Details können dagegen Details zu einem Gericht erfragt werden.
+
+Für uns war es wichtig, die gesamte Breite der API zu nutzen, um dem Nutzer so viele Funktionen wie möglich zu bieten.
+Nichtsdestotrotz findet die In-App-Kommunikation schnell ein Ende, wenn der Benutzer ein mögliches Ziel erreicht hat oder ein Fehler aufgetreten ist.
+Der Skill kann dann in einem One-Shot erneut gelaunched werden.
+
+\subsubsection{Essensplan}
+Gibt den Essensplan einer bestimmten Mensa für ein bestimmtes Datum aus. Optional kann eine Zutat angegeben werden, die enthalten sein soll. 
+
+Beispieläußerungen:
+\begin{quote}
+“lies mir den plan für \{date\} vor”\\
+“gibt es \{date\} \{ingredient\} gerichte in der \{mensa\_name\}”\\
+“was gibt's in der mensa”
+\end{quote}
+
+\paragraph{Gerichte ohne Zutat}~\\
+Sucht Gerichte in einer bestimmten Mensa für ein bestimmtes Datum ohne bis zu zwei Zutaten.
+
+Beispieläußerungen:
+\begin{quote}
+“suche für \{date\} \{synonyms\_gericht\} ohne \{ingredient\} in \{mensa\_name\}”\\
+“gibt es \{date\} \{synonyms\_gericht\} ohne \{ingredient\}”\\
+“nach \{synonyms\_gericht\} ohne \{ingredient\} bitte”\\
+\end{quote} 
+
+\paragraph{Gerichte mit Zutat}~\\
+Sucht Gerichte in einer bestimmten Mensa für ein bestimmtes Datum mit bis zu zwei Zutaten. 
+
+Beispieläußerungen:
+\begin{quote}
+“suche für \{date\} \{synonyms\_gericht\} mit \{ingredient\} in \{mensa\_name\}”\\
+“gibt es \{date\} \{synonyms\_gericht\} mit \{ingredient\}”\\
+“nach \{synonyms\_gericht\} mit \{ingredient\} bitte”\\
+\end{quote}
+
+\subsubsection{Preis der Gerichte}
+Der Skill gibt den Preis für ein Gericht zurück.
+
+Beispieläußerungen:
+\begin{quote}
+“preis für nummer \{number\}”\\
+“wie viel kostet das \{number\} für \{user\_group\}”\\
+“wie teuer ist das \{number\} gericht”\\
+\end{quote}
+
+\subsubsection{Adresse der Mensa}
+Die Adresse einer Mensa wird vorgelesen. 
+
+Beispieläußerungen:
+\begin{quote}
+“zeige mir die adresse der \{mensa\_name\}”\\
+“standort \{mensa\_name\}”\\
+“adresse \{mensa\_name\}”\\
+\end{quote}
+
+\subsubsection{Mensas in einer Stadt}
+Listet die Mensas in einer genannten Stadt auf.
+
+Beispieläußerungen:
+\begin{quote}
+“welche mensas gibt es in \{city\}”\\
+“suche mensas in \{city\}”\\
+“gibt es mensas in \{city\}”\\
+\end{quote}
+
+\subsubsection{Mensa in der Nähe}
+Findet die Mensa, die dem Benutzerstandort am nächsten ist.
+
+Beispieläußerungen:
+\begin{quote}
+“wo ist die nächste mensa”\\
+“ich bin hungrig”\\
+“welche mensa ist in der nähe”\\
+\end{quote}
+
+\subsection{Szenarien und Beispieldialoge}
+Im nachfolgenden Absatz werden Beispieldialoge für jeden Intent aufgelistet, die Skillerfolge und -misserfolge darstellen sollen, um die Funktionalität des Skills zu verdeutlichen.
+Diese werden jeweils anhand von spezifischen Szenarien veranschaulicht und erklärt.
+
+\subsubsection{Beispieldialoge: Essensplan und Preise erfahren}
+Die am häufigsten genutzte Funktion eines Mensa-Skills wird voraussichtlich das Abfragen des Essensplans für einen bestimmten Tag in der eigenen Mensa sein. 
+Hierbei kann der Nutzer Zutaten inkludieren, um die Auswahl von Anfang an einzuschränken.
+Wenn eine Auswahl getroffen wurde, wird der Benutzer gefragt, ob er Details oder den Preis eines der Gerichte erfahren möchte.
+Der Benutzer kann an dieser Stelle auch verneinen, woraufhin der Skill geschlossen wird.
+
+\ul{Szenario 1: Benutzer möchte den Essensplan für eine bestimmte Mensa, für einen bestimmten Tag erfragen.}\\
+Wann? Jederzeit, wann immer der User in der Mensa essen möchte.\\~\\
+\ul{Situation 1.1: Morgen ist ein Werktag.}\\
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, öffne Mensaauskunft.\\
+	A:& Willkommen bei der Mensaauskunft! Wenn du Hilfe bei der Bedienung brauchst, sag bitte HILFE. Was möchtest du wissen?\\
+	U:& Was gibt es morgen in der Mensa?\\  
+	A:& In welcher Mensa möchtest du essen?\\
+	U:& Mensa Golm.\\
+	A:& Es gibt 5  Gerichte  zur Auswahl: 1. Eintopf aus Kichererbsen, Linsen, Gemüse,Kartoffeln, 2. Eintopf aus Kichererbsen, Linsen, Gemüse,Kartoffeln, 3. Gulasch und 4. Hähnchenbrust „Piccata Milanese“. Möchtest du mehr Gerichte hören oder Details?\\ 
+	U:& Mehr!\\ 
+	A:& 5. Griechisches Kartoffelgericht. Möchtest du Details zu einem dieser Gerichte erfahren? Sag zum Beispiel: Details. oder: Wie viel kostet Gericht Nummer 2 für Studenten.\\
+	U:& Wie viel kostet Gericht Nummer 2 für Studenten?\\
+	A:& Das Gericht Eintopf aus Kichererbsen, Linsen, Gemüse,Kartoffeln und Rindfleisch kostet 1,6 Euro für Studenten.\\[0.2cm]
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\ul{Situation 1.2: Morgen ist Wochenende oder Feiertag.}
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, frag Mensaauskunft, was gibt es morgen in der Mensa Golm?\\  
+	A:& Sorry, für den ausgewählten Tag 2019-10-20 gibt es leider keinen Essensplan für mensa golm.\\[0.2cm]  
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\ul{Situation 1.3: Die Mensa wurde nicht richtig verstanden (ASR Error) oder ist nicht in der Datenbank.}
+
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, frag Mensaauskunft, was gibt es morgen in der Mensa Golm?\\
+	A:& Sorry, Essenspläne für mensa golum habe ich leider nicht im Angebot.\\[0.2cm]
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\ul{Situation 1.4: Der Benutzer sucht nach Gerichten mit einer bestimmten Zutat.}\\
+\textbf{Dialog 1.4.1}
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, frag Mensaauskunft nach veganen Gerichten.\\
+	A:& Für wann?\\
+	U:& Morgen.\\
+	A:& In welcher Mensa möchtest du essen?\\
+	U:& Mensa Golm.\\
+	A:& Es gibt 2 Vegan Gerichte zur Auswahl: 1. Vegane Knusperkroketten und 2. Glasnudel-Bowl. Möchtest du Details zu einem dieser Gerichte erfahren? Sag zum Beispiel: Details. oder: Wie viel kostet Gericht Nummer 2 für Studenten.\\
+	U:& Stopp.\\
+	A:& Guten Hunger!\\[0.2cm]
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\textbf{Dialog 1.4.2}
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, frag Mensaauskunft nach Gerichten mit Sellerie.\\
+	A:& Für wann?\\
+	U:& Morgen.\\
+	A:& Leider gibt es keine passenden  Gerichte mit sellerie. Kann ich sonst noch helfen?\\
+	U:& Nein.\\
+	A:& Okay, tschüss!\\[0.2cm]
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\subsubsection{Beispieldialoge: Die nächste Mensa finden}
+Ein wenig komplexer ist die Funktionalität, eine Mensa in der Nähe des Standortes des Benutzers zu finden.
+Aus dem Intent können daher daher unterschiedliche Reaktionen hervorgehen, je nach Status der Standortfreigabe für das benutzte Gerät und den Skill selbst.\\
+
+\ul{Szenario 2: Benutzer möchte eine Mensa in seiner Nähe finden und befindet sich im Ortsteil Golm in Potsdam.}\\
+Wann? Höchstwahrscheinlich nur ein Mal, wenn der User wissen möchte, welche Mensa die nächste in der Umgebung ist.\\~\\
+\ul{Situation 2.1: Der User hat den Gerätestandort nicht freigegeben.}
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, frag Mensaauskunft, wo die nächste Mensa ist.\\
+	A:& Um die nächste Mensa zu finden, benötige ich Deinen Standort. Bitte öffne die Alexa-App, um deinen Standort mit mir zu teilen.\\[0.2cm]
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\ul{Situation 2.2: Der User hat den Gerätestandort freigegeben.}
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, frag Mensaauskunft, wo die nächste Mensa ist.\\
+	A:& Die nächste Mensa ist Mensa Golm in Karl-Liebknecht-Str. 24/25, 14476 Potsdam OT Golm.\\[0.2cm]
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\subsubsection{Beispieldialoge: Die Adresse einer Mensa erfahren}
+Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen anderer Mensen gesucht werden.\\
+
+\ul{Szenario 3: Benutzer möchte die Adresse einer Mensa erfahren.}\\
+\ul{Situation 3.1: Die Adresse der Mensa kann gefunden werden, sie ist also in der Datenbank vorhanden.}
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, frag Mensaauskunft nach der Adresse der Mensa Golm.\\
+	A:& Die Adresse der mensa golm lautet Karl-Liebknecht-Str. 24/25, 14476 Potsdam OT Golm.\\[0.2cm]
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\ul{Situation 3.2: Die Adresse der Mensa kann nicht gefunden werden, sie ist also nicht in der Datenbank vorhanden. Möglich ist auch, dass ASR den User falsch verstanden hat.}
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, frag Mensaauskunft nach der Adresse der Mensa Golm.\\
+	A:& Die Adresse der angefragten Mensa mensa ball um konnte leider nicht gefunden werden.\\[0.2cm]	
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\ul{Szenario 4: Benutzer möchte erfahren, welche Mensen es in einer bestimmten Stadt gibt.}\\
+\ul{Situation 4.1: Der Nutzer fragt nach Mensen in einer deutschen Stadt, zum Beispiel Potsdam.}
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, frag Mensaauskunft, welche Mensas gibt es in Potsdam?\\
+	A:& Es gibt die folgenden Mensas in potsdam: Mensa Am Neuen Palais, Mensa Kiepenheuerallee, Mensa Golm, Mensa Griebnitzsee, Bistro Tasty Studio Babelsberg, Ulf's Café (HPI Cafeteria), Erfrischungshalle.\\[0.2cm]
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\ul{Situation 4.2: Der Nutzer fragt nach Mensen in einer Stadt, die nicht in Deutschland liegt, zum Beispiel Tokyo.}
+\begin{quote}
+\begin{tabular}{lp{12cm}}
+	U:& Alexa, frag Mensaauskunft, welche Mensas gibt es in Tokyo?\\
+	A:& Leider keine Mensas in Tokyo gefunden. Du kannst eine andere Stadt in Deutschland auswählen.\\[0.2cm]
+\end{tabular}
+--- SKILL SCHLIEßT SICH ---\\
+\end{quote}
+
+\section{Projektorganisation}
+\begin{itemize}
+	\item TeilnehmerInnen, Aufgabenverteilung
+	\item Planungsdokumente, Milestones (und ihre Dynamik über die Entwicklungsphase: Wie wurde der Plan angepasst über die Entwicklungszeit?)
+\end{itemize}
+
+\section{Entwurf des Systems, Dokumentation}
+\subsection{Entwicklungsumgebung}
+\begin{figure}[h]
+\center
+\includegraphics[width=10cm]{mermaid-diagram.png}
+\caption{Benutzte Software während der Entwicklung des Skills}
+\end{figure}
+
+Das Diagram zeigt, mit welcher Software der Skill erstellt wurde.
+Der Skill läuft unter der Pythonversion 3.6 und importiert einige Bibliotheken, die einerseits native Python-Bibliotheken sind und andererseits von dem Alexa Skills Kit zur Verfügung gestellt wurden oder installiert werden müssen.
+Diese Bibliotheken müssen im selben Ordner der \texttt{lambda\_function.py} liegen, damit diese auch von AWS Lambda eingelesen werden können.
+Für die Installation wurde \texttt{pip} und das Kommando \texttt{pip3 install -r requirements.txt -t .} benutzt.
+Zu den Requirements gehören:
+\begin{itemize}
+	\setlength\itemsep{0em}
+	\item ask-sdk
+	\item flask
+	\item flask-ask-sdk
+	\item haversine
+\end{itemize}
+
+\texttt{ask-sdk} wird benötigt, um die Kommunikation mit Alexa herzustellen.
+Das ganze Skill-Building basiert auf den Bibliotheken dieser Software, dazu gehören die Intent-Klassen und Funktionen sowie das Verarbeiten des Sprach-Outputs (Prompts). 
+
+\texttt{flask} und \texttt{flask-ask-sdk} wird zum Aufsetzen eines lokalen Servers verwendet.
+Wenn der Server gestartet ist, kann das Alexa Skills Kit mit dem auf dem Computer gespeicherten Code kommunizieren, wenn dieser lokal ausgeführt wird.
+Dazu wird außerdem das Tool \texttt{ngrok} benötigt, um den Port des Computers nach außen zu leiten.
+Diese Tools waren essenziell für das Testen unseres Skills. 
+
+\texttt{haversine} ist eine Bibliothek, die die Distanz zwischen zwei Punkten auf der Erde mithilfe des Breiten- und Längengrades kalkuliert.
+Diese wird benötigt, um die nächste Mensa in der Nähe des Benutzerstandortes zu finden.
+
+\subsection{Tests}
+Getestet wurde der Skill mithilfe von \emph{flask} und \emph{ngrok} lokal auf unseren eigenen Rechnern, um Status- und Fehlermeldungen angezeigt bekommen zu können, sodass sie direkt nachvollzogen werden konnten. 
+
+Dokumentation Intents => mit Sphinx
+
+\section{Projektabschluss, Evaluation}
+\begin{itemize}
+	\item Versuchsanordnung: VPs, Material, Methode (Fragebogen, Erfolg)
+	\item Auswertung
+	\item Ausblick, Verbesserungsmöglichkeiten
+\end{itemize}
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+\end{document}
