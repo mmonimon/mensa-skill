@@ -382,11 +382,25 @@ def list_mensas_intent_handler(handler_input):
 def get_nearest_mensa_intent_handler(handler_input):
     """Der Intent gibt die vom Standort des Nutzers aus nächste Mensa und ihre Adresse zurück. 
     Dafür muss der Benutzer seinen Standort für den Skill freigegeben haben. 
-    
-    Je nach Errortype werden unterschiedliche Fehlermeldungen ausgegeben, 
-    wenn der Benutzer seinen Standort nicht freigegeben hat.
 
-    TODO Docu
+    Um die nächste Mensa berechnen zu können, werden die Koordinaten des Nutzers extrahiert. 
+    Anschließend wird mithilfe der Haversine-Formel die zum Benutzer nächstgelegene Mensa berechnet.
+    Es wird also die Mensa mit der kleinsten Luftlinie zum Nutzer zurückgegeben. 
+
+    Die Koordinaten des Nutzer werden folgendermaßen extrahiert:
+        a) Falls der Benutzer ein mobiles Gerät verwendet, werden die aktuellen Koordinaten aus 
+           dem GPS-Sensor des Geräts des Nutzers aus dem von Alexa an das Backend gesendete 
+           Request-JSON-Objekt extrahiert.
+        b) Falls der Benutzer ein stationäres Gerät verwendet, wird die vom Benutzer in der Alexa-App
+           bzw. angegebene Adresse aus der Alexa-API extrahiert. Anschließend werden die Koordinaten
+           der extrahierten Adresses mithilfe der Nominatim-API ermittelt.
+
+    Um dies zu ermöglichen, muss der Nutzer Zugriff auf seinen aktuellen Standort 
+    bzw. auf seine Adressdaten in der Alexa-App erlauben.
+
+    Wenn der Benutzer seinen Standort nicht freigegeben hat oder dieser gerade nicht extrahierbar ist, 
+    weil z.B. kein GPS-Signal verfügbar ist, werden je nach Errortype unterschiedliche Fehlermeldungen 
+    ausgegeben.
 
     :param handler_input: HandlerInput
     :type handler_input: (HandlerInput) -> Response
@@ -394,10 +408,6 @@ def get_nearest_mensa_intent_handler(handler_input):
     :rtype: Response
     """
     print("In GetNearestMensaIntent")
-    # device_id = handler_input.request_envelope.context.system.device.device_id
-    # access_token = handler_input.request_envelope.context.system.api_access_token
-    # print ("DeviceID:", device_id)
-    # print("AccessToken:", access_token)
 
     system_context = handler_input.request_envelope.context.system
     # check if mobile device (to get current coordinates of user)
@@ -405,10 +415,9 @@ def get_nearest_mensa_intent_handler(handler_input):
         geo_location = handler_input.request_envelope.context.geolocation
         # check if coordinates are available
         if geo_location:
-            user_latitude = float(geo_location.coordinate.latitude_in_degrees)
-            user_longitude = float(geo_location.coordinate.longitude_in_degrees)
-            print("Latitude:", user_latitude)
-            print("Longitude:", user_longitude)
+            user_coordinates = (float(geo_location.coordinate.latitude_in_degrees),
+                                float(geo_location.coordinate.longitude_in_degrees))
+            print('User Coordinates:', user_coordinates)
 
         # coordinates not available
         else:
@@ -479,44 +488,18 @@ def get_nearest_mensa_intent_handler(handler_input):
         nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
         try:
             location_data = utility.http_get(nominatim_api)[0]
-            user_latitude = float(location_data['lat'])
-            user_longitude = float(location_data['lon'])
-            print("Latitude:", user_latitude)
-            print("Longitude:", user_longitude)
+            user_coordinates = (float(location_data['lat']), float(location_data['lon']))
+            print("User Coordinates:", user_coordinates)
         except Exception as e:
             print(e)
             return handler_input.response_builder.speak(ERROR_PROMPT2).response
 
     # calculate nearest mensa with haversine formula (airline distance)
-    nearest_mensa = None
-    shortest_distance = None
-    for mensa in all_mensas:
-        # check if coordinates availabe
-        if mensa['coordinates']:
-            mensa_latitude = mensa['coordinates'][0]
-            mensa_longitude = mensa['coordinates'][1]
-        # coordinates not available -> retrieve from address
-        else:
-            # get coordinates of mensa using nominatim api
-            address_string = mensa['address']
-            nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
-            try:
-                location_data = utility.http_get(nominatim_api)[0]
-                mensa_latitude = float(location_data['lat'])
-                mensa_longitude = float(location_data['lon'])
-            except IndexError:
-                pass
-            except Exception as e:
-                print(e)
-                return handler_input.response_builder.speak(ERROR_PROMPT2).response
-
-        distance = haversine((user_latitude, user_longitude), (mensa_latitude,mensa_longitude))
-        if shortest_distance is None or distance < shortest_distance:
-            shortest_distance = distance
-            nearest_mensa = mensa
-
-    nearest_mensa_name = nearest_mensa['name']
-    nearest_mensa_address = nearest_mensa['address']
+    try:
+       nearest_mensa_name, nearest_mensa_address = utility.calculate_nearest_mensa(user_coordinates, all_mensas)
+    except Exception as e:
+        print(e)
+        return handler_input.response_builder.speak(ERROR_PROMPT2).response
 
     nearest_mensa_speech = "Die nächste Mensa ist {} in {}.".format(nearest_mensa_name, nearest_mensa_address)
     return handler_input.response_builder.speak(nearest_mensa_speech).response
@@ -621,7 +604,7 @@ def no_intent_handler(handler_input):
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.NextIntent")(input))
 def next_intent_handler(handler_input):
     """
-    Der Intent listet führt den ListDishesIntent weiter und listet weitere Gerichte auf.
+    Der Intent führt den ListDishesIntent weiter und listet weitere Gerichte auf.
     Die benötigten Daten werden aus den Session-Attributes entnommen.
 
     Jeder Turn gibt nur vier Gerichte aus. Will der Nutzer mehr Gerichte erfahren, 

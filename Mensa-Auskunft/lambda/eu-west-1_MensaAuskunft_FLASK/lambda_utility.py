@@ -1,5 +1,6 @@
 import random, requests, six
 from ask_sdk_model.slu.entityresolution import StatusCode
+from haversine import haversine
 
 ################################################
 # Utility functions ############################
@@ -399,3 +400,40 @@ def ingredient_fleisch(dishlist, first_prep, second_prep, is_first_ingredient=Tr
                     if not(ingredient_in_dish('vegan', dish) or \
                            ingredient_in_dish('vegetarisch', dish) or \
                            ingredient_in_dish('fisch', dish))]
+
+# calculates nearest mensa using haversine formula (airline distance)
+def calculate_nearest_mensa(user_coordinates, mensa_list):
+    """Berechnet die zum User nächstgelegene Mensa (Luftlinie)
+    mithilfe der Haversine-Formel.
+
+    :param user_coordinates: Paar mit Koordinaten des Users
+    :type user_coordinates: Tuple[float]
+    :param mensa_list: Liste aller Mensen
+    :type mensa_list: List[dict]
+    :return: Paar mit Name und Adresse der nächsten Mensa
+    :rtype: Tuple[str]
+    """
+    nearest_mensa = None
+    shortest_distance = None
+    for mensa in mensa_list:
+        # check if coordinates are available for current mensa
+        if mensa['coordinates']:
+            mensa_coordinates = (float(mensa['coordinates'][0]), float(mensa['coordinates'][1]))
+        # coordinates not available -> retrieve from address
+        else:
+            # get coordinates of mensa using nominatim api
+            address_string = mensa['address']
+            nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
+            try:
+                location_data = http_get(nominatim_api)[0]
+                coordinates = (float(location_data['lat']), float(location_data['lon']))
+            # Nominatim API could not find address of Mensa in its database
+            except IndexError:
+                pass
+
+        distance = haversine(user_coordinates, mensa_coordinates)
+        if shortest_distance is None or distance < shortest_distance:
+            shortest_distance = distance
+            nearest_mensa = mensa
+
+    return nearest_mensa['name'], nearest_mensa['address']
