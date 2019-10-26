@@ -206,8 +206,32 @@ Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen
 ---- SKILL SCHLIEßT SICH ----  
 
 ## 3. Projektorganisation
-- TeilnehmerInnen, Aufgabenverteilung
-- Planungsdokumente, Milestones (und ihre Dynamik über die Entwicklungsphase: Wie wurde der Plan angepasst über die Entwicklungszeit?)
+### TeilnehmerInnen
+Das Team setzt sich zusammen aus 4 Personen: Monique Noss,  Bogdan Kostić, Maria Lomaeva und Olha Zolotarenko. 
+
+### Aufgabenverteilung
+Jeder Teammitglied hatte einen Aufgabenbereich bekommen, für den er oder sie zuständig sind. Die Aufteilung im Team nach den Intents war wie folgt:
+
+* Bogdan: IngredientIntent, GetNearestMensaIntent, WithoutIntent, ListDishesIntent(+WithoutIntent)
+* Olha: AddressIntent, Chunking
+* Maria: ListMensasIntent, Chunking
+* Moni: ListDishesIntent, PriceIntent, DetailsIntent, NextIntent, NoIntent
+
+Neben den benötigten Intents hat man sich auch um die jeweiligen sample utterances, das Testen und Dokumentieren. Das ganze Systemkoordination in dem Code hat Monique Noss übernommen.
+
+### Planungsdokumente & Milestones
+Die Planungsdokumente zusammen mit den ursprünglichen Entwicklungsideen (`ideas.md`) und den dazugehörigen Milestones sind unter mensa-skill/material/ zu finden. 
+
+Die erste Version von dem Skill und den Intents wurde in der Datei `meeting1.md` dokumentiert. Diese Version wurde in der Vorstellung der Projekte Ende des Sommersemesters 2019 getestet und anschließend präsentiert.  Die wichtigsten Probleme, die dabei entstanden, sind die folgenden:
+
+* Aufzählungslisten verkürzen (siehe dazu auch  `chunking.md`)
+* Die Möglichkeit, mehr als nach einer Zutat im Gericht zu suchen, einbauen
+* Nach der Mensa in der Nähe fragen zu können, statt nur alle Mensen in der Stadt aufzulisten
+* Mehr natürliche sample utterances einfügen
+
+Die zweite Version von der Mensa-Auskunft erfolgte nach der ausführlichen Besprechung der nötigen Verbesserungen, die oben kurz zusammengefasst wurden. Näheres kann man der Datei `meeting2.md` entnehmen. 
+
+Schließlich wurde der Code organisiert und kommentiert, um die Lesbarkeit zu erhöhen. So entstand auch eine separate Datei `lambda_utility.py`, die alle Hilfsfunktionen für `lambda_function.py` beinhaltet. 
 
 ## 4. Entwurf des Systems, Dokumentation
 ### 4.1 Entwicklungsumgebung
