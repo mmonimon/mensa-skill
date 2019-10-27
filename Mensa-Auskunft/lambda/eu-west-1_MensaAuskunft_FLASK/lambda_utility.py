@@ -1,4 +1,7 @@
+import itertools
+import logging
 import random, requests, six
+import string
 from ask_sdk_model.slu.entityresolution import StatusCode
 from haversine import haversine
 
@@ -73,7 +76,6 @@ def http_get_iterate(url):
         results = results + data
 
     return results
-
 ###################### CHUNKING ######################
 
 def chunking(meal):
@@ -88,19 +90,20 @@ def chunking(meal):
     dish = meal.split(' ')
     preposition_list = ['aus', 'dazu', '\ndazu', 'oder', '\noder', 'mit', '\nmit', '\n', 'im', 'auf']
     first_prep_found = next((word for word in dish if word in preposition_list), None)
-#    print(first_prep_found)
+
     if first_prep_found != None:
         ind = dish.index(first_prep_found)
         first_noun_ind = next(i for i in range(ind, len(dish)) if dish[i][0].isupper())
-        # print(dish[first_noun_ind+1])
-        if dish[first_noun_ind+1][0].isupper() == False:
-            dish = dish[:ind] + dish[ind:first_noun_ind+1]
-        else:
-            dish = dish[:ind] + dish[ind:first_noun_ind+2]
+        cut_dish = dish[:ind] + dish[ind:first_noun_ind + 1]
+        if first_noun_ind != len(dish)-1 and dish[first_noun_ind][-1] != ',':
+            if dish[first_noun_ind+1][0].isupper():
+                cut_dish = dish[:ind] + dish[ind:first_noun_ind + 2]
+    else:
+        return ' '.join(dish)
 
-    return ' '.join(dish)
+    return ' '.join(cut_dish)
 
-def find_difference(duplicates):
+def find_difference(duplicates, all_dishes):
     """Hilfsfunktion für Chunking, die ähnliche Gerichte in der Liste
     mit allen Gerichten sucht und diese so verkürzt, dass nach der
     Präposition mit der unterschiedlicher Teil diser Gerichte steht
@@ -110,6 +113,7 @@ def find_difference(duplicates):
     :return: Gibt die Liste der ähnlichen Gerichte, wenn diese vorkommen
     :rtype: list
     """
+
     similar_meals = []
     similar_groups = [[phrase for phrase in all_dishes if duplicate in phrase] for duplicate in duplicates]
     for i in range(len(similar_groups)):
@@ -136,20 +140,25 @@ def make_chunking(all_dishes):
     :return: Gibt die Liste mit schon geschnittenen Namen der Gerichte
     :rtype: list
     """
+
     chunked_dishes = []
     for dish in all_dishes:
         chunked_dishes.append(chunking(dish))
 
+    # if naive chunking returns duplicates
     if len(set(chunked_dishes)) != len(chunked_dishes):
         dups = [(i, dish) for i, dish in enumerate(chunked_dishes) if chunked_dishes.count(dish) > 1]
         zip_dups = list(zip(*dups))
-        similar = find_difference(list(dict.fromkeys(zip_dups[1])))
-        print(similar)
+        # find the difference between those duplicates using original names
+        # and add the differences to already chunked string
+        similar = find_difference(list(dict.fromkeys(zip_dups[1])), all_dishes)
+
+        # arrange the dishes according to their original index
         for i, dish in zip(zip_dups[0], similar):
             chunked_dishes[i] = dish
 
-    print('Chunked dishes: ', chunked_dishes)
-    assert len(chunked_dishes) == len(all_dishes)
+    if len(chunked_dishes) != len(all_dishes):
+        logging.warning("Chunking has removed some dishes from the list!")
 
     # removing punctuation signs from each string
     final_list = [i.translate(str.maketrans(i, i, string.punctuation))
@@ -161,10 +170,10 @@ def make_chunking(all_dishes):
 
 def build_dish_speech(dishlist, start_idx):
     """Baut den String, der anschließend für den Prompt benutzt wird.
-    Die Liste ist möglicherweise sehr lang. Daher wird nur das Element am Startindex und 
+    Die Liste ist möglicherweise sehr lang. Daher wird nur das Element am Startindex und
     drei weitere Strings in den Prompt gebaut, um zu lange Antworten zu vermeiden.
 
-    Der letzte Index wird gemerkt und zusammen mit dem String zurückgegeben. 
+    Der letzte Index wird gemerkt und zusammen mit dem String zurückgegeben.
     Dieser fungiert beim nächsten Durchlauf als Startindex, damit die Liste an derselben Stelle fortgesetzt wird.
 
     :param dishlist: Eine Liste mit Gerichten als Strings
@@ -177,8 +186,11 @@ def build_dish_speech(dishlist, start_idx):
 
     dishlist_string = ''
     last_idx = start_idx + 3 # TODO
-    for i in range(start_idx, len(dishlist)):
-        current_dish = chunking(dishlist[i]['name'])
+    dishes_names = [d['name'] for d in dishlist]
+    chunked_dishes = make_chunking(dishes_names)
+    for i in range(start_idx, len(chunked_dishes)):
+
+        current_dish = chunked_dishes[i]
         count = i+1
         if i == last_idx:
             dishlist_string += '{}. {}. '.format(count, current_dish)
