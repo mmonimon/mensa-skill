@@ -179,7 +179,10 @@ def list_dishes_intent_handler(handler_input):
     session_attr['current_date'] = slot_values['date']['resolved']
     session_attr['mensa_name'] = slot_values['mensa_name']['resolved']
     session_attr['mensa_id'] = slot_values['mensa_name']['id']
-    print(slot_values)    
+    print(slot_values)
+
+    # set state for AMAZON.NextIntent
+    session_attr['next_intent_state'] = "ListDishes"
 
     # Mensa does not exist => return error prompt
     if session_attr['mensa_id'] is None:
@@ -344,8 +347,11 @@ def address_intent_handler(handler_input) :
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("ListMensasIntent")(input))
 def list_mensas_intent_handler(handler_input):
     """Der Intent gibt eine Liste mit Mensen in einer Stadt zurück. Benötigt wird der Name der Stadt.
-    Sind Mensen vorhanden, werden diese zurückgegeben, gibt es keine oder ist die Stadt nicht im Katalog,
-    wird eine Fehldermeldung zurückgegeben.
+    Sind Mensen vorhanden, werden diese zurückgegeben; gibt es keine oder ist die Stadt nicht in der
+    Datenbank, wird eine Fehldermeldung zurückgegeben.
+
+    Bei jedem Turn werden nur vier Mensen ausgegeben. Will der Nutzer mehr Mensen erfahren, muss er 
+    nach \"weiteren Mensen\" fragen.
 
     Der Benutzeranfrage und den bereitgestellten Slot Values werden folgende Daten entlockt:
         - Stadt (erforderlich)
@@ -358,20 +364,32 @@ def list_mensas_intent_handler(handler_input):
 
     # type: (HandlerInput) -> Response
     print("In ListMensasIntent")
+    # set state for AMAZON.NextIntent
+    session_attr = handler_input.attributes_manager.session_attributes
+    session_attr['next_intent_state'] = "ListMensas"
+    session_attr['last_idx_mensas'] = 0
+
     filled_slots = handler_input.request_envelope.request.intent.slots
     slot_values = utility.get_slot_values(filled_slots)
     print(slot_values)
     city = slot_values['city']['resolved']
-    try:
-        prefix = 'Es gibt die folgenden Mensas in {}:\n'.format(city)
-        city_mensas = [d['name'] for d in all_mensas if d['city'].lower() == city]
-        city_mensas[-1] = city_mensas[-1] + '.'
-        for mensa in city_mensas:
-            prefix += '{}, '.format(mensa)
-        speech = prefix.rstrip(', ')
-    except Exception as e:
-        speech = "Leider keine Mensas in {} gefunden. Du kannst eine andere Stadt in Deutschland wählen. ".format(city)
-        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+    city_mensas = [d['name'] for d in all_mensas if d['city'].lower() == city]
+
+    # mensas found: build speech with a list of mensas
+    if city_mensas:
+      if len(city_mensas) == 1:
+        speech = "Ich habe eine Mensa in {} gefunden: {}".format(city, city_mensas[0])
+      else:
+        session_attr['city_mensas'] = city_mensas
+        first_mensas, session_attr['last_idx'] = utility.build_mensa_speech(city_mensas, 0)
+        speech = "Ich habe {} Mensen in {} gefunden: {}".format(len(city_mensas), city, first_mensas)
+        if session_attr['last_idx_mensas'] < len(city_mensas):
+            question = "Möchtest du mehr Mensen hören? "
+            return handler_input.response_builder.speak(speech+question).ask(question).response
+
+    # no mensas found
+    else:
+        speech = "Leider keine Mensen in {} gefunden.Du kannst eine andere Stadt in Deutschland wählen. ".format(city)
 
     return handler_input.response_builder.speak(speech).response
 
@@ -618,21 +636,43 @@ def next_intent_handler(handler_input):
 
     # type: (HandlerInput) -> Response
     print("In AMAZON.NextIntent")
+
     # get previous response from session attributes 
     session_attr = handler_input.attributes_manager.session_attributes
-    if 'all_dishes' not in session_attr:
-        return handler_input.response_builder.speak("Du musst zuerst eine Suche starten,\
-                bevor du weitere Gerichte hören kannst. ").response
+
+    # if dialogue state for NextIntent not set, unvalid intent
+    if 'next_intent_state' not in session_attr:
+        speech = "Du musst zuerst eine Suche starten, bevor du weitere Gerichte oder Mensen hören kanst. "
+        return handler_input.response_builder.speak(speech).response
     
-    more_dish_speech, session_attr['last_idx'] = utility.build_dish_speech(session_attr['all_dishes'], session_attr['last_idx'])
-    if session_attr['last_idx'] < len(session_attr['all_dishes'])+1:
-        question = 'Möchtest du mehr Gerichte hören oder Details? '
+    # dialogue state for NextIntent in ListDishes
+    if session_attr['next_intent_state'] == 'ListDishes':
+        more_dish_speech, session_attr['last_idx'] = utility.build_dish_speech(session_attr['all_dishes'], session_attr['last_idx'])
+        if session_attr['last_idx'] < len(session_attr['all_dishes'])+1:
+            question = 'Möchtest du mehr Gerichte hören oder Details? '
+        else:
+            question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
+                    Sag zum Beispiel: \
+                    Details. \
+                    oder: Wie viel kostet Gericht Nummer 2 für Studenten. '
+        return handler_input.response_builder.speak(more_dish_speech+question).ask(question).response
+
+    # dialogue state for NextIntent in ListMensas
+    elif session_attr['next_intent_state'] == 'ListMensas':
+        more_mensa_speech, session_attr['last_idx_mensas'] = utility.build_mensa_speech(session_attr['city_mensas'], session_attr['last_idx'])
+        if session_attr['last_idx_mensas'] < len(session_attr['city_mensas']):
+            question = "Möchtest du mehr Mensen hören?"
+            return handler_input.response_builder.speak(more_mensa_speech+question).ask(question).response
+        else:
+            goodbye = "<say-as interpret-as=\"interjection\">arrivederci</say-as>."
+            return handler_input.response_builder.speak(more_mensa_speech+goodbye).response
+
+    # undefined dialogue state
     else:
-        question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
-                Sag zum Beispiel: \
-                Details. \
-                oder: Wie viel kostet Gericht Nummer 2 für Studenten. '
-    return handler_input.response_builder.speak(more_dish_speech+question).ask(question).response
+        print("Undefined Dialogue State {} in NextIntent".format(session_attributes['next_intent_state']))
+        speech = "Du musst zuerst eine Suche starten, bevor du weitere Gerichte oder Mensen hören kanst. "
+        return handler_input.response_builder.speak(speech).response
+
 
 ## AMAZON.HelpIntent
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.HelpIntent")(input))

@@ -791,6 +791,16 @@
                 {
                     "name": "AMAZON.NextIntent",
                     "samples": [
+                        "gib mir mehr mensas",
+                        "gib mir mehr mensen",
+                        "lies mir weitere mensas vor",
+                        "lies mir weiter mensen vor",
+                        "mehr mensas",
+                        "mehr mensen",
+                        "weitere mensas",
+                        "weitere mensen",
+                        "weitere mensas vorlesen",
+                        "weiter mensen vorlesen",
                         "ja",
                         "weitere gerichte vorlesen",
                         "mehr gerichte",
