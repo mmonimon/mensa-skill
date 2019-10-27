@@ -18,7 +18,7 @@
 
 Chunking wurde wie in oben in dem finalen Entscheidung schon kurz geschrieben mit dem Split nach den gängigsten Präpositionen gemacht:
 
-['aus', 'dazu', '\ndazu', 'oder', '\noder', 'mit', '\nmit', '\n', 'im', 'auf']
+['\n', 'aus', '\naus', 'dazu', '\ndazu', 'oder', '\noder', 'mit', '\nmit', 'im', '\nim', 'auf', '\nauf', 'in', '\nin', 'an', '\nan']
 
 Die Hauptfunktion **make_chunking** bekommt die Liste von allen an dem gefragten Tag un an der gewählten Mensa vorhandenen Gerichten. Zuerst werden alle Gerichte "vorgechunkt" mit der Funktion **chunking**. Diese orientiert sich nach den obengenannten Präpositionen und schneidet den Namen des Gerichts nach der ersten vorgekommenen Präposition und lässt die esten Nomen nachdem. Es wird außerdem überprüft, ob es vielleicht nach dem ersten Nomen auch noch ein Nomen ist wie in dem Beispiel mit "Linseneintopf mit Wiener Würstchen", damit der Name des Gerichts immer noch verständlich ist. Die Funktion **find_difference** überprüft dabei, ob es ähnliiche Gerichte in der Liste gibt. Diese werden dann so verkürzt, dass nach der Präposition "mit" der unterschiedliche Teil dieser Gerichte steht. Anschließend wird die fertig abgearbeitete Liste mit den Grichten zurückgegeben.
 
@@ -104,6 +104,9 @@ Die Hauptfunktion **make_chunking** bekommt die Liste von allen an dem gefragten
 * Haselnussjoghurt
 * Schokoladenpudding
 
+## Verbesserungsmöglichkeiten
+Es gibt einige Bespiele bei manchen Mensen wie z.B. bei der Mensa in Heidelberg "Tagessuppe\nHähnchengeschnetzeltes\nCurry-Sahnesauce\nReis\nSalat der Saison\n", wo man zusätzliche Methoden verwenden muss, um die Gerichtsphrase zu teilen. 
+
 ## Code
 
 ```python
@@ -118,22 +121,32 @@ def chunking(meal):
     :rtype: str
     """
     dish = meal.split(' ')
-    preposition_list = ['aus', 'dazu', '\ndazu', 'oder', '\noder', 'mit', '\nmit', '\n', 'im', 'auf']
+    preposition_list = ['\n', 'aus', '\naus', 'dazu', '\ndazu', 'oder', '\noder', 'mit', '\nmit', 'im', '\nim', 'auf', '\nauf', 'in', '\nin', 'an', '\nan']
     first_prep_found = next((word for word in dish if word in preposition_list), None)
-    # print(first_prep_found)
+
     if first_prep_found != None:
         ind = dish.index(first_prep_found)
         first_noun_ind = next(i for i in range(ind, len(dish)) if dish[i][0].isupper())
-        # print(dish[first_noun_ind+1])
-        if dish[first_noun_ind+1][0].isupper() == False:
-            dish = dish[:ind] + dish[ind:first_noun_ind+1]
-        else:
-            dish = dish[:ind] + dish[ind:first_noun_ind+2]
+        cut_dish = dish[:ind] + dish[ind:first_noun_ind + 1]
+        print(cut_dish)
+        if first_noun_ind != len(dish)-1 and dish[first_noun_ind][-1] != ',':
+            if dish[first_noun_ind+1][0].isupper():
+                cut_dish = dish[:ind] + dish[ind:first_noun_ind + 2]
+    else:
+        return ' '.join(dish)
 
-    return ' '.join(dish)
+    return ' '.join(cut_dish)
 
+def find_difference(duplicates, all_dishes):
+    """Hilfsfunktion für Chunking, die ähnliche Gerichte in der Liste
+    mit allen Gerichten sucht und diese so verkürzt, dass nach der
+    Präposition mit der unterschiedlicher Teil diser Gerichte steht
 
-def find_difference(duplicates):
+    :param duplicates: Liste ähnlicher Gerichte
+    :type all_dishes: list
+    :return: Gibt die Liste der ähnlichen Gerichte, wenn diese vorkommen
+    :rtype: list
+    """
 
     similar_meals = []
     similar_groups = [[phrase for phrase in all_dishes if duplicate in phrase] for duplicate in duplicates]
@@ -161,25 +174,31 @@ def make_chunking(all_dishes):
     :return: Gibt die Liste mit schon geschnittenen Namen der Gerichte
     :rtype: list
     """
+
     chunked_dishes = []
     for dish in all_dishes:
-        chunked_dishes.append(chunking(dish))  # das geht relativ gut
+        chunked_dishes.append(chunking(dish))
 
+    # if naive chunking returns duplicates
     if len(set(chunked_dishes)) != len(chunked_dishes):
         dups = [(i, dish) for i, dish in enumerate(chunked_dishes) if chunked_dishes.count(dish) > 1]
         zip_dups = list(zip(*dups))
-        similar = find_difference(list(dict.fromkeys(zip_dups[1])))
-        print('Similar: ', similar)
+        # find the difference between those duplicates using original names
+        # and add the differences to already chunked string
+        similar = find_difference(list(dict.fromkeys(zip_dups[1])), all_dishes)
+
+        # arrange the dishes according to their original index
         for i, dish in zip(zip_dups[0], similar):
             chunked_dishes[i] = dish
 
-    print('Chunked dishes: ', chunked_dishes)
-    assert len(chunked_dishes) == len(all_dishes)
+    if len(chunked_dishes) != len(all_dishes):
+        logging.warning("Chunking has removed some dishes from the list!")
 
     # removing punctuation signs from each string
     final_list = [i.translate(str.maketrans(i, i, string.punctuation))
                   for i in chunked_dishes]
 
     return final_list
+
 
 ```
