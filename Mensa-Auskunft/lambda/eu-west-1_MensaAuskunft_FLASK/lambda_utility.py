@@ -79,12 +79,13 @@ def http_get_iterate(url):
 ###################### CHUNKING ######################
 
 def chunking(meal):
-    """Hilfsfunktion wendet naive Chunking auf die Gerichte an,
-    die keine ähnliche Gerichte in der globale Liste haben.
+    """Hilfsfunktion, die naives Chunking auf die Gerichte anwendet,
+    für die es keine ähnlichen Gerichte in der globalen Liste gibt.
+    Gesplittet wird an Präpositionen.
 
-    :param meal: Name des Gerichts auf den Chunking angewendet wird.
+    :param meal: Name des Gerichts, auf den Chunking angewendet wird.
     :type meal: str
-    :return: Gibt den abgekurzten String zurück.
+    :return: Gibt den verkürzten String zurück.
     :rtype: str
     """
     dish = meal.split(' ')
@@ -106,13 +107,14 @@ def chunking(meal):
 
 def find_difference(duplicates, all_dishes):
     """Hilfsfunktion für Chunking, die ähnliche Gerichte in der Liste
-    mit allen Gerichten sucht und diese so verkürzt, dass nach der
-    Präposition mit der unterschiedlicher Teil diser Gerichte steht
+    aller Gerichte sucht und diese so verkürzt, dass nach der
+    Präposition \"mit\" der Teil dieser ähnlichen Gerichte steht, der
+    sie unterscheidet.
 
     :param duplicates: Liste ähnlicher Gerichte
-    :type all_dishes: list
-    :return: Gibt die Liste der ähnlichen Gerichte, wenn diese vorkommen
-    :rtype: list
+    :type all_dishes: List
+    :return: Gibt die Liste der ähnlichen Gerichte zurück, wenn diese vorkommen
+    :rtype: List
     """
 
     similar_meals = []
@@ -132,14 +134,14 @@ def find_difference(duplicates, all_dishes):
 
 
 def make_chunking(all_dishes):
-    """Hauptfunktion der Chunking.
+    """Hauptfunktion des Chunkings der Gerichte.
     Die Länge der Namen der Gerichte in der endgültigen Liste wird durch
-    parameter cutoff von overlap-Funktion kontrolliert.
+    den parameter cutoff von der overlap-Funktion kontrolliert.
 
     :param all_dishes: Liste aller Gerichte.
-    :type all_dishes: list
-    :return: Gibt die Liste mit schon geschnittenen Namen der Gerichte
-    :rtype: list
+    :type all_dishes: List
+    :return: Gibt eine Liste mit verkürzten Namen der Gerichte zurück
+    :rtype: List
     """
 
     chunked_dishes = []
