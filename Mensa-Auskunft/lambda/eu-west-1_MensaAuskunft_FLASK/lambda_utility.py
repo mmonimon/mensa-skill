@@ -1,4 +1,7 @@
+import itertools
+import logging
 import random, requests, six
+import string
 from ask_sdk_model.slu.entityresolution import StatusCode
 from haversine import haversine
 
@@ -73,30 +76,107 @@ def http_get_iterate(url):
         results = results + data
 
     return results
+###################### CHUNKING ######################
 
-# chunking for shorter lists of dishes
-# ',' are not cut because they belong to the previous string
-def chunking(j):
-    """Sucht nach Präpositionen in einem String, um ab dieser den Rest wegzuschneiden.
+def chunking(meal):
+    """Hilfsfunktion, die naives Chunking auf die Gerichte anwendet,
+    für die es keine ähnlichen Gerichte in der globalen Liste gibt.
+    Gesplittet wird an Präpositionen.
 
-    :param j: Der zu schneidende String.
-    :type j: str
-    :return: Gibt den geschnittenen String zurück
+    :param meal: Name des Gerichts, auf den Chunking angewendet wird.
+    :type meal: str
+    :return: Gibt den verkürzten String zurück.
     :rtype: str
     """
-    dish = j.split(' ')
-    preposition_list = ['dazu', '\ndazu', 'oder', 'und', '\nmit', 'mit']
-    for prep in preposition_list:
-        if prep in dish:
-            dish = dish[:dish.index(prep)]
-    return ' '.join(dish)
+    dish = meal.split(' ')
+    preposition_list = ['\n', 'aus', '\naus', 'dazu', '\ndazu', 'oder', '\noder', 'mit', '\nmit', 'im', '\nim', 'auf', '\nauf', 'in', '\nin', 'an', '\nan']
+    first_prep_found = next((word for word in dish if word in preposition_list), None)
+
+    if first_prep_found != None:
+        ind = dish.index(first_prep_found)
+        first_noun_ind = next(i for i in range(ind, len(dish)) if dish[i][0].isupper())
+        cut_dish = dish[:ind] + dish[ind:first_noun_ind + 1]
+        print(cut_dish)
+        if first_noun_ind != len(dish)-1 and dish[first_noun_ind][-1] != ',':
+            if dish[first_noun_ind+1][0].isupper():
+                cut_dish = dish[:ind] + dish[ind:first_noun_ind + 2]
+    else:
+        return ' '.join(dish)
+
+    return ' '.join(cut_dish)
+
+def find_difference(duplicates, all_dishes):
+    """Hilfsfunktion für Chunking, die ähnliche Gerichte in der Liste
+    aller Gerichte sucht und diese so verkürzt, dass nach der
+    Präposition \"mit\" der Teil dieser ähnlichen Gerichte steht, der
+    sie unterscheidet.
+
+    :param duplicates: Liste ähnlicher Gerichte
+    :type all_dishes: List
+    :return: Gibt die Liste der ähnlichen Gerichte zurück, wenn diese vorkommen
+    :rtype: List
+    """
+
+    similar_meals = []
+    similar_groups = [[phrase for phrase in all_dishes if duplicate in phrase] for duplicate in duplicates]
+    for i in range(len(similar_groups)):
+        pairs = itertools.combinations(similar_groups[i], 2)
+        for pair in pairs:
+            dish1 = pair[0].split(' ')
+            dish2 = pair[1].split(' ')
+
+            diff1, diff2 = list(set(dish1) - set(dish2)), list(set(dish2) - set(dish1))
+            meal1 = duplicates[i] + ' mit ' + ' '.join(diff1)
+            meal2 = duplicates[i] + ' mit ' + ' '.join(diff2)
+            similar_meals.extend((meal1, meal2))
+
+    return list(dict.fromkeys(similar_meals))
+
+
+def make_chunking(all_dishes):
+    """Hauptfunktion des Chunkings der Gerichte.
+    Die Länge der Namen der Gerichte in der endgültigen Liste wird durch
+    den parameter cutoff von der overlap-Funktion kontrolliert.
+
+    :param all_dishes: Liste aller Gerichte.
+    :type all_dishes: List
+    :return: Gibt eine Liste mit verkürzten Namen der Gerichte zurück
+    :rtype: List
+    """
+
+    chunked_dishes = []
+    for dish in all_dishes:
+        chunked_dishes.append(chunking(dish))
+
+    # if naive chunking returns duplicates
+    if len(set(chunked_dishes)) != len(chunked_dishes):
+        dups = [(i, dish) for i, dish in enumerate(chunked_dishes) if chunked_dishes.count(dish) > 1]
+        zip_dups = list(zip(*dups))
+        # find the difference between those duplicates using original names
+        # and add the differences to already chunked string
+        similar = find_difference(list(dict.fromkeys(zip_dups[1])), all_dishes)
+
+        # arrange the dishes according to their original index
+        for i, dish in zip(zip_dups[0], similar):
+            chunked_dishes[i] = dish
+
+    if len(chunked_dishes) != len(all_dishes):
+        logging.warning("Chunking has removed some dishes from the list!")
+
+    # removing punctuation signs from each string
+    final_list = [i.translate(str.maketrans(i, i, string.punctuation))
+                  for i in chunked_dishes]
+
+    return final_list
+
+#######################################################
 
 def build_dish_speech(dishlist, start_idx):
     """Baut den String, der anschließend für den Prompt benutzt wird.
-    Die Liste ist möglicherweise sehr lang. Daher wird nur das Element am Startindex und 
+    Die Liste ist möglicherweise sehr lang. Daher wird nur das Element am Startindex und
     drei weitere Strings in den Prompt gebaut, um zu lange Antworten zu vermeiden.
 
-    Der letzte Index wird gemerkt und zusammen mit dem String zurückgegeben. 
+    Der letzte Index wird gemerkt und zusammen mit dem String zurückgegeben.
     Dieser fungiert beim nächsten Durchlauf als Startindex, damit die Liste an derselben Stelle fortgesetzt wird.
 
     :param dishlist: Eine Liste mit Gerichten als Strings
@@ -109,8 +189,11 @@ def build_dish_speech(dishlist, start_idx):
 
     dishlist_string = ''
     last_idx = start_idx + 3 # TODO
-    for i in range(start_idx, len(dishlist)):
-        current_dish = chunking(dishlist[i]['name'])
+    dishes_names = [d['name'] for d in dishlist]
+    chunked_dishes = make_chunking(dishes_names)
+    for i in range(start_idx, len(chunked_dishes)):
+
+        current_dish = chunked_dishes[i]
         count = i+1
         if i == last_idx:
             dishlist_string += '{}. {}. '.format(count, current_dish)
