@@ -171,9 +171,43 @@ def make_chunking(all_dishes):
 
 #######################################################
 
+def build_mensa_speech(mensalist, start_idx):
+    """Baut den String, der anschließend für den Prompt des ListMensasIntents benutzt wird.
+    Die Liste ist möglicherweise sehr lang. Deshalb wird nur das Element am Startindex und drei
+    weitere Elemente in den Prompt gebaut, um zu lange Antworten zu vermeiden.
+
+    Der letzte Index wird gemerkt und zusammen mit dem String zurückgegeben.
+    Dieser fungiert beim nächsten Durchlauf als Startindec, damit die Liste an derselben Stelle
+    fortgesetzt wird.
+
+    :param mensalist: Eine Liste mit Mensen als Strings
+    :type mensalist: List[str]
+    :param start_idx: Der Index, bei dem angefangen werden soll zu suchen.
+    :type start_idx: int
+    :return: Gibt den fertigen String un den letzten Index für den nächsten Durchlauf zurück.
+    :rtype: str, int
+    """
+
+    mensalist_string = ''
+    last_idx = start_idx + 3
+    for i in range(start_idx, len(mensalist)):
+        current_mensa = mensalist[i]
+        if i == last_idx:
+            mensalist_string += '{}. '.format(current_mensa)
+            break
+        if i + 1 == len(mensalist):
+            mensalist_string += '{}. '.format(current_mensa)
+        elif i == (len(mensalist) - 2) or i == last_idx - 1:
+            mensalist_string += '{} und '.format(current_mensa)
+        else:
+            mensalist_string += '{}, '.format(current_mensa)
+    print(mensalist_string)
+    return mensalist_string, last_idx+1
+
+
 def build_dish_speech(dishlist, start_idx):
-    """Baut den String, der anschließend für den Prompt benutzt wird.
-    Die Liste ist möglicherweise sehr lang. Daher wird nur das Element am Startindex und
+    """Baut den String, der anschließend für den Prompt des ListDishesIntents benutzt wird.
+    Die Liste ist möglicherweise sehr lang. Daher wird nur das Element am Startindex und 
     drei weitere Strings in den Prompt gebaut, um zu lange Antworten zu vermeiden.
 
     Der letzte Index wird gemerkt und zusammen mit dem String zurückgegeben.
@@ -181,7 +215,7 @@ def build_dish_speech(dishlist, start_idx):
 
     :param dishlist: Eine Liste mit Gerichten als Strings
     :type dishlist: List[str]
-    :param start_idx: Der Index, bei dem angefangen soll zu suchen.
+    :param start_idx: Der Index, bei dem angefangen werden soll zu suchen.
     :type start_idx: int
     :return: Gibt den fertigen String und den letzten Index für den nächsten Durchlauf zurück
     :rtype: str, int
