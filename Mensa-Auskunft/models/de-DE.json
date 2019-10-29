@@ -13,7 +13,15 @@
                 },
                 {
                     "name": "AMAZON.StopIntent",
-                    "samples": []
+                    "samples": [
+                        "mensa auskunft stoppen",
+                        "stoppe mensa auskunft",
+                        "mensa auskunft abbrechen",
+                        "mensa auskunft beenden",
+                        "mach mensa auskunft zu",
+                        "schließ mensa auskunft",
+                        "beende mensa auskunft"
+                    ]
                 },
                 {
                     "name": "ListDishesIntent",
@@ -23,8 +31,7 @@
                             "type": "AMAZON.DATE",
                             "samples": [
                                 "für {date}",
-                                "{first_ingredient}",
-                                "{mensa_name}",
+                                "{date} in der {mensa_name}",
                                 "am {date}",
                                 "{date}"
                             ]
@@ -34,9 +41,8 @@
                             "type": "mensa_name",
                             "samples": [
                                 "in {mensa_name}",
-                                "{first_ingredient}",
                                 "in der {mensa_name}",
-                                "{date}",
+                                "{date} in der {mensa_name}",
                                 "{mensa_name}"
                             ]
                         },
@@ -62,6 +68,10 @@
                         }
                     ],
                     "samples": [
+                        "ich möchte etwas {first_prep} {first_ingredient} aber {second_prep} {second_ingredient}",
+                        "ich möchte {first_ingredient} aber {second_prep} {second_ingredient}",
+                        "gib mir ein {synonyms_gericht} {first_prep} {first_ingredient} aber {second_prep} {second_ingredient}",
+                        "ein {synonyms_gericht} {first_prep} {first_ingredient} aber {second_prep} {second_ingredient}",
                         "essensplan  {date}",
                         "such mir bitte für {date} {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name}",
                         "such mir {first_ingredient} {synonyms_gericht} {second_prep} {second_ingredient} für {date} von der {mensa_name}",
@@ -469,9 +479,55 @@
                         {
                             "name": "user_group",
                             "type": "user_group"
+                        },
+                        {
+                            "name": "dish",
+                            "type": "AMAZON.Food"
                         }
                     ],
                     "samples": [
+                        "wie viel kostet das denn",
+                        "wie viel kosten die {dish}",
+                        "was kosten die {dish}",
+                        "wie viel muss man für {dish} bezahlen",
+                        "wie viel muss ich für {dish} bezahlen",
+                        "gib mir den preis für {dish}",
+                        "sag mir den preis für {dish}",
+                        "preis für {dish}",
+                        "gib mir den preis von {dish}",
+                        "sag mir den preis von {dish}",
+                        "der preis von {dish}",
+                        "wie viel kostet das {dish}",
+                        "wie viel kostet der {dish}",
+                        "wie viel bezahl ich für {dish}",
+                        "wie viel bezahlt man für {dish}",
+                        "wie viel kostet {dish}",
+                        "wie viel kostet gericht nummer {number}",
+                        "wie viel kostet das gericht nummer {number}",
+                        "wie viel kostet das gericht {number}",
+                        "wie viel kostet das gericht",
+                        "was kostet das",
+                        "wie viel muss ich dafür bezahlen",
+                        "wie viel muss ein {user_group} für gericht {number} bezahlen",
+                        "wie viel muss ein {user_group} für nummer {number} bezahlen",
+                        "wie viel muss ein {user_group} bezahlen",
+                        "wie viel bezahlt ein {user_group}",
+                        "wie viel bezahlen {user_group}",
+                        "kosten",
+                        "preise",
+                        "preis",
+                        "wie viel muss ich für das gericht nummer {number} bezahlen",
+                        "wie viel muss ich für die {number} bezahlen",
+                        "wie viel muss ich für gericht nummer {number} bezahlen",
+                        "wie viel muss ich für nummer {number} bezahlen",
+                        "was muss ich bezahlen",
+                        "wie teuer",
+                        "preis für {number}",
+                        "preis für gericht nummer {number}",
+                        "sag mir den preis für gericht {number}",
+                        "sag mir den preis für gericht nummer {number}",
+                        "sag mir den preis für {number}",
+                        "sag mir den preis für nummer {number}",
                         "wie teuer ist das {number} gericht",
                         "wie teuer ist das",
                         "wie teuer ist nummer {number} für {user_group}",
@@ -483,20 +539,20 @@
                         "gericht {number}",
                         "was muss ich für die {number} blechen",
                         "wie viel kostet gericht {number}",
-                        "was kostet das {number} gericht",
-                        "wie viel kostet das {number} gericht",
+                        "was kostet die nummer {number} gericht",
+                        "wie viel kostet die nummer {number} gericht",
                         "{user_group}",
                         "{number}",
                         "{user_group} {number}",
                         "{number} für {user_group}",
-                        "was kostet das {number}",
+                        "was kostet die {number}",
                         "was kostet nummer {number}",
                         "nummer {number}",
                         "preis {number}",
                         "preis für nummer {number}",
                         "wie viel kostet nummer {number}",
-                        "wie viel kostet das {number} für {user_group}",
-                        "wie viel kostet das {number}",
+                        "wie viel kostet die {number} für {user_group}",
+                        "wie viel kostet die {number}",
                         "wie viel kostet das"
                     ]
                 },
@@ -509,6 +565,10 @@
                         }
                     ],
                     "samples": [
+                        "wo kann ich in {city} essen",
+                        "welche mensen gibt's in {city}",
+                        "gib mir eine liste für {city}",
+                        "liste alle mensen in {city} auf",
                         "welche mensas gibt es in {city}",
                         "suche mensas in {city}",
                         "gibt es mensas in {city}",
@@ -777,9 +837,44 @@
                                 "nummer {number}",
                                 "{number}"
                             ]
+                        },
+                        {
+                            "name": "dish",
+                            "type": "AMAZON.Food"
                         }
                     ],
                     "samples": [
+                        "details zu {dish} vorlesen",
+                        "lies details zu {dish} vor",
+                        "sag mir details für die {dish}",
+                        "gib mir details für das {dish}",
+                        "{dish} details",
+                        "details zum {dish}",
+                        "details für das {dish}",
+                        "details für die {dish}",
+                        "details zu der {dish}",
+                        "details zu {dish}",
+                        "details zu den {dish}",
+                        "was gibt's noch über die {number} zu wissen",
+                        "was kann ich noch über gericht {number} erfahren",
+                        "sag mir die details für gericht {number}",
+                        "details für gericht {number} vorlesen",
+                        "details für nummer {number} vorlesen",
+                        "gericht {number} komplett vorlesen",
+                        "gericht {number} öffnen",
+                        "gib mir details für nummer {number}",
+                        "gib mir details für die nummer {number}",
+                        "sag mir details für die nummer {number}",
+                        "sag mir details für nummer {number}",
+                        "details für die nummer {number}",
+                        "sag mir details für das gericht nummer {number}",
+                        "gib mir details für das gericht nummer {number}",
+                        "details für das gericht nummer {number}",
+                        "details für das gericht {number}",
+                        "details für {number}",
+                        "infos",
+                        "mehr infos",
+                        "mehr details",
                         "gib mir details für {number}",
                         "details für gericht nummer {number} bitte",
                         "details für gericht nummer {number}",
@@ -6740,12 +6835,39 @@
                     "values": [
                         {
                             "name": {
-                                "value": "ohne"
+                                "value": "ohne",
+                                "synonyms": [
+                                    "auf gar keinen fall",
+                                    "unter vermeidung von",
+                                    "außer",
+                                    "ausgenommen",
+                                    "exklusive",
+                                    "minus",
+                                    "keinen",
+                                    "keine",
+                                    "kein",
+                                    "abzüglich",
+                                    "nicht mit"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "mit"
+                                "value": "mit",
+                                "synonyms": [
+                                    "gleichzeitig",
+                                    "außerdem",
+                                    "eingeschlossen",
+                                    "plus",
+                                    "samt",
+                                    "mitsamt",
+                                    "nebst",
+                                    "inklusive",
+                                    "zuzüglich",
+                                    "dazu",
+                                    "auf",
+                                    "darauf"
+                                ]
                             }
                         }
                     ]
@@ -6771,6 +6893,13 @@
                         {
                             "name": "user_group",
                             "type": "user_group",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "dish",
+                            "type": "AMAZON.Food",
                             "confirmationRequired": false,
                             "elicitationRequired": false,
                             "prompts": {}
@@ -6882,6 +7011,13 @@
                             "prompts": {
                                 "elicitation": "Elicit.Slot.249093957736.573736832731"
                             }
+                        },
+                        {
+                            "name": "dish",
+                            "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
                         }
                     ]
                 }
@@ -6892,6 +7028,14 @@
             {
                 "id": "Elicit.Slot.1442739773155.397611828099",
                 "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Nenne mir bitte die Nummer des Gerichts."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Wie ist die Nummer des Gerichts?"
+                    },
                     {
                         "type": "PlainText",
                         "value": "Welches Gericht, nenne bitte die Nummer."
@@ -7020,7 +7164,7 @@
                     },
                     {
                         "type": "PlainText",
-                        "value": "Welches Gericht?"
+                        "value": "Wie lautet die Nummer des Gerichts?"
                     },
                     {
                         "type": "PlainText",
