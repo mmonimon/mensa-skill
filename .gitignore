@@ -13,35 +13,45 @@ Click-7.0.dist-info/
 Flask-1.0.3.dist-info/
 Flask-1.1.0.dist-info/
 Jinja2-2.10.1.dist-info/
+Jinja2-2.10.3.dist-info/
 MarkupSafe-1.1.1.dist-info/
 Werkzeug-0.15.4.dist-info/
+Werkzeug-0.16.0.dist-info/
 __pycache__/
 ask_sdk_core/
 ask_sdk_core-1.10.2.dist-info/
+ask_sdk_core-1.11.0.dist-info/
 ask_sdk_model/
 ask_sdk_model-1.11.0.dist-info/
 ask_sdk_model-1.12.0.dist-info/
 ask_sdk_model-1.13.0.dist-info/
+ask_sdk_model-1.17.0.dist-info/
 ask_sdk_runtime/
 ask_sdk_runtime-1.10.2.dist-info/
+ask_sdk_runtime-1.11.0.dist-info/
 ask_sdk_webservice_support/
 ask_sdk_webservice_support-0.1.2.dist-info/
+ask_sdk_webservice_support-1.0.0.dist-info/
 asn1crypto/
 asn1crypto-0.24.0.dist-info/
 bin/
 certifi/
 certifi-2019.6.16.dist-info/
+certifi-2019.9.11.dist-info/
 cffi/
 cffi-1.12.3.dist-info/
+cffi-1.13.1.dist-info/
 chardet/
 chardet-3.0.4.dist-info/
 click/
 cryptography/
 cryptography-2.7.dist-info/
+cryptography-2.8.dist-info/
 dateutil/
 flask/
 flask_ask_sdk/
 flask_ask_sdk-0.1.1.dist-info/
+flask_ask_sdk-1.0.0.dist-info/
 idna/
 idna-2.8.dist-info/
 itsdangerous/
@@ -56,6 +66,7 @@ requests-2.22.0.dist-info/
 six-1.12.0.dist-info/
 urllib3/
 urllib3-1.25.3.dist-info/
+urllib3-1.25.6.dist-info/
 werkzeug/
 six.py
 build/
@@ -72,15 +83,20 @@ var/
 wheels/
 Flask-1.1.0.dist-info/
 ask_sdk-1.10.2.dist-info/
+ask_sdk-1.11.0.dist-info/
 ask_sdk/
 ask_sdk_dynamodb/
 ask_sdk_dynamodb_persistence_adapter-1.10.2.dist-info/
+ask_sdk_dynamodb_persistence_adapter-1.11.0.dist-info/
 ask_sdk_model-1.13.0.dist-info/
 boto3-1.9.183.dist-info/
+boto3-1.10.2.dist-info/
 boto3/
 botocore-1.12.183.dist-info/
+botocore-1.13.2.dist-info/
 botocore/
 docutils-0.14.dist-info/
+docutils-0.15.2.dist-info/
 docutils/
 jmespath-0.9.4.dist-info/
 jmespath/
@@ -90,7 +106,11 @@ boto3-1.9.188.dist-info/
 botocore-1.12.188.dist-info/
 Flask-1.1.1.dist-info/
 boto3-1.9.188.dist-info/
+boto3-1.10.3.dist-info/
 botocore-1.12.188.dist-info/
+botocore-1.13.3.dist-info/
+haversine-2.1.2.dist-info/
+haversine/
 
 *.egg-info/
 .installed.cfg
@@ -124,6 +144,57 @@ coverage.xml
 *.pot
 
 # Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+jango stuff:
 *.log
 local_settings.py
 db.sqlite3
