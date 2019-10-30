@@ -536,17 +536,11 @@ def calculate_nearest_mensa(user_coordinates, mensa_list):
         # check if coordinates are available for current mensa
         if mensa['coordinates']:
             mensa_coordinates = (float(mensa['coordinates'][0]), float(mensa['coordinates'][1]))
-        # coordinates not available -> retrieve from address
+        # coordinates not available -> check next mensa
+        # (Nominatim API only allows 1 request per secons, that's too slow for Alexa to check
+        # all the mensas without coordinate information)
         else:
-            # get coordinates of mensa using nominatim api
-            address_string = mensa['address']
-            nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
-            try:
-                location_data = http_get(nominatim_api)[0]
-                coordinates = (float(location_data['lat']), float(location_data['lon']))
-            # Nominatim API could not find address of Mensa in its database
-            except IndexError:
-                pass
+            continue
 
         distance = haversine(user_coordinates, mensa_coordinates)
         if shortest_distance is None or distance < shortest_distance:
