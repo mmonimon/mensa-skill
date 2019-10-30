@@ -255,7 +255,7 @@ Getestet wurde der Skill mithilfe von *Flask* und *ngrok* lokal auf unseren eige
 Dieser Skill verwendet insgesamt 13 Intents, davon sind sechs Intents _Custom Intents_ sowie sieben Intents _Built-In Intents_, die von Amazon zur Verfügung gestellt werden und teilweise von uns mit eigenen _sample utterances_ erweitert wurden. 
 Außerdem benutzt der Skill acht verschiedene Slot-Types, von denen vier zu den _Amazon Built-In Slots_ gehören.
 
-<img src="intent-order.png" alt="intent order" title="Intentabfolge von gelungenen Dialogen mit dem Skill" width="500" align="middle"/>
+<img src="intent-order.png" alt="intent order" title="Intentabfolge von gelungenen Dialogen mit dem Skill" width="1000" align="middle"/>
 
 Dieses Diagramm zeigt die Intentabfolge von gelungenen Dialogen mit dem Skill. Der Intent `AMAZON.WelcomeIntent` kann mit einer One-Shot-Äußerung des Benutzers übersprungen werden.
 Weicht der Nutzer von dieser Intentreihenfolge ab, so erhält er einen Hinweis, dass zunächst eine entsprechende Suche gestartet werden muss.
