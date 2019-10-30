@@ -264,8 +264,37 @@ In der Datei `Backend.pdf` dieses Verzeichnis' befindet sich eine Dokumentation 
 Diese Dokumentation wurde mithilfe des Tools _Sphinx_ aus den Docstrings extrahiert.
 
 
-
 ## 5. Projektabschluss, Evaluation
-- Versuchsanordnung: VPs, Material, Methode (Fragebogen, Erfolg)
-- Auswertung
-- Ausblick, Verbesserungsmöglichkeiten
+### Versuchsanordnung: VPs, Material, Methode (Fragebogen, Erfolg)
+Für die Evaluation des Skills wurde ein Frageborgen bei Google Forms für die Probanden erstellt (diesen kann man unter docs als Alexa Skill/Mensa-Auskunft_Form.pdf finden). Die Fragen wurden im Hinsicht auf folgende Punkte konzipiert: 
+
+- Zweck der Anwendung, Zufriedenheit mit dem Produkt bzw. Entsprechnung der Erwartungen  
+- Dauer der Anwendung bis Erhalt von den erwünschten Informationen  
+- Art vom unerwünschtesn Verhalten des Skills  
+- Wahrscheinlichkeit der Weiterempfehlung  
+- Verbesserungsvorschläge  
+
+Um einschätzen zu können, welche Kategorie der Nutzer den Skill evaluiert hat, wurde auch nach der Erfahrung mit den Sprachassistenten und Skills gefragt. 
+
+Als kritische Fragen für die allgemeine Evaluation des Skills wurden die Fragen zur Informationserhalt und zur Weiterempfehlung gesehen (Fragen 2 und 6). Die anderen Fragen orientieren sich an die Verbesserung des Skills und helfen, die möglichen Problemen zu entdecken und zu beheben.
+
+### Auswertung
+Im Allgemeinen wurde der Skill von 80% der Probanden als empfelenswert markiert. Die am meisten benutzten Funktionen von dem Skill waren die Suche von dem aktuellen Essensplan und Essensplan für einen bestimmten Tag. Am wenigsten hat man die Suche nach der Adresse der Mensa benutzt. Im Durchschnitt brauchte man 3 bis 5 Minuten, um die gewünschte Information zu bekommen. Unetwünschte Reaktionen des Skills tauchten bei 60% der Probanden 1 bis 4 Mal auf, bei 20% 5 bis 10 Mal und bei 20% gar nicht. Die häufigsten beschriebenen unerwünschten Reaktionen waren folgende:
+
+- Alexa hat mich ab und zu falsch verstanden. Das liegt aber wohl eher an Alexa selbst.  
+- Nicht verstandene Wörter  
+- Namen der Mensen nicht verstanden besonders HU und TU Berlin, oftmals konnte ich die Infos nicht erhalten, weil etwas schief gelaufen ist, One-shots scheinen schlecht bis gar nicht zu funktionieren  
+
+Die meisten Probanden waren nur ein wenig erfahren mit Alexa oder anderen Sprachassistenten und Skills.
+
+Man kann also schlussfolgern, dass der Skill allgemein schon gut funktioniert. Es gab soweit nur positiven Feedback zu der Erhalt von Informationen, obwohl es noch aus verschiedenen Gründen bei vielen gedauert hat. Die Ergebnisse der Umfrage zeigen auch, dass manche Funktionen eher wenig benutzt werden, daher konnte man sich überlegen, diese nicht weiter auszubauen oder über die Möglichkeit der Benutzung dieser Funktionen den User mehr informieren. Außerdem konnte man bei der Entwiklung neuer Funktionalitäten auch beachten, dass die meisten Probanden eher unerfahren mit Sprachassistenten waren und sich mehr Hilfe während der Unterhaltung mit dem Skill wünschen.
+
+### Ausblick & Verbesserungsmöglichkeiten
+- Funktionalität: Wie voll ist die gewählte Mensa zur Zeit der Anfrage?  
+- Chunking: mehrere unregelmäßige Fälle bei den Gerichtsnamen abfangen
+- Evaluationsverfahren verbessern und mehr Probanden finden
+- Individuelle Vorschläge für die User generieren und Präferenzen speichern
+
+Zwischen den Verbesserungsvorschlägen von den Probanden waren folgende Punkte:
+- Hilfe-Prompt ist etwas zu lang  
+- "...kostet 2 Euro für Studenten" => Studierende wäre besser  
