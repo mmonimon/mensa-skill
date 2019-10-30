@@ -208,34 +208,34 @@ Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen
 ## 3. Projektorganisation
 ### TeilnehmerInnen & Aufgabenverteilung
 Das Team setzt sich aus vier Personen zusammen: Monique Noss, Bogdan Kostić, Maria Lomaeva und Olha Zolotarenko. 
-Jedes Teammitglied hatte einen Aufgabenbereich zugeteilt bekommen, für den er oder sie zuständig war. Die Aufteilung im Team nach den Intents war wie folgt:
+Jedem Teammitglied wurde ein Aufgabenbereich zugeteilt, für den er oder sie zuständig war. Die Aufteilung der Intents im Team war wie folgt:
 
 * Bogdan: IngredientIntent, GetNearestMensaIntent, WithoutIntent, ListDishesIntent(+WithoutIntent), NextIntent
 * Olha: AddressIntent, Chunking
 * Maria: ListMensasIntent, Chunking
 * Monique: ListDishesIntent, PriceIntent, DetailsIntent, NextIntent, NoIntent
 
-Neben dem Code für das Backend der Intents sollte sich auch um die jeweiligen sample utterances, das Testen und das Dokumentieren des jeweiligen Intents gekümmert werden. Die Koordination der verschiedenen Bestandteile des Skills im Code hat Monique Noss übernommen.
+Neben dem Erstellen des Codes für das Backend der Intents sollte sich auch um die jeweiligen \emph{sample utterances}, das Testen sowie das Dokumentieren des jeweiligen Intents gekümmert werden. Die Koordination der verschiedenen Bestandteile des Skills im Code hat Monique Noss übernommen.
 
 ### Planungsdokumente & Milestones
 Die Planungsdokumente zusammen mit den ursprünglichen Entwicklungsideen (`ideas.md`) und den dazugehörigen Milestones sind unter mensa-skill/material/ zu finden. 
 
-Die erste Version des Skills und der Intents wurde in der Datei `meeting1.md` dokumentiert. Diese Version wurde in der Vorstellung der Projekte am Ende des Sommersemesters 2019 getestet und anschließend präsentiert. Die wichtigsten Verbesserungsvorschläge waren dabei die folgenden:
+Die erste Version des Skills und der Intents wurde in der Datei `meeting1.md` dokumentiert. Diese Version wurde in der Vorstellung der Projekte am Ende des Sommersemesters 2019 getestet und anschließend präsentiert. Die wichtigsten Verbesserungsvorschläge, die dabei resultiert sind, waren dabei die folgenden:
 
 * Aufzählungslisten verkürzen (siehe dazu auch  `chunking.md`)
 * Die Möglichkeit, nach mehr als einer Zutat im Gericht zu suchen
 * Nach einer Mensa in der Nähe fragen zu können, statt nur alle Mensen in der Stadt aufzulisten
 * Mehr natürliche sample utterances einfügen
 
-Die zweite Version des Skills Mensa-Auskunft wurde nach einer ausführlichen Besprechung der nötigen Verbesserungen implementiert, die oben kurz zusammengefasst wurden. Näheres kann man der Datei `meeting2.md` entnehmen. 
+Die zweite Version des Skills Mensa-Auskunft wurde nach einer ausführlichen Besprechung der nötigen Verbesserungen implementiert, welche oben kurz zusammengefasst wurden. Näheres kann man der Datei `meeting2.md` entnehmen. 
 
 Schließlich wurde der Code organisiert und kommentiert, um die Lesbarkeit zu erhöhen. So entstand auch eine separate Datei `lambda_utility.py`, die alle Hilfsfunktionen für `lambda_function.py` beinhaltet. 
 
 ## 4. Entwurf des Systems, Dokumentation
 ### 4.1 Entwicklungsumgebung
-<img src="mermaid-diagram-20190715215538.svg" alt="drawing" width="500" align="middle"/>
+<img src="mermaid-diagram-20190715215538.svg" alt="drawing" title="Benutzte Software während der Entwicklung des Skills" width="500" align="middle"/>
 
-Das Diagram zeigt, mit welcher Software der Skill erstellt wurde. Der Skill läuft unter der Pythonversion 3.6 und importiert einige Bibliotheken, die einerseits native Python-Bibliotheken sind und andererseits von dem Alexa Skills Kit zur Verfügung gestellt wurden oder installiert werden müssen. Diese Bibliotheken müssen im selben Ordner der `lambda_function.py` liegen, damit diese auch von AWS Lambda eingelesen werden können. Für die Installation wurde `pip` und das Kommando `pip3 install -r requirements.txt -t .` benutzt.
+Das Diagramm zeigt, mit welcher Software der Skill erstellt wurde. Der Skill läuft unter der Pythonversion 3.6 und importiert einige Bibliotheken, die einerseits native Python-Bibliotheken sind und andererseits von dem Alexa Skills Kit zur Verfügung gestellt wurden oder installiert werden müssen. Diese Bibliotheken müssen im selben Ordner der `lambda_function.py` liegen, damit diese auch von AWS Lambda eingelesen werden können. Für die Installation wurde `pip` und das Kommando `pip3 install -r requirements.txt -t .` benutzt.
 Zu den Requirements gehören:  
 - ask-sdk  
 - flask  
@@ -251,7 +251,19 @@ Zu den Requirements gehören:
 #### 4.2 Tests
 Getestet wurde der Skill mithilfe von *Flask* und *ngrok* lokal auf unseren eigenen Rechnern, um Status- und Fehlermeldungen angezeigt bekommen zu können, sodass sie direkt nachvollzogen werden konnten. 
 
-- Dokumentation Intents => mit Sphinx
+### Intents
+Dieser Skill verwendet insgesamt 13 Intents, davon sind sechs Intents _Custom Intents_ sowie sieben Intents _Built-In Intents_, die von Amazon zur Verfügung gestellt werden und teilweise von uns mit eigenen _sample utterances_ erweitert wurden. 
+Außerdem benutzt der Skill acht verschiedene Slot-Types, von denen vier zu den _Amazon Built-In Slots_ gehören.
+
+<img src="intent-order.png" alt="intent order" title="Intentabfolge von gelungenen Dialogen mit dem Skill" width="500" align="middle"/>
+
+Dieses Diagramm zeigt die Intentabfolge von gelungenen Dialogen mit dem Skill. Der Intent `AMAZON.WelcomeIntent` kann mit einer One-Shot-Äußerung des Benutzers übersprungen werden.
+Weicht der Nutzer von dieser Intentreihenfolge ab, so erhält er einen Hinweis, dass zunächst eine entsprechende Suche gestartet werden muss.
+
+In der Datei `Backend.pdf` dieses Verzeichnis' befindet sich eine Dokumentation des Backends des Skills, aus der die verschiedenen Intents und Slot-Types entnommen werden können.
+Diese Dokumentation wurde mithilfe des Tools _Sphinx_ aus den Docstrings extrahiert.
+
+
 
 ## 5. Projektabschluss, Evaluation
 - Versuchsanordnung: VPs, Material, Methode (Fragebogen, Erfolg)

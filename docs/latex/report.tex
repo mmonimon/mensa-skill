@@ -12,9 +12,15 @@
 \setlength{\parindent}{0em}
 \usepackage[a4paper,left=4cm,right=3cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{soul}
+\usepackage{changepage}
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{3}
 
+
+% sphinx documentation
+% \usepackage{standalone}
+% \usepackage{sphinx}
+\usepackage{pdfpages}
 
 % BibLaTeX
 \usepackage[bibencoding=auto, backend=biber, style=apa]{biblatex}
@@ -117,7 +123,7 @@ Während die Implementierung und Einbettung über AWS DynamoDB einfach vorgenomm
 Auch könnten User Accounts angelegt werden, um persönliche Vorlieben des Users speichern zu können. 
 
 Eine weitere mögliche Verbesserung haben wir während der zweiten Projektphase, also nach der ersten Vorstellung der Projekte, umsetzen können.
-Es handelt sich hierbei um syntaktisches Parsing der Gerichte, um nur den Kopf der "Gerichtsphrase" auszugeben und somit die Antworten des Skills zu kürzen, um den Nutzer nicht mit Informationen zu überhäufen.
+Es handelt sich hierbei um syntaktisches Parsing der Gerichte, um nur den Kopf der “Gerichtsphrase” auszugeben und somit die Antworten des Skills zu kürzen, um den Nutzer nicht mit Informationen zu überhäufen.
 Aus demselben Grund werden nun immer nur vier Gerichte in einem Prompt vorgelesen.
 Möchte der Nutzer weitere Gerichte erfahren, kann einfach "weiter" gescrollt werden. Mit einem Intent für Details können dagegen Details zu einem Gericht erfragt werden.
 
@@ -205,9 +211,9 @@ Hierbei kann der Nutzer Zutaten inkludieren, um die Auswahl von Anfang an einzus
 Wenn eine Auswahl getroffen wurde, wird der Benutzer gefragt, ob er Details oder den Preis eines der Gerichte erfahren möchte.
 Der Benutzer kann an dieser Stelle auch verneinen, woraufhin der Skill geschlossen wird.
 
-\ul{Szenario 1: Benutzer möchte den Essensplan für eine bestimmte Mensa, für einen bestimmten Tag erfragen.}\\
+\textbf{Szenario 1: Benutzer möchte den Essensplan für eine bestimmte Mensa, für einen bestimmten Tag erfragen.}\\
 Wann? Jederzeit, wann immer der User in der Mensa essen möchte.\\~\\
-\ul{Situation 1.1: Morgen ist ein Werktag.}\\
+\ul{Situation 1.1:}\\Morgen ist ein Werktag.\\
 \begin{quote}
 \begin{tabular}{lp{12cm}}
 	U:& Alexa, öffne Mensaauskunft.\\
@@ -215,7 +221,7 @@ Wann? Jederzeit, wann immer der User in der Mensa essen möchte.\\~\\
 	U:& Was gibt es morgen in der Mensa?\\  
 	A:& In welcher Mensa möchtest du essen?\\
 	U:& Mensa Golm.\\
-	A:& Es gibt 5  Gerichte  zur Auswahl: 1. Eintopf aus Kichererbsen, Linsen, Gemüse,Kartoffeln, 2. Eintopf aus Kichererbsen, Linsen, Gemüse,Kartoffeln, 3. Gulasch und 4. Hähnchenbrust „Piccata Milanese“. Möchtest du mehr Gerichte hören oder Details?\\ 
+	A:& Es gibt 5  Gerichte  zur Auswahl: 1. Eintopf aus Kichererbsen, Linsen, Gemüse, Kartoffeln, 2. Eintopf aus Kichererbsen, Linsen, Gemüse,Kartoffeln, 3. Gulasch und 4. Hähnchenbrust „Piccata Milanese“. Möchtest du mehr Gerichte hören oder Details?\\ 
 	U:& Mehr!\\ 
 	A:& 5. Griechisches Kartoffelgericht. Möchtest du Details zu einem dieser Gerichte erfahren? Sag zum Beispiel: Details. oder: Wie viel kostet Gericht Nummer 2 für Studenten.\\
 	U:& Wie viel kostet Gericht Nummer 2 für Studenten?\\
@@ -224,7 +230,7 @@ Wann? Jederzeit, wann immer der User in der Mensa essen möchte.\\~\\
 --- SKILL SCHLIEßT SICH ---\\
 \end{quote}
 
-\ul{Situation 1.2: Morgen ist Wochenende oder Feiertag.}
+\ul{Situation 1.2:}\\Morgen ist Wochenende oder Feiertag.
 \begin{quote}
 \begin{tabular}{lp{12cm}}
 	U:& Alexa, frag Mensaauskunft, was gibt es morgen in der Mensa Golm?\\  
@@ -233,7 +239,7 @@ Wann? Jederzeit, wann immer der User in der Mensa essen möchte.\\~\\
 --- SKILL SCHLIEßT SICH ---\\
 \end{quote}
 
-\ul{Situation 1.3: Die Mensa wurde nicht richtig verstanden (ASR Error) oder ist nicht in der Datenbank.}
+\ul{Situation 1.3:}\\Die Mensa wurde nicht richtig verstanden (ASR Error) oder ist nicht in der Datenbank.
 
 \begin{quote}
 \begin{tabular}{lp{12cm}}
@@ -243,8 +249,8 @@ Wann? Jederzeit, wann immer der User in der Mensa essen möchte.\\~\\
 --- SKILL SCHLIEßT SICH ---\\
 \end{quote}
 
-\ul{Situation 1.4: Der Benutzer sucht nach Gerichten mit einer bestimmten Zutat.}\\
-\textbf{Dialog 1.4.1}
+\ul{Situation 1.4:}\\Der Benutzer sucht nach Gerichten mit einer bestimmten Zutat.\\
+\emph{-- Dialog 1.4.1 --}
 \begin{quote}
 \begin{tabular}{lp{12cm}}
 	U:& Alexa, frag Mensaauskunft nach veganen Gerichten.\\
@@ -259,7 +265,7 @@ Wann? Jederzeit, wann immer der User in der Mensa essen möchte.\\~\\
 --- SKILL SCHLIEßT SICH ---\\
 \end{quote}
 
-\textbf{Dialog 1.4.2}
+\emph{-- Dialog 1.4.2 --}
 \begin{quote}
 \begin{tabular}{lp{12cm}}
 	U:& Alexa, frag Mensaauskunft nach Gerichten mit Sellerie.\\
@@ -276,9 +282,9 @@ Wann? Jederzeit, wann immer der User in der Mensa essen möchte.\\~\\
 Ein wenig komplexer ist die Funktionalität, eine Mensa in der Nähe des Standortes des Benutzers zu finden.
 Aus dem Intent können daher daher unterschiedliche Reaktionen hervorgehen, je nach Status der Standortfreigabe für das benutzte Gerät und den Skill selbst.\\
 
-\ul{Szenario 2: Benutzer möchte eine Mensa in seiner Nähe finden und befindet sich im Ortsteil Golm in Potsdam.}\\
+\textbf{Szenario 2: Benutzer möchte eine Mensa in seiner Nähe finden und befindet sich im Ortsteil Golm in Potsdam.}\\
 Wann? Höchstwahrscheinlich nur ein Mal, wenn der User wissen möchte, welche Mensa die nächste in der Umgebung ist.\\~\\
-\ul{Situation 2.1: Der User hat den Gerätestandort nicht freigegeben.}
+\ul{Situation 2.1:}\\Der User hat den Gerätestandort nicht freigegeben.
 \begin{quote}
 \begin{tabular}{lp{12cm}}
 	U:& Alexa, frag Mensaauskunft, wo die nächste Mensa ist.\\
@@ -287,7 +293,7 @@ Wann? Höchstwahrscheinlich nur ein Mal, wenn der User wissen möchte, welche Me
 --- SKILL SCHLIEßT SICH ---\\
 \end{quote}
 
-\ul{Situation 2.2: Der User hat den Gerätestandort freigegeben.}
+\ul{Situation 2.2:}\\Der User hat den Gerätestandort freigegeben.
 \begin{quote}
 \begin{tabular}{lp{12cm}}
 	U:& Alexa, frag Mensaauskunft, wo die nächste Mensa ist.\\
@@ -299,8 +305,8 @@ Wann? Höchstwahrscheinlich nur ein Mal, wenn der User wissen möchte, welche Me
 \subsubsection{Beispieldialoge: Die Adresse einer Mensa erfahren}
 Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen anderer Mensen gesucht werden.\\
 
-\ul{Szenario 3: Benutzer möchte die Adresse einer Mensa erfahren.}\\
-\ul{Situation 3.1: Die Adresse der Mensa kann gefunden werden, sie ist also in der Datenbank vorhanden.}
+\textbf{Szenario 3: Benutzer möchte die Adresse einer Mensa erfahren.}\\
+\ul{Situation 3.1:}\\Die Adresse der Mensa kann gefunden werden, sie ist also in der Datenbank vorhanden.
 \begin{quote}
 \begin{tabular}{lp{12cm}}
 	U:& Alexa, frag Mensaauskunft nach der Adresse der Mensa Golm.\\
@@ -309,7 +315,7 @@ Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen
 --- SKILL SCHLIEßT SICH ---\\
 \end{quote}
 
-\ul{Situation 3.2: Die Adresse der Mensa kann nicht gefunden werden, sie ist also nicht in der Datenbank vorhanden. Möglich ist auch, dass ASR den User falsch verstanden hat.}
+\ul{Situation 3.2:}\\Die Adresse der Mensa kann nicht gefunden werden, sie ist also nicht in der Datenbank vorhanden. Möglich ist auch, dass ASR den User falsch verstanden hat.
 \begin{quote}
 \begin{tabular}{lp{12cm}}
 	U:& Alexa, frag Mensaauskunft nach der Adresse der Mensa Golm.\\
@@ -318,8 +324,8 @@ Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen
 --- SKILL SCHLIEßT SICH ---\\
 \end{quote}
 
-\ul{Szenario 4: Benutzer möchte erfahren, welche Mensen es in einer bestimmten Stadt gibt.}\\
-\ul{Situation 4.1: Der Nutzer fragt nach Mensen in einer deutschen Stadt, zum Beispiel Potsdam.}
+\textbf{Szenario 4: Benutzer möchte erfahren, welche Mensen es in einer bestimmten Stadt gibt.}\\
+\ul{Situation 4.1:}\\Der Nutzer fragt nach Mensen in einer deutschen Stadt, zum Beispiel Potsdam.
 \begin{quote}
 \begin{tabular}{lp{12cm}}
 	U:& Alexa, frag Mensaauskunft, welche Mensas gibt es in Potsdam?\\
@@ -328,7 +334,7 @@ Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen
 --- SKILL SCHLIEßT SICH ---\\
 \end{quote}
 
-\ul{Situation 4.2: Der Nutzer fragt nach Mensen in einer Stadt, die nicht in Deutschland liegt, zum Beispiel Tokyo.}
+\ul{Situation 4.2:}\\Der Nutzer fragt nach Mensen in einer Stadt, die nicht in Deutschland liegt, zum Beispiel Tokyo.
 \begin{quote}
 \begin{tabular}{lp{12cm}}
 	U:& Alexa, frag Mensaauskunft, welche Mensas gibt es in Tokyo?\\
@@ -338,10 +344,40 @@ Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen
 \end{quote}
 
 \section{Projektorganisation}
+\subsection{TeilnehmerInnen \& Aufgabenverteilung}
+Das Team setzt sich aus vier Personen zusammen: Monique Noss, Bogdan Kostić, Maria Lomaeva und Olha Zolotarenko. 
+Jedem Teammitglied wurde ein Aufgabenbereich zugeteilt, für den er oder sie zuständig war.
+Die Aufteilung der Intents im Team war wie folgt:
 \begin{itemize}
-	\item TeilnehmerInnen, Aufgabenverteilung
-	\item Planungsdokumente, Milestones (und ihre Dynamik über die Entwicklungsphase: Wie wurde der Plan angepasst über die Entwicklungszeit?)
+	\setlength\itemsep{0em}
+	\item Bogdan: IngredientIntent, GetNearestMensaIntent, WithoutIntent, ListDishesIntent(+WithoutIntent), NextIntent
+	\item Olha: AddressIntent, Chunking
+	\item Maria: ListMensasIntent, Chunking
+	\item Monique: ListDishesIntent, PriceIntent, DetailsIntent, NextIntent, NoIntent
 \end{itemize}
+
+Neben dem Erstellen des Codes für das Backend der Intents sollte sich auch um die jeweiligen \emph{sample utterances}, das Testen sowie das Dokumentieren des jeweiligen Intents gekümmert werden.
+Die Koordination der verschiedenen Bestandteile des Skills im Code hat Monique Noss übernommen.
+
+\subsection{Planungsdokumente \& Milestones}
+Die Planungsdokumente zusammen mit den ursprünglichen Entwicklungsideen (\texttt{ideas.md}) und den dazugehörigen Milestones sind unter \texttt{mensa-skill/material/} zu finden. 
+
+Die erste Version des Skills und der Intents wurde in der Datei \texttt{meeting1.md} dokumentiert.
+Diese Version wurde in der Vorstellung der Projekte am Ende des Sommersemesters 2019 getestet und anschließend präsentiert.
+Die wichtigsten Verbesserungsvorschläge, die dabei resultiert sind, waren dabei die folgenden:
+\begin{itemize}
+	\setlength\itemsep{0em}
+	\item Aufzählungslisten verkürzen (siehe dazu auch  \texttt{chunking.md})
+	\item Die Möglichkeit, nach mehr als einer Zutat im Gericht zu suchen
+	\item Nach einer Mensa in der Nähe fragen zu können, statt nur alle Mensen in der Stadt aufzulisten
+	\item Mehr natürliche \emph{sample utterances} einfügen
+\end{itemize}
+
+Die zweite Version des Skills Mensa-Auskunft wurde nach einer ausführlichen Besprechung der nötigen Verbesserungen implementiert, welche oben kurz zusammengefasst wurden. 
+Näheres kann man der Datei \texttt{meeting2.md} entnehmen. 
+
+Schließlich wurde der Code organisiert und kommentiert, um die Lesbarkeit zu erhöhen. 
+So entstand auch eine separate Datei \texttt{lambda\_utility.py}, die alle Hilfsfunktionen für \texttt{lambda\_function.py} beinhaltet. 
 
 \section{Entwurf des Systems, Dokumentation}
 \subsection{Entwicklungsumgebung}
@@ -351,7 +387,7 @@ Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen
 \caption{Benutzte Software während der Entwicklung des Skills}
 \end{figure}
 
-Das Diagram zeigt, mit welcher Software der Skill erstellt wurde.
+Abbildung 1 zeigt, mit welcher Software der Skill erstellt wurde.
 Der Skill läuft unter der Pythonversion 3.6 und importiert einige Bibliotheken, die einerseits native Python-Bibliotheken sind und andererseits von dem Alexa Skills Kit zur Verfügung gestellt wurden oder installiert werden müssen.
 Diese Bibliotheken müssen im selben Ordner der \texttt{lambda\_function.py} liegen, damit diese auch von AWS Lambda eingelesen werden können.
 Für die Installation wurde \texttt{pip} und das Kommando \texttt{pip3 install -r requirements.txt -t .} benutzt.
@@ -378,7 +414,22 @@ Diese wird benötigt, um die nächste Mensa in der Nähe des Benutzerstandortes 
 \subsection{Tests}
 Getestet wurde der Skill mithilfe von \emph{flask} und \emph{ngrok} lokal auf unseren eigenen Rechnern, um Status- und Fehlermeldungen angezeigt bekommen zu können, sodass sie direkt nachvollzogen werden konnten. 
 
-Dokumentation Intents => mit Sphinx
+\subsection{Intents}
+Dieser Skill verwendet insgesamt 13 Intents, davon sind sechs Intents \emph{Custom Intents} sowie sieben Intents \emph{Built-In Intents}, die von Amazon zur Verfügung gestellt werden und teilweise von uns mit eigenen \emph{sample utterances} erweitert wurden. 
+Außerdem benutzt der Skill acht verschiedene Slot-Types, von denen vier zu den \emph{Amazon Built-In Slots} gehören.
+
+\begin{figure}[ht]
+\center
+\includegraphics[width=\textwidth]{intent-order.png}
+\caption{Intentabfolge von gelungenen Dialogen mit dem Skill}
+\end{figure}
+
+Abbildung 2 zeigt die Intentabfolge von gelungenen Dialogen mit dem Skill.
+Der Intent \texttt{AMAZON.WelcomeIntent} kann mit einer One-Shot-Äußerung des Benutzers übersprungen werden.
+Weicht der Nutzer von dieser Intentreihenfolge ab, so erhält er einen Hinweis, dass zunächst eine entsprechende Suche gestartet werden muss.
+
+Im Anhang dieses Berichts befindet sich eine Dokumentation des Backends des Skills, aus der die verschiedenen Intents und Slot-Types entnommen werden können.
+Diese Dokumentation wurde mithilfe des Tools \emph{Sphinx} aus den Docstrings extrahiert.
 
 \section{Projektabschluss, Evaluation}
 \begin{itemize}
@@ -387,17 +438,10 @@ Dokumentation Intents => mit Sphinx
 	\item Ausblick, Verbesserungsmöglichkeiten
 \end{itemize}
 
- 
-
-
-
-
-
-
-
-
-
-
+\newpage
+\addcontentsline{toc}{section}{Anhang: Dokumentation des Backends}
+\includepdf[pages=5,pagecommand=\section*{Anhang: Dokumentation des Backends}]{../_build/latex/Mensa-Auskunft.pdf}
+\includepdf[pages=6-12]{../_build/latex/Mensa-Auskunft.pdf}
 
 
 
