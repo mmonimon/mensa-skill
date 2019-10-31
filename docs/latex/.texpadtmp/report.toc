@@ -32,10 +32,18 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3}Projektorganisation}{9}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Entwurf des Systems, Dokumentation}{9}
+\contentsline {subsection}{\numberline {3.1}TeilnehmerInnen \& Aufgabenverteilung}{9}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.1}Entwicklungsumgebung}{9}
+\contentsline {subsection}{\numberline {3.2}Planungsdokumente \& Milestones}{10}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2}Tests}{10}
+\contentsline {section}{\numberline {4}Entwurf des Systems, Dokumentation}{10}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Projektabschluss, Evaluation}{10}
+\contentsline {subsection}{\numberline {4.1}Entwicklungsumgebung}{10}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2}Tests}{11}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3}Intents}{12}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5}Projektabschluss, Evaluation}{12}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Anhang: Dokumentation des Backends}{13}

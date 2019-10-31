@@ -20,8 +20,8 @@ sys.path.insert(0, os.path.abspath('../Mensa-Auskunft/lambda/eu-west-1_MensaAusk
 # -- Project information -----------------------------------------------------
 
 project = 'Mensa-Auskunft'
-copyright = "2019, Bogdan Kostic', Maria Lomaeva, Monique Noss, Olha Zolotarenko"
-author = "Bogdan Kostic', Maria Lomaeva, Monique Noss, Olha Zolotarenko"
+copyright = "2019, Bogdan Kostić, Maria Lomaeva, Monique Noss, Olha Zolotarenko"
+author = "Bogdan Kostić, Maria Lomaeva, Monique Noss, Olha Zolotarenko"
 
 # The short X.Y version
 version = ''
@@ -112,11 +112,12 @@ htmlhelp_basename = 'Mensa-Auskunftdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
+latex_engine = 'xelatex'
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
-    # 'papersize': 'letterpaper',
+    'papersize': 'a4paper',
 
     # The font size ('10pt', '11pt' or '12pt').
     #
@@ -136,7 +137,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'Mensa-Auskunft.tex', 'Mensa-Auskunft Documentation',
-     "Bogdan Kostic', Maria Lomaeva, Monique Noss, Olha Zolotarenko", 'manual'),
+     "Bogdan Kostić, Maria Lomaeva, Monique Noss, Olha Zolotarenko", 'manual'),
 ]
 
 
