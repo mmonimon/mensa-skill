@@ -12,7 +12,7 @@ Welcome to Mensa-Auskunft's documentation!
 
    lambda_function
    lambda_utility
-   interaction_models
+   interaction_model
 
 Indices and tables
 ==================
