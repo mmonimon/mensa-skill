@@ -6991,6 +6991,14 @@
                     "name": "AMAZON.Food",
                     "values": [
                         {
+                            "name": {
+                                "value": "Schlangen",
+                                "synonyms": [
+                                    "schlangen"
+                                ]
+                            }
+                        },
+                        {
                             "id": "Geflügel",
                             "name": {
                                 "value": "Geflügel",

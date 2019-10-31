@@ -181,6 +181,11 @@ def list_dishes_intent_handler(handler_input):
     session_attr['mensa_id'] = slot_values['mensa_name']['id']
     print(slot_values)
 
+    # Easteregg :P
+    if str(ingredients['first']).lower() == 'schlangen' or str(ingredients['second']).lower() == 'schlangen':
+        speech = "<say-as interpret-as=\"interjection\">ähm </say-as> <break time=\"0.25s\"/> Herr Schlangen ist nicht zum Verzehr geeignet! "
+        return handler_input.response_builder.speak(speech).response
+
     # set state for AMAZON.NextIntent
     session_attr['next_intent_state'] = "ListDishes"
 
@@ -336,10 +341,12 @@ def address_intent_handler(handler_input) :
     current_mensa_id = slot_values['mensa_name']['id']
     current_mensa_name = slot_values['mensa_name']['resolved']
     try:
-        address = [j['address'] for j in all_mensas if j['id'] == int(current_mensa_id)]
-        speech = "Die Adresse der {} lautet {}".format(current_mensa_name,address[0])
+        name_address = [(j['name'], j['address']) for j in all_mensas if j['id'] == int(current_mensa_id)]
+        speech = "Die Adresse der {} lautet {}".format(name_address[0][0], name_address[0][1])
+        speech = utility.convert_acronyms(speech)
     except Exception as e:
         speech = "Die Adresse der angefragten Mensa {} konnte leider nicht gefunden werden. ".format(current_mensa_name)
+        speech = utility.convert_acronyms(speech)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
     
     return handler_input.response_builder.speak(speech).response
@@ -383,6 +390,7 @@ def list_mensas_intent_handler(handler_input):
         session_attr['city_mensas'] = city_mensas
         first_mensas, session_attr['last_idx'] = utility.build_mensa_speech(city_mensas, 0)
         speech = "Ich habe {} Mensen in {} gefunden: {}".format(len(city_mensas), city, first_mensas)
+        speech = utility.convert_acronyms(speech)
         if session_attr['last_idx_mensas'] < len(city_mensas):
             question = "Möchtest du mehr Mensen hören? "
             return handler_input.response_builder.speak(speech+question).ask(question).response
@@ -520,6 +528,7 @@ def get_nearest_mensa_intent_handler(handler_input):
         return handler_input.response_builder.speak(ERROR_PROMPT2).response
 
     nearest_mensa_speech = "Die nächste Mensa ist {} in {}.".format(nearest_mensa_name, nearest_mensa_address)
+    nearest_mensa_speech = utility.convert_acronyms(nearest_mensa_speech)
     return handler_input.response_builder.speak(nearest_mensa_speech).response
 
 
@@ -660,11 +669,12 @@ def next_intent_handler(handler_input):
     # dialogue state for NextIntent in ListMensas
     elif session_attr['next_intent_state'] == 'ListMensas':
         more_mensa_speech, session_attr['last_idx_mensas'] = utility.build_mensa_speech(session_attr['city_mensas'], session_attr['last_idx'])
+        more_mensa_speech = utility.convert_acronyms(more_mensa_speech)
         if session_attr['last_idx_mensas'] < len(session_attr['city_mensas']):
             question = "Möchtest du mehr Mensen hören?"
             return handler_input.response_builder.speak(more_mensa_speech+question).ask(question).response
         else:
-            goodbye = "<say-as interpret-as=\"interjection\">arrivederci</say-as>."
+            goodbye = "<say-as interpret-as=\"interjection\">zum wohl</say-as>."
             return handler_input.response_builder.speak(more_mensa_speech+goodbye).response
 
     # undefined dialogue state

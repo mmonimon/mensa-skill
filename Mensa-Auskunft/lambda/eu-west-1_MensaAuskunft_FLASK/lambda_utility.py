@@ -193,10 +193,10 @@ def build_mensa_speech(mensalist, start_idx):
     for i in range(start_idx, len(mensalist)):
         current_mensa = mensalist[i]
         if i == last_idx:
-            mensalist_string += '{}. '.format(current_mensa)
+            mensalist_string += '{} . '.format(current_mensa)
             break
         if i + 1 == len(mensalist):
-            mensalist_string += '{}. '.format(current_mensa)
+            mensalist_string += '{} . '.format(current_mensa)
         elif i == (len(mensalist) - 2) or i == last_idx - 1:
             mensalist_string += '{} und '.format(current_mensa)
         else:
@@ -554,3 +554,54 @@ def calculate_nearest_mensa(user_coordinates, mensa_list):
             nearest_mensa = mensa
 
     return nearest_mensa['name'], nearest_mensa['address']
+
+# Converts acronyms in a speech output into a form so that Alexa
+# pronounces them letter by letter
+def convert_acronyms(speech):
+    """Konvertiert Akronyme in einem Speech-Output in eine Form, die Alexa zeigt,
+    dass das Akronym nicht als Wort sondern Buchstabe für Buchstabe ausgesprochen
+    werden soll.
+    Diese Funktion ist wichtig, da Alexa ansonsten Universitäten wie \"FU Berlin\" als 
+    [fuː bɛɐˈliːn] aussprechen würde.
+
+    :param speech: Speech-Output als String
+    :type speech: str
+    :return: Gibt einen umgewandelten Speech-String zurück
+    :rtype: str
+    """
+    speech_list = speech.split()
+    for idx, word in enumerate(speech_list):
+        if len(word) > 1:
+            front_index = 0
+            back_index = -1
+            for char in word:
+                if not char.isalpha():
+                    front_index += 1
+                    break
+            for pos, char in enumerate(reversed(word)):
+                if (not char.isalpha()) and ((len(word) - pos - 1) > front_index) :
+                    back_index -= 1
+                    break
+
+            # check if word is an acronym, and that it is not a roman numeral
+            if (word[front_index].isupper() and word[back_index].isupper()) and \
+               (not (word[front_index] == "I" and word[back_index] == "I")):
+
+                # put instruction for Alexa to spell out acronym lette by letter in the right place
+                if back_index == -1:
+                    speech_list[idx] = word[:front_index] + \
+                                       "<say-as interpret-as=\"characters\">" + \
+                                       word[front_index:] + \
+                                       "</say-as>"
+                elif back_index < -1:
+                    speech_list[idx] = word[:front_index] + \
+                                       "<say-as interpret-as=\"characters\">" + \
+                                       word[front_index:back_index+1] + \
+                                       "</say-as>" + \
+                                       word[back_index+1:] 
+                # back_index is bigger than 0, which should be unvalid
+                else:
+                    print("ERROR: back_index has unvalid value")
+                    raise ValueError("back_index has unvalid value bigger than 0")
+
+    return ' '.join(speech_list)
