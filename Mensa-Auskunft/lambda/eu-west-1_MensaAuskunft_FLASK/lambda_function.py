@@ -86,7 +86,7 @@ def details_intent_handler(handler_input):
 
     if 'all_dishes' not in session_attr:
         return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du Details erfahren kannst. ").response
+                bevor du Details erfahren kannst. ").set_should_end_session(True).response
     
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
@@ -123,7 +123,7 @@ def details_intent_handler(handler_input):
     except Exception as e:
         speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-    return handler_input.response_builder.speak(speech).response
+    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
 
 
@@ -184,7 +184,7 @@ def list_dishes_intent_handler(handler_input):
     # Easteregg :P
     if str(ingredients['first']).lower() == 'schlangen' or str(ingredients['second']).lower() == 'schlangen':
         speech = "<say-as interpret-as=\"interjection\">ähm </say-as> <break time=\"0.25s\"/> Herr Schlangen ist nicht zum Verzehr geeignet! "
-        return handler_input.response_builder.speak(speech).response
+        return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
     # set state for AMAZON.NextIntent
     session_attr['next_intent_state'] = "ListDishes"
@@ -277,7 +277,7 @@ def price_intent_handler(handler_input):
     session_attr = handler_input.attributes_manager.session_attributes
     if 'all_dishes' not in session_attr:
         return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du einen Preis erfahren kannst. ").response
+                bevor du einen Preis erfahren kannst. ").set_should_end_session(True).response
     
     # define user group names
     user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studenten']
@@ -314,7 +314,7 @@ def price_intent_handler(handler_input):
         speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
     
-    return handler_input.response_builder.speak(speech).response
+    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
 
 ############## AddressIntent ########################
@@ -349,7 +349,7 @@ def address_intent_handler(handler_input) :
         speech = utility.convert_acronyms(speech)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
     
-    return handler_input.response_builder.speak(speech).response
+    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("ListMensasIntent")(input))
 def list_mensas_intent_handler(handler_input):
@@ -399,7 +399,7 @@ def list_mensas_intent_handler(handler_input):
     else:
         speech = "Leider keine Mensen in {} gefunden.Du kannst eine andere Stadt in Deutschland wählen. ".format(city)
 
-    return handler_input.response_builder.speak(speech).response
+    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
 
 ############## GetNearestMensaIntent ########################
@@ -454,12 +454,14 @@ def get_nearest_mensa_intent_handler(handler_input):
                     
                     # location is turned on -> something else must have gone wrong
                     print("ERROR: Cannot get location although turned on and permission available.")
+                    handler_input.response_builder.set_should_end_session(True)
                     return handler_input.response_builder.speak("Oh je. Es scheint, als hätte ich zurzeit Probleme, \
                             deinen Standort ausfindig zu machen. Bitte versuche es später noch einmal. ").response
 
                 # location sharing is turned off on user's device -> ask to turn on
                 else:
                     print("Location sharing is turned off on device.")
+                    handler_input.response_builder.set_should_end_session(True)
                     return handler_input.response_builder.speak("Ich kann nicht auf deinen Standort zugreifen. \
                             Bitte gehe in die Einstellungen deines Geräts und erlaube das Teilen deines Standorts. ").response
 
@@ -469,6 +471,7 @@ def get_nearest_mensa_intent_handler(handler_input):
                 handler_input.response_builder.speak("Um die nächste Mensa zu finden, benötige ich Deinen Standort. \
                                                     Bitte öffne die Alexa-App, um deinen Standort mit mir zu teilen. ")
                 handler_input.response_builder.set_card(AskForPermissionsConsentCard(permissions=['alexa::devices:all:geolocation:read']))
+                handler_input.response_builder.set_should_end_session(True)
                 return handler_input.response_builder.response
 
     # if not mobile device, check if user has permitted to use their address
@@ -491,23 +494,25 @@ def get_nearest_mensa_intent_handler(handler_input):
                 handler_input.response_builder.speak("Um die nächste Mensa zu finden, benötige ich Deine Adresse. \
                                                     Bitte öffne die Alexa-App, um deine Adresse mit mir zu teilen. ")
                 handler_input.response_builder.set_card(AskForPermissionsConsentCard(permissions=['read::alexa:device:all:address']))
+                handler_input.response_builder.set_should_end_session(True)
                 return handler_input.response_builder.response
             # some error ocurred while trying to retrieve user's address
             else:
                 print("ERROR: Alexa has permission but still can't get user's address.")
                 print(e)
-                return handler_input.response_builder.speak(ERROR_PROMPT2).response
+                return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
         # user has permitted to use their address, but hasn't filled in address information -> ask to fill in
         except ValueError as e:
             print("Alexa has permission to get user address, but there is no address information.")
             print(e)
+            handler_input.response_builder.set_should_end_session(True)
             return handler_input.response_builder.speak("Um die nächste Mensa für Dich zu finden, benötige ich Deine Adresse. \
                     Bitte füge sie in der Alexa-App hinzu. ").response
         # some error ocurred while trying to retrieve user's address
         except Exception as e:
             print("ERROR: Alexa has permission but still can't get user's address.")
             print(e)
-            return handler_input.response_builder.speak(ERROR_PROMPT2).response
+            return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
 
         # get coordinates of user's address using nominatim api
         address_string = "{},{},{},{}".format(address['addressLine1'], address['postalCode'], address['city'], address['countryCode'])
@@ -518,18 +523,18 @@ def get_nearest_mensa_intent_handler(handler_input):
             print("User Coordinates:", user_coordinates)
         except Exception as e:
             print(e)
-            return handler_input.response_builder.speak(ERROR_PROMPT2).response
+            return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
 
     # calculate nearest mensa with haversine formula (airline distance)
     try:
        nearest_mensa_name, nearest_mensa_address = utility.calculate_nearest_mensa(user_coordinates, all_mensas)
     except Exception as e:
         print(e)
-        return handler_input.response_builder.speak(ERROR_PROMPT2).response
+        return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
 
     nearest_mensa_speech = "Die nächste Mensa ist {} in {}.".format(nearest_mensa_name, nearest_mensa_address)
     nearest_mensa_speech = utility.convert_acronyms(nearest_mensa_speech)
-    return handler_input.response_builder.speak(nearest_mensa_speech).response
+    return handler_input.response_builder.speak(nearest_mensa_speech).set_should_end_session(True).response
 
 
 ################################################
@@ -652,7 +657,7 @@ def next_intent_handler(handler_input):
     # if dialogue state for NextIntent not set, unvalid intent
     if 'next_intent_state' not in session_attr:
         speech = "Du musst zuerst eine Suche starten, bevor du weitere Gerichte oder Mensen hören kanst. "
-        return handler_input.response_builder.speak(speech).response
+        return handler_input.response_builder.speak(speech).set_should_end_session(True).response
     
     # dialogue state for NextIntent in ListDishes
     if session_attr['next_intent_state'] == 'ListDishes':
@@ -675,13 +680,13 @@ def next_intent_handler(handler_input):
             return handler_input.response_builder.speak(more_mensa_speech+question).ask(question).response
         else:
             goodbye = "<say-as interpret-as=\"interjection\">zum wohl</say-as>."
-            return handler_input.response_builder.speak(more_mensa_speech+goodbye).response
+            return handler_input.response_builder.speak(more_mensa_speech+goodbye).set_should_end_session(True).response
 
     # undefined dialogue state
     else:
         print("Undefined Dialogue State {} in NextIntent".format(session_attributes['next_intent_state']))
         speech = "Du musst zuerst eine Suche starten, bevor du weitere Gerichte oder Mensen hören kanst. "
-        return handler_input.response_builder.speak(speech).response
+        return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
 
 ## AMAZON.HelpIntent
@@ -707,7 +712,7 @@ def help_intent_handler(handler_input):
             Alexa, Gib mir den Tagesplan von Mensaauskunft. \
             Alexa, Suche ein Gericht ohne Fleisch für morgen in der Mensa Golm mit Mensaauskunft. \
             Alexa, Frag Mensaauskunft Golm, was es morgen zu essen gibt."
-    return handler_input.response_builder.speak(speech).response
+    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
 ## AMAZON.StopIntent
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.CancelIntent")(input) or
@@ -742,7 +747,7 @@ def session_ended_request_handler(handler_input):
     # type: (HandlerInput) -> Response
     print("In SessionEndedRequestHandler")
     print("Session ended with reason: {}".format(handler_input.request_envelope.request.reason))
-    return handler_input.response_builder.response
+    return handler_input.response_builder.set_should_end_session(True).response
 
 
 ## AMAZON.FallbackIntent
@@ -776,7 +781,7 @@ def all_exception_handler(handler_input, exception):
 
     # type: (HandlerInput, Exception) -> Response
     logger.error(exception, exc_info=True)
-    return handler_input.response_builder.speak(ERROR_PROMPT).response
+    return handler_input.response_builder.speak(ERROR_PROMPT).set_should_end_session(True).response
 
 ## Unhandled handler
 @sb.request_handler(can_handle_func=lambda input: True)
@@ -792,7 +797,7 @@ def unhandled_intent_handler(handler_input):
     """
 
     # type: (HandlerInput) -> Response
-    return handler_input.response_builder.speak(ERROR_PROMPT).response
+    return handler_input.response_builder.speak(ERROR_PROMPT).set_should_end_session(True).response
 
 lambda_handler = sb.lambda_handler()
 
