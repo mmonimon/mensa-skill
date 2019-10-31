@@ -91,6 +91,7 @@ ask_sdk_dynamodb_persistence_adapter-1.11.0.dist-info/
 ask_sdk_model-1.13.0.dist-info/
 boto3-1.9.183.dist-info/
 boto3-1.10.2.dist-info/
+boto3-1.10.6.dist-info/
 boto3/
 botocore-1.12.183.dist-info/
 botocore-1.13.2.dist-info/
@@ -109,6 +110,7 @@ boto3-1.9.188.dist-info/
 boto3-1.10.3.dist-info/
 botocore-1.12.188.dist-info/
 botocore-1.13.3.dist-info/
+botocore-1.13.6.dist-info/
 haversine-2.1.2.dist-info/
 haversine/
 
