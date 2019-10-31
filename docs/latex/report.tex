@@ -2,6 +2,7 @@
 
 % XeLaTeX
 \usepackage{fontspec}
+\usepackage{hyperref}
 \usepackage[german]{babel}
 % images
 \usepackage{graphicx}
@@ -488,7 +489,26 @@ Daher könnte man sich überlegen, diese nicht weiter auszubauen oder über die 
 Außerdem könnte man bei der Entwicklung neuer Funktionalitäten auch beachten, dass die meisten Probanden eher unerfahren mit Sprachassistenten waren und sich mehr Hilfe während der Unterhaltung mit dem Skill wünschen.
 
 \subsection{Ausblick \& Verbesserungsmöglichkeiten}
-TO-DO
+
+Während der aktiven Arbeit an dem Projekt und dank des Feedbacks unserer Tester sind uns viele Verbesserungsmöglichkeiten aufgefallen, die in diesem Abschnitt zusammengefasst werden sollen. Aktuelle Ideen werden außerdem in unserem Github-Repository im "Issues"-Abschnitt festgehalten: \href{https://github.com/mmonimon/mensa-skill/issues}{Github-Issues}
+
+Verbesserungen können insbesondere im Bereich des Chunkings und in den Prompts festgestellt werden. Sicherlich könnte das Chunking dahingehend verbessert werden, sodass mehrere unregelmäßige Fälle bei den Gerichtsnamen abgefangen werden. Darüber hinaus soll das Chunking künftig auch für einen neuen Details- und PriceIntent relevant werden, damit User auch nach Gerichtnamen fragen können und sich nicht die Gerichtnummer merken müssen. Das Chunking könnte auch insofern mehr eingrenzen, dass Gerichte mit demselben Kopf zusammengefasst werden. 
+Beispiel:
+Gericht 1: "Gulasch (...) mit Sojastreifen"
+Gericht 2: "Gulasch (...) mit Rinderfleisch"
+Gericht 1 ∩ 2: "Gulasch"
+
+Der DetailsIntent könnte dann dazu dienen, den User nicht nur über ein einziges Gericht detailliert zu informieren, sondern beide Gerichte zu inkludieren. Ein möglicher Prompt wäre dann "Es gibt zwei verschiedene Gerichte mit Gulasch: 1. Gulasch (...) mit Sojastreifen und 2. Gulasch (...) mit Rinderfleisch. [...]. Über welches Gericht möchtest du mehr erfahren?". Da diese Möglichkeit jedoch die Listen mit den Gerichten verkürzen würde und Gerichte in der ursprünglichen Liste somit nicht mehr eindeutig einem Index zugeordnet werden könnte, haben wir auf diese Möglichkeit der Erweiterung vorerst verzichtet.
+
+Darüber hinaus stehen einige neue Intents in Planung, auf die für die erste Version des Skills verzichtet wurde, da zunächst die Funktionalität der existierenden Intents sichergestellt werden sollte. Folgende Intents befinden sich derzeit auf unserer To-Do-Liste:
+
+- PriceRangeIntent: Gibt Gerichte innerhalb einer bestimmten Preisspanne aus.
+- IsOpenIntent: Je nach Tageszeit bzw. für einen bestimmten Tag/Zeit, wird darüber informiert, ob die Mensa geöffnet ist oder nicht.
+- IsFullIntent: Informiert darüber, wie voll die gewählte Mensa zur Zeit der Anfrage ist. => Nicht durch API erfragbar.
+
+Weitere Verbesserungen finden sich zudem im Bereich der Benutzerfreundlichkeit. Mithilfe von den zuvor erwähnten Persist Attributes könnten individuelle Vorschläge für die User generiert und Präferenzen gespeichert werden. Auf diese haben wir aufgrund der Kosten für DynamoDB jedoch zunächst verzichtet.
+
+Zuletzt konnten einige Verbesserungsvorschläge von den Probanden, die sich auf die Prompts des Skills beziehen, umgesetzt werden. Dazu gehört die Nutzung von genderneutralen Nomina (z.B. "Studierende" statt "Studenten") und die Verkürzung des Help-Prompts. Wenn wir das Evaluationsverfahren noch verbessern und mehr Probanden finden können, werden wir sicherlich noch weitere nützliche Verbesserungsvorschläge erhalten.
 
 \newpage
 \addcontentsline{toc}{section}{Anhang: Dokumentation des Backends}
