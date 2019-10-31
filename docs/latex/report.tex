@@ -249,6 +249,8 @@ Wann? Jederzeit, wann immer der User in der Mensa essen möchte.\\~\\
 --- SKILL SCHLIEßT SICH ---\\
 \end{quote}
 
+\newpage
+
 \ul{Situation 1.3:}\\Die Mensa wurde nicht richtig verstanden (ASR Error) oder ist nicht in der Datenbank.
 
 \begin{quote}
@@ -315,6 +317,7 @@ Wann? Höchstwahrscheinlich nur ein Mal, wenn der User wissen möchte, welche Me
 \subsubsection{Beispieldialoge: Die Adresse einer Mensa erfahren}
 Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen anderer Mensen gesucht werden.\\
 
+\newpage
 \textbf{Szenario 3: Benutzer möchte die Adresse einer Mensa erfahren.}\\
 \ul{Situation 3.1:}\\Die Adresse der Mensa kann gefunden werden, sie ist also in der Datenbank vorhanden.
 \begin{quote}
@@ -360,10 +363,10 @@ Jedem Teammitglied wurde ein Aufgabenbereich zugeteilt, für den er oder sie zus
 Die Aufteilung der Intents im Team war wie folgt:
 \begin{itemize}
   \setlength\itemsep{0em}
-  \item Bogdan: IngredientIntent, GetNearestMensaIntent, WithoutIntent, ListDishesIntent(+WithoutIntent), NextIntent
-  \item Olha: AddressIntent, Chunking
-  \item Maria: ListMensasIntent, Chunking
-  \item Monique: ListDishesIntent, PriceIntent, DetailsIntent, NextIntent, NoIntent
+  \item \textbf{Bogdan:} IngredientIntent, GetNearestMensaIntent, WithoutIntent, ListDishesIntent(+WithoutIntent), NextIntent
+  \item \textbf{Olha:} AddressIntent, Chunking
+  \item \textbf{Maria:} ListMensasIntent, Chunking
+  \item \textbf{Monique:} ListDishesIntent, PriceIntent, DetailsIntent, NextIntent, NoIntent
 \end{itemize}
 
 Neben dem Erstellen des Codes für das Backend der Intents sollte sich auch um die jeweiligen \emph{sample utterances}, das Testen sowie das Dokumentieren des jeweiligen Intents gekümmert werden.
@@ -431,7 +434,7 @@ Diese Praktik hat sicher gestellt, dass der Code auch bei Änderungen einwandfre
 Dieser Skill verwendet insgesamt 13 Intents, davon sind sechs Intents \emph{Custom Intents} sowie sieben Intents \emph{Built-In Intents}, die von Amazon zur Verfügung gestellt werden und teilweise von uns mit eigenen \emph{sample utterances} erweitert wurden. 
 Außerdem benutzt der Skill acht verschiedene Slot-Types, von denen vier zu den \emph{Amazon Built-In Slots} gehören.
 
-\begin{figure}[ht]
+\begin{figure}[h]
 \center
 \includegraphics[width=\textwidth]{intent-order.png}
 \caption{Intentabfolge von gelungenen Dialogen mit dem Skill}
@@ -446,7 +449,7 @@ Diese Dokumentation wurde mithilfe des Tools \emph{Sphinx} aus den Docstrings ex
 
 \section{Evaluation \& Projektabschluss}
 \subsection{Versuchsanordnung: Probanden \& Fragebogen}
-Für die Evaluation des Skills wurde ein Fragebogen bei Google Forms für die Probanden erstellt; diesen kann man unter \texttt{docs} als \texttt{Alexa Skill/Mensa-Auskunft\_Form.pdf} finden. Die Fragen wurden in Hinsicht auf folgende Punkte konzipiert:
+Für die Evaluation des Skills wurde ein Fragebogen bei Google Forms für die Probanden erstellt; diesen kann man unter \texttt{docs} als \texttt{Alexa Skill/Mensa-\\Auskunft\_Form.pdf} finden. Die Fragen wurden in Hinsicht auf folgende Punkte konzipiert:
 
 \begin{itemize}
 \setlength\itemsep{0em}
@@ -488,27 +491,47 @@ Die Ergebnisse der Umfrage zeigen auch, dass manche Funktionen eher wenig benutz
 Daher könnte man sich überlegen, diese nicht weiter auszubauen oder über die Möglichkeit der Benutzung dieser Funktionen den User mehr zu informieren.
 Außerdem könnte man bei der Entwicklung neuer Funktionalitäten auch beachten, dass die meisten Probanden eher unerfahren mit Sprachassistenten waren und sich mehr Hilfe während der Unterhaltung mit dem Skill wünschen.
 
+\newpage
 \subsection{Ausblick \& Verbesserungsmöglichkeiten}
 
-Während der aktiven Arbeit an dem Projekt und dank des Feedbacks unserer Tester sind uns viele Verbesserungsmöglichkeiten aufgefallen, die in diesem Abschnitt zusammengefasst werden sollen. Aktuelle Ideen werden außerdem in unserem Github-Repository im "Issues"-Abschnitt festgehalten: \href{https://github.com/mmonimon/mensa-skill/issues}{Github-Issues}
+Während der aktiven Arbeit an dem Projekt und dank des Feedbacks unserer Tester sind uns viele Verbesserungsmöglichkeiten aufgefallen, die in diesem Abschnitt zusammengefasst werden sollen.
+Aktuelle Ideen werden außerdem in unserem Github-Repository im “Issues”-Abschnitt festgehalten: \href{https://github.com/mmonimon/mensa-skill/issues}{\texttt{Github-Issues}}
 
-Verbesserungen können insbesondere im Bereich des Chunkings und in den Prompts festgestellt werden. Sicherlich könnte das Chunking dahingehend verbessert werden, sodass mehrere unregelmäßige Fälle bei den Gerichtsnamen abgefangen werden. Darüber hinaus soll das Chunking künftig auch für einen neuen Details- und PriceIntent relevant werden, damit User auch nach Gerichtnamen fragen können und sich nicht die Gerichtnummer merken müssen. Das Chunking könnte auch insofern mehr eingrenzen, dass Gerichte mit demselben Kopf zusammengefasst werden. 
+Verbesserungen können insbesondere im Bereich des Chunkings und in den Prompts festgestellt werden.
+Sicherlich könnte das Chunking dahingehend verbessert werden, sodass mehrere unregelmäßige Fälle bei den Gerichtsnamen abgefangen werden.
+Darüber hinaus soll das Chunking künftig auch für einen neuen Details- und PriceIntent relevant werden, damit User auch nach Gerichtsnamen fragen können und sich nicht die Gerichtsnummer merken müssen.
+Das Chunking könnte auch insofern mehr eingrenzen, dass Gerichte mit demselben Kopf zusammengefasst werden. 
 Beispiel:
-Gericht 1: "Gulasch (...) mit Sojastreifen"
-Gericht 2: "Gulasch (...) mit Rinderfleisch"
-Gericht 1 ∩ 2: "Gulasch"
+\newline
+~\\
+\begin{tabular}{rl}
+	Gericht 1:& “Gulasch (...) mit Sojastreifen” \\
+	Gericht2:& “Gulasch (...) mit Rinderfleisch” \\
+	Gericht 1 $\cap$ 2:& “Gulasch” \\
+\end{tabular}
+~\\
+\newline
+Der DetailsIntent könnte dann dazu dienen, den User nicht nur über ein einziges Gericht detailliert zu informieren, sondern beide Gerichte zusammenzufassen.
+Ein möglicher Prompt wäre dann: \begin{quote}\emph{“Es gibt zwei verschiedene Gerichte mit Gulasch: 1. Gulasch (...) mit Sojastreifen und 2. Gulasch (...) mit Rinderfleisch. [...]. Über welches Gericht möchtest du mehr erfahren?”}\end{quote}
+Da diese Möglichkeit jedoch die Listen mit den Gerichten verkürzen würde und Gerichte in der ursprünglichen Liste somit nicht mehr eindeutig einem Index zugeordnet werden könnten, haben wir auf diese Möglichkeit der Erweiterung vorerst verzichtet.
 
-Der DetailsIntent könnte dann dazu dienen, den User nicht nur über ein einziges Gericht detailliert zu informieren, sondern beide Gerichte zu inkludieren. Ein möglicher Prompt wäre dann "Es gibt zwei verschiedene Gerichte mit Gulasch: 1. Gulasch (...) mit Sojastreifen und 2. Gulasch (...) mit Rinderfleisch. [...]. Über welches Gericht möchtest du mehr erfahren?". Da diese Möglichkeit jedoch die Listen mit den Gerichten verkürzen würde und Gerichte in der ursprünglichen Liste somit nicht mehr eindeutig einem Index zugeordnet werden könnte, haben wir auf diese Möglichkeit der Erweiterung vorerst verzichtet.
+Darüber hinaus stehen einige neue Intents in Planung, auf die für die erste Version des Skills verzichtet wurde, da zunächst die Funktionalität der existierenden Intents sichergestellt werden sollte.
+Folgende Intents befinden sich derzeit auf unserer To-Do-Liste:
 
-Darüber hinaus stehen einige neue Intents in Planung, auf die für die erste Version des Skills verzichtet wurde, da zunächst die Funktionalität der existierenden Intents sichergestellt werden sollte. Folgende Intents befinden sich derzeit auf unserer To-Do-Liste:
+\begin{itemize}
+\setlength\itemsep{0em}
+	\item \textbf{PriceRangeIntent:} Gibt Gerichte innerhalb einer bestimmten Preisspanne aus.
+	\item \textbf{IsOpenIntent:} Je nach Tageszeit bzw. für einen bestimmten Tag/Zeit, wird darüber informiert, ob die Mensa geöffnet ist oder nicht.
+	\item \textbf{IsFullIntent:} Informiert darüber, wie voll die gewählte Mensa zur Zeit der Anfrage ist. => Nicht durch API erfragbar.
+\end{itemize}
 
-- PriceRangeIntent: Gibt Gerichte innerhalb einer bestimmten Preisspanne aus.
-- IsOpenIntent: Je nach Tageszeit bzw. für einen bestimmten Tag/Zeit, wird darüber informiert, ob die Mensa geöffnet ist oder nicht.
-- IsFullIntent: Informiert darüber, wie voll die gewählte Mensa zur Zeit der Anfrage ist. => Nicht durch API erfragbar.
+Weitere Verbesserungen finden sich zudem im Bereich der Benutzerfreundlichkeit.
+Mithilfe der zuvor erwähnten Persist Attributes könnten individuelle Vorschläge für die User generiert und Präferenzen gespeichert werden.
+Auf diese haben wir aufgrund der Kosten für DynamoDB jedoch zunächst verzichtet.
 
-Weitere Verbesserungen finden sich zudem im Bereich der Benutzerfreundlichkeit. Mithilfe von den zuvor erwähnten Persist Attributes könnten individuelle Vorschläge für die User generiert und Präferenzen gespeichert werden. Auf diese haben wir aufgrund der Kosten für DynamoDB jedoch zunächst verzichtet.
-
-Zuletzt konnten einige Verbesserungsvorschläge von den Probanden, die sich auf die Prompts des Skills beziehen, umgesetzt werden. Dazu gehört die Nutzung von genderneutralen Nomina (z.B. "Studierende" statt "Studenten") und die Verkürzung des Help-Prompts. Wenn wir das Evaluationsverfahren noch verbessern und mehr Probanden finden können, werden wir sicherlich noch weitere nützliche Verbesserungsvorschläge erhalten.
+Zuletzt konnten einige Verbesserungsvorschläge von den Probanden, die sich auf die Prompts des Skills beziehen, umgesetzt werden.
+Dazu gehört die Nutzung von genderneutralen Nomina (z.B. “Studierende” statt “Studenten”) und die Verkürzung des Help-Prompts.
+Wenn wir das Evaluationsverfahren noch verbessern und mehr Probanden finden können, werden wir sicherlich noch weitere nützliche Verbesserungsvorschläge erhalten.
 
 \newpage
 \addcontentsline{toc}{section}{Anhang: Dokumentation des Backends}
