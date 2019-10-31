@@ -216,10 +216,10 @@ Die Adresse der Mensa kann erneut erfragt werden oder es kann auch nach Adressen
 Das Team setzt sich aus vier Personen zusammen: Monique Noss, Bogdan Kostić, Maria Lomaeva und Olha Zolotarenko. 
 Jedem Teammitglied wurde ein Aufgabenbereich zugeteilt, für den er oder sie zuständig war. Die Aufteilung der Intents im Team war wie folgt:
 
-* Bogdan: IngredientIntent, GetNearestMensaIntent, WithoutIntent, ListDishesIntent(+WithoutIntent), NextIntent
-* Olha: AddressIntent, Chunking
-* Maria: ListMensasIntent, Chunking
-* Monique: ListDishesIntent, PriceIntent, DetailsIntent, NextIntent, NoIntent
+* **Bogdan:** IngredientIntent, GetNearestMensaIntent, WithoutIntent, ListDishesIntent(+WithoutIntent), NextIntent
+* **Olha:** AddressIntent, Chunking
+* **Maria:** ListMensasIntent, Chunking
+* **Monique:** ListDishesIntent, PriceIntent, DetailsIntent, NextIntent, NoIntent
 
 Neben dem Erstellen des Codes für das Backend der Intents sollte sich auch um die jeweiligen \emph{sample utterances}, das Testen sowie das Dokumentieren des jeweiligen Intents gekümmert werden. Die Koordination der verschiedenen Bestandteile des Skills im Code hat Monique Noss übernommen.
 
@@ -315,9 +315,9 @@ Darüber hinaus soll das Chunking künftig auch für einen neuen Details- und Pr
 Das Chunking könnte auch insofern mehr eingrenzen, dass Gerichte mit demselben Kopf zusammengefasst werden. 
 
 Beispiel:
-> Gericht 1: "Gulasch (...) mit Sojastreifen"
-> Gericht 2: "Gulasch (...) mit Rinderfleisch"
-> Gericht 1 ∩ 2: "Gulasch"
+> Gericht 1: "Gulasch (...) mit Sojastreifen"  
+> Gericht 2: "Gulasch (...) mit Rinderfleisch"  
+> Gericht 1 ∩ 2: "Gulasch"  
 
 Der DetailsIntent könnte dann dazu dienen, den User nicht nur über ein einziges Gericht detailliert zu informieren, sondern beide Gerichte zu inkludieren.
 Ein möglicher Prompt wäre dann _"Es gibt zwei verschiedene Gerichte mit Gulasch: 1. Gulasch (...) mit Sojastreifen und 2. Gulasch (...) mit Rinderfleisch. [...]. Über welches Gericht möchtest du mehr erfahren?"_.
