@@ -307,7 +307,7 @@ Man kann also schlussfolgern, dass der Skill allgemein schon gut funktioniert. E
 
 ### Ausblick & Verbesserungsmöglichkeiten
 Während der aktiven Arbeit an dem Projekt und dank des Feedbacks unserer Tester sind uns viele Verbesserungsmöglichkeiten aufgefallen, die in diesem Abschnitt zusammengefasst werden sollen.
-Aktuelle Ideen werden außerdem in unserem Github-Repository im "Issues"-Abschnitt festgehalten:[Github-Issues](https://github.com/mmonimon/mensa-skill/issues)
+Aktuelle Ideen werden außerdem in unserem Github-Repository im "Issues"-Abschnitt festgehalten: [Github-Issues](https://github.com/mmonimon/mensa-skill/issues)
 
 Verbesserungen können insbesondere im Bereich des Chunkings und in den Prompts festgestellt werden.
 Sicherlich könnte das Chunking dahingehend verbessert werden, sodass mehrere unregelmäßige Fälle bei den Gerichtsnamen abgefangen werden.
