@@ -428,6 +428,10 @@ def get_nearest_mensa_intent_handler(handler_input):
     weil z.B. kein GPS-Signal verfügbar ist, werden je nach Errortype unterschiedliche Fehlermeldungen 
     ausgegeben.
 
+    Es kann vorkommen, dass die NominatimAPI (z.B. weil sie gerade sehr ausgelastet ist) zu lange braucht,
+    um die Anfrage des Skills nach den Koordinaten des Nutzers zu beantworten. Ist dies der Fall, so springt
+    der Skill in den SessionEndedRequestHandler.
+
     :param handler_input: HandlerInput
     :type handler_input: (HandlerInput) -> Response
     :return: Gibt die vollständige Skill-Antwort zurück
