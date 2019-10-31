@@ -255,7 +255,10 @@ Zu den Requirements gehören:
 `haversine` ist eine Bibliothek, die die Distanz zwischen zwei Punkten auf der Erde mithilfe der Latitüde und Longitüde kalkuliert. Diese wird benötigt, um die nächste Mensa in der Nähe des Benutzerstandortes zu finden.
 
 #### 4.2 Tests
-Getestet wurde der Skill mithilfe von *Flask* und *ngrok* lokal auf unseren eigenen Rechnern, um Status- und Fehlermeldungen angezeigt bekommen zu können, sodass sie direkt nachvollzogen werden konnten. 
+Getestet wurde der Skill mithilfe von *Flask* und *ngrok* lokal auf unseren eigenen Rechnern, um Status- und Fehlermeldungen angezeigt bekommen zu können, sodass sie direkt nachvollzogen werden konnten.
+Hat einer der Gruppenmitglieder etwas am Code verändert, so musste dieses Gruppenmitglied einen _Pull Request_ auf Github eröffnen.
+Damit diese Modifikation dann in den finalen Code übernommen wird, musste ein anderes Mitglied diese Änderungen sichten und testen.
+Diese Praktik hat sicher gestellt, dass der Code auch bei Änderungen einwandfrei funktioniert, da diese von mindestens zwei Personen nachvollzogen und getestet werden mussten.
 
 ### Intents
 Dieser Skill verwendet insgesamt 13 Intents, davon sind sechs Intents _Custom Intents_ sowie sieben Intents _Built-In Intents_, die von Amazon zur Verfügung gestellt werden und teilweise von uns mit eigenen _sample utterances_ erweitert wurden. 
