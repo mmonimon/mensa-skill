@@ -682,7 +682,7 @@ def next_intent_handler(handler_input):
             question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
                     Sag zum Beispiel: \
                     Details. \
-                    oder: Wie viel kostet Gericht Nummer 2 für Studenten. '
+                    oder: Wie viel kostet Gericht Nummer 2 für Studierende. '
         return handler_input.response_builder.speak(more_dish_speech+question).ask(question).response
 
     # dialogue state for NextIntent in ListMensas
@@ -698,7 +698,7 @@ def next_intent_handler(handler_input):
 
     # undefined dialogue state
     else:
-        print("Undefined Dialogue State {} in NextIntent".format(session_attributes['next_intent_state']))
+        print("Undefined Dialogue State {} in NextIntent".format(session_attr['next_intent_state']))
         speech = "Du musst zuerst eine Suche starten, bevor du weitere Gerichte oder Mensen hören kanst. "
         return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
