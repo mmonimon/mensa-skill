@@ -6976,9 +6976,9 @@
                         {
                             "id": "students",
                             "name": {
-                                "value": "studierende",
+                                "value": "studenten",
                                 "synonyms": [
-                                    "studenten",
+                                    "studierende",
                                     "studierender",
                                     "studentin",
                                     "student"
