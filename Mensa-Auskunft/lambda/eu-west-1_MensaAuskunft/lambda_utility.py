@@ -96,7 +96,7 @@ def chunking(meal):
         ind = dish.index(first_prep_found)
         first_noun_ind = next(i for i in range(ind, len(dish)) if dish[i][0].isupper())
         cut_dish = dish[:ind] + dish[ind:first_noun_ind + 1]
-        print(cut_dish)
+        # print(cut_dish)
         if first_noun_ind != len(dish)-1 and dish[first_noun_ind][-1] != ',':
             if dish[first_noun_ind+1][0].isupper():
                 cut_dish = dish[:ind] + dish[ind:first_noun_ind + 2]
