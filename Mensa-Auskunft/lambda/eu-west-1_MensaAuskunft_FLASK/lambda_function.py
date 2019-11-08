@@ -101,7 +101,7 @@ def details_intent_handler(handler_input):
 
     if 'all_dishes' not in session_attr:
         return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du Details erfahren kannst. ").set_should_end_session(True).response
+                bevor du Details über ein Gericht erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
     
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
