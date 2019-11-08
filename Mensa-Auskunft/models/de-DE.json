@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "mensaauskunft",
+            "invocationName": "mensa auskunft",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -14,13 +14,13 @@
                 {
                     "name": "AMAZON.StopIntent",
                     "samples": [
-                        "mensaauskunft stoppen",
-                        "stoppe mensaauskunft",
-                        "mensaauskunft abbrechen",
-                        "mensaauskunft beenden",
-                        "mach mensaauskunft zu",
-                        "schließ mensaauskunft",
-                        "beende mensaauskunft"
+                        "mensa auskunft stoppen",
+                        "stoppe mensa auskunft",
+                        "mensa auskunft abbrechen",
+                        "mensa auskunft beenden",
+                        "mach mensa auskunft zu",
+                        "schließ mensa auskunft",
+                        "beende mensa auskunft"
                     ]
                 },
                 {
@@ -383,7 +383,20 @@
                 },
                 {
                     "name": "AMAZON.FallbackIntent",
-                    "samples": []
+                    "samples": [
+                        "spiel lady gaga",
+                        "geh für mich arbeiten",
+                        "sing mir ein lied",
+                        "ruf papa an",
+                        "spiel mit mir",
+                        "mach helene fischer an",
+                        "spiel schlager",
+                        "mach musik an",
+                        "ich hasse dich",
+                        "wie spät ist es",
+                        "wie ist der verkehr",
+                        "du bist doof"
+                    ]
                 },
                 {
                     "name": "AMAZON.NavigateHomeIntent",
@@ -1214,7 +1227,7 @@
                         "weitere mensen",
                         "weitere mensas vorlesen",
                         "weiter mensen vorlesen",
-                        "ja",
+                        "ja mehr",
                         "weitere gerichte vorlesen",
                         "mehr gerichte",
                         "lies mir weitere gerichte vor",
@@ -1226,6 +1239,10 @@
                         "mehr",
                         "weiter"
                     ]
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
                 }
             ],
             "types": [
@@ -1317,8 +1334,6 @@
                                     "p. z. h. hannover",
                                     "hannover p. z. h.",
                                     "mensa p. z. h.",
-                                    "hannover pzh",
-                                    "pzh hannover",
                                     "produktionstechnisches zentrum",
                                     "mensa produktionstechnisches zentrum"
                                 ]
@@ -1360,10 +1375,7 @@
                                     "h. m. t. m. h.",
                                     "medienhochschule hannover",
                                     "hochschule für musik theater und medien",
-                                    "musikhochschule hannover",
-                                    "hannover hmtmh",
-                                    "hmtmh hannover",
-                                    "hmtmh"
+                                    "musikhochschule hannover"
                                 ]
                             }
                         },
@@ -7397,7 +7409,13 @@
                             "elicitationRequired": true,
                             "prompts": {
                                 "elicitation": "Elicit.Slot.661953623319.1316003562014"
-                            }
+                            },
+                            "validations": [
+                                {
+                                    "type": "hasEntityResolutionMatch",
+                                    "prompt": "Slot.Validation.277258041227.668282365235.1046627696060"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -7422,7 +7440,13 @@
                             "elicitationRequired": true,
                             "prompts": {
                                 "elicitation": "Elicit.Slot.1064646129460.1106937306601"
-                            }
+                            },
+                            "validations": [
+                                {
+                                    "type": "hasEntityResolutionMatch",
+                                    "prompt": "Slot.Validation.1180314102272.1115247818267.651227697851"
+                                }
+                            ]
                         },
                         {
                             "name": "first_ingredient",
@@ -7648,6 +7672,32 @@
                     {
                         "type": "PlainText",
                         "value": "Welche Gerichtnummer?"
+                    }
+                ]
+            },
+            {
+                "id": "Slot.Validation.1180314102272.1115247818267.651227697851",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Sorry, ich hab den Mensanamen nicht verstanden, kannst du das bitte wiederholen?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Sorry, wie war der Name der Mensa?"
+                    }
+                ]
+            },
+            {
+                "id": "Slot.Validation.277258041227.668282365235.1046627696060",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Bitte wiederhole den Mensanamen."
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Entschuldige, wie ist der Name der Mensa?"
                     }
                 ]
             }

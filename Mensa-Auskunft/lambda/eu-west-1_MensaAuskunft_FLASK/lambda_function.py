@@ -51,6 +51,11 @@ HELP_SAMPLES = [
     "Alexa, Suche ein Gericht ohne Fleisch für morgen in der Mensa Golm mit Mensaauskunft. ",
     "Alexa, Frag Mensaauskunft Golm, was es morgen zu essen gibt. "
 ]
+REPROMPTS = [
+    "Möchtest du eine neue Suche starten? ",
+    "Bitte starte eine neue Suche oder sage STOP. ",
+    "Kann ich dir sonst noch weiterhelfen? "
+]
 
 ##################################################
 # Request Handler classes ########################
@@ -120,10 +125,10 @@ def details_intent_handler(handler_input):
             if price == None:
                 continue
             speech += utility.build_price_speech(price, user_groups_de[i])
-        speech += '. Es gehört zur Kategorie: {} und enthält bzw. ist, '.format(dish_cat)
+        speech += '. Es gehört zur Kategorie: {} und enthält '.format(dish_cat)
         for i in range(len(dish_notes)):
             if i == len(dish_notes)-2:
-                speech += dish_notes[i] + 'und '
+                speech += dish_notes[i] + ' und '
             else:
                 speech += dish_notes[i] + ', '
         speech += '. '
@@ -133,6 +138,7 @@ def details_intent_handler(handler_input):
     except Exception as e:
         speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+        return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
     return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
 
@@ -202,7 +208,7 @@ def list_dishes_intent_handler(handler_input):
     # Mensa does not exist => return error prompt
     if session_attr['mensa_id'] is None:
         speech = "Sorry, Essenspläne für {} habe ich leider nicht im Angebot. ".format(session_attr['mensa_name'])
-        return handler_input.response_builder.speak(speech).set_should_end_session(True).response
+        return handler_input.response_builder.speak(speech+utility.random_phrase(REPROMPTS)).ask(utility.random_phrase(REPROMPTS)).response
 
     # # saving session attributes to persistent attributes
     # #handler_input.attributes_manager.persistent_attributes = session_attr
@@ -219,26 +225,24 @@ def list_dishes_intent_handler(handler_input):
         api_response = utility.http_get(mensa_url)
     # No dishes found for requested date or API is down 
     except Exception as e:
-        speech = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. ".format(session_attr['current_date'], session_attr['mensa_name'])
+        speech = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. \
+                  Bitte überprüfe, ob die Mensa an diesem Tag geöffnet ist. ".format(session_attr['current_date'], session_attr['mensa_name'])
         print("Intent: {}: message: {}".format('ListDishesIntent', str(e)))
-        return handler_input.response_builder.speak(speech).set_should_end_session(True).response
+        return handler_input.response_builder.speak(speech+utility.random_phrase(REPROMPTS)).ask(utility.random_phrase(REPROMPTS)).response
 
     # try to find matching dishes
     session_attr['all_dishes'] = utility.find_matching_dishes(api_response, ingredients)
     # build speech for dish list
     dish_speech, session_attr['last_idx'] = utility.build_dish_speech(session_attr['all_dishes'], 0)
     ingredients_pre, ingredients_post = utility.build_preposition_speech(ingredients)
-    # back up question in case it there is no dish_speech
-    question = 'Kann ich sonst noch helfen? '
+
     # dishes found: build speech with a list of dishes
     if dish_speech:
         if session_attr['last_idx'] < len(session_attr['all_dishes']):
             question = 'Möchtest du mehr Gerichte hören oder Details? '
         else: 
             question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
-                        Sag zum Beispiel: \
-                        Details. \
-                        oder: Wie viel kostet Gericht Nummer 2 für Studierende. '
+                        Sag zum Beispiel: Details. oder: Wie viel kostet Gericht Nummer 2 für Studierende. '
 
         speech = 'Es gibt {} {} Gerichte {} zur Auswahl: {}. {}'.format(len(session_attr['all_dishes']),
                                                                         ingredients_pre,
@@ -248,6 +252,8 @@ def list_dishes_intent_handler(handler_input):
 
     # no dishes found, e.g. there is no dish containing the requested ingredients
     else:
+        # back up question in case it there is no dish_speech
+        question = utility.random_phrase(REPROMPTS)
         if ingredients_post or ingredients_pre:
             speech = 'Leider gibt es keine passenden {} Gerichte {}. '.format(ingredients_pre,
                                                                              ingredients_post)
@@ -287,7 +293,7 @@ def price_intent_handler(handler_input):
     session_attr = handler_input.attributes_manager.session_attributes
     if 'all_dishes' not in session_attr:
         return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du einen Preis erfahren kannst. ").set_should_end_session(True).response
+                bevor du einen Preis erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
     
     # define user group names
     user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
@@ -323,6 +329,7 @@ def price_intent_handler(handler_input):
     except Exception as e:
         speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+        return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
     
     return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
@@ -355,9 +362,10 @@ def address_intent_handler(handler_input) :
         speech = "Die Adresse der {} lautet {}".format(name_address[0][0], name_address[0][1])
         speech = utility.convert_acronyms(speech)
     except Exception as e:
-        speech = "Die Adresse der angefragten Mensa {} konnte leider nicht gefunden werden. ".format(current_mensa_name)
-        speech = utility.convert_acronyms(speech)
+        speech = "Die Adresse der angefragten Mensa {} konnte leider nicht gefunden werden".format(current_mensa_name)
+        speech = utility.convert_acronyms(speech) + ". "
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+        return handler_input.response_builder.speak(speech+utility.random_phrase(REPROMPTS)).ask(utility.random_phrase(REPROMPTS)).response
     
     return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
@@ -402,15 +410,12 @@ def list_mensas_intent_handler(handler_input):
         speech = "Ich habe {} Mensen in {} gefunden: {}".format(len(city_mensas), city, first_mensas)
         speech = utility.convert_acronyms(speech)
         if session_attr['last_idx_mensas'] < len(city_mensas):
-            question = "Möchtest du mehr Mensen hören? "
+            question = "Möchtest du mehr Mensen hören? Sag: Weiter!"
             return handler_input.response_builder.speak(speech+question).ask(question).response
 
     # no mensas found
-    else:
-        speech = "Leider keine Mensen in {} gefunden.Du kannst eine andere Stadt in Deutschland wählen. ".format(city)
-
-    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
-
+    speech = "Leider keine Mensen in {} gefunden. Du kannst eine andere Stadt in Deutschland wählen. ".format(city)
+    return handler_input.response_builder.speak(speech+utility.random_phrase(REPROMPTS)).ask(utility.random_phrase(REPROMPTS)).response
 
 ############## GetNearestMensaIntent ########################
 
@@ -603,29 +608,29 @@ def launch_request_handler(handler_input):
                                                             der Adresse einer Mensa oder eine Auflistung \
                                                             aller Mensen in deiner Stadt? ").response
 
-# ## AMAZON.YesIntent
-# @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.YesIntent")(input))
-# def yes_intent_handler(handler_input):
-#     # type: (HandlerInput) -> Response
-#     print("In YesIntentHandler")
-#     session_attr = handler_input.attributes_manager.session_attributes
-#     print(session_attr)
+## AMAZON.YesIntent
+@sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.YesIntent")(input))
+def yes_intent_handler(handler_input):
+    # type: (HandlerInput) -> Response
+    print("In YesIntentHandler")
+    # session_attr = handler_input.attributes_manager.session_attributes
+    # print(session_attr)
 
-#     if not session_attr:
-#         speech = "Du musst zuerst eine Mensa auswählen! " + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-#         return handler_input.response_builder.speak(speech).ask(speech).response
+    # if not session_attr:
+    #     speech = "Du musst zuerst eine Mensa auswählen! " + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
+    #     return handler_input.response_builder.speak(speech).ask(speech).response
     
-#     # current date should be today => TODO: maybe tomorrow? maybe asking the user again?
-#     current_date = datetime.now().strftime("%Y-%m-%d")
-#     print(current_date)
-#     try:
-#         speech, question = list_dishes(session_attr, current_date)
-#         print(speech, question)
-#     except Exception as e:
-#         speech = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. ".format(current_date, session_attr['mensa_name'])
-#         question = REPROMPT
-#         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-#     return handler_input.response_builder.speak(speech).ask(question).response
+    # # current date should be today => TODO: maybe tomorrow? maybe asking the user again?
+    # current_date = datetime.now().strftime("%Y-%m-%d")
+    # print(current_date)
+    # try:
+    #     speech, question = list_dishes(session_attr, current_date)
+    #     print(speech, question)
+    # except Exception as e:
+    #     speech = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. ".format(current_date, session_attr['mensa_name'])
+    #     question = REPROMPT
+    #     print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+    return handler_input.response_builder.speak("Los geht's! Was möchtest du wissen? ").ask(utility.random_phrase(REPROMPTS)).response
 
 ## AMAZON.NoIntent
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.NoIntent")(input))
@@ -669,38 +674,33 @@ def next_intent_handler(handler_input):
     session_attr = handler_input.attributes_manager.session_attributes
 
     # if dialogue state for NextIntent not set, unvalid intent
-    if 'next_intent_state' not in session_attr:
-        speech = "Du musst zuerst eine Suche starten, bevor du weitere Gerichte oder Mensen hören kanst. "
-        return handler_input.response_builder.speak(speech).set_should_end_session(True).response
-    
-    # dialogue state for NextIntent in ListDishes
-    if session_attr['next_intent_state'] == 'ListDishes':
-        more_dish_speech, session_attr['last_idx'] = utility.build_dish_speech(session_attr['all_dishes'], session_attr['last_idx'])
-        if session_attr['last_idx'] < len(session_attr['all_dishes']):
-            question = 'Möchtest du mehr Gerichte hören oder Details? '
-        else:
-            question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
-                    Sag zum Beispiel: \
-                    Details. \
-                    oder: Wie viel kostet Gericht Nummer 2 für Studierende. '
-        return handler_input.response_builder.speak(more_dish_speech+question).ask(question).response
+    if 'next_intent_state' in session_attr:
 
-    # dialogue state for NextIntent in ListMensas
-    elif session_attr['next_intent_state'] == 'ListMensas':
-        more_mensa_speech, session_attr['last_idx_mensas'] = utility.build_mensa_speech(session_attr['city_mensas'], session_attr['last_idx'])
-        more_mensa_speech = utility.convert_acronyms(more_mensa_speech)
-        if session_attr['last_idx_mensas'] < len(session_attr['city_mensas']):
-            question = "Möchtest du mehr Mensen hören?"
-            return handler_input.response_builder.speak(more_mensa_speech+question).ask(question).response
-        else:
-            goodbye = "<say-as interpret-as=\"interjection\">zum wohl</say-as>."
-            return handler_input.response_builder.speak(more_mensa_speech+goodbye).set_should_end_session(True).response
+        # dialogue state for NextIntent in ListDishes
+        if session_attr['next_intent_state'] == 'ListDishes' and 'all_dishes' in session_attr:
+            more_dish_speech, session_attr['last_idx'] = utility.build_dish_speech(session_attr['all_dishes'], session_attr['last_idx'])
+            if session_attr['last_idx'] < len(session_attr['all_dishes']):
+                question = 'Möchtest du mehr Gerichte hören oder Details? '
+            else:
+                question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
+                            Sag zum Beispiel: Details. oder: Wie viel kostet Gericht Nummer 2 für Studierende. '
+            return handler_input.response_builder.speak(more_dish_speech+question).ask(question).response
 
-    # undefined dialogue state
-    else:
+        # dialogue state for NextIntent in ListMensas
+        elif session_attr['next_intent_state'] == 'ListMensas':
+            more_mensa_speech, session_attr['last_idx_mensas'] = utility.build_mensa_speech(session_attr['city_mensas'], session_attr['last_idx_mensas'])
+            more_mensa_speech = utility.convert_acronyms(more_mensa_speech)
+            if session_attr['last_idx_mensas'] < len(session_attr['city_mensas']):
+                question = "Möchtest du mehr Mensen hören? Sage: Weiter! "
+                return handler_input.response_builder.speak(more_mensa_speech+question).ask(question).response
+            else:
+                goodbye = "<say-as interpret-as=\"interjection\">zum wohl</say-as>."
+                return handler_input.response_builder.speak(more_mensa_speech+goodbye).set_should_end_session(True).response
+
+        # undefined dialogue state
         print("Undefined Dialogue State {} in NextIntent".format(session_attr['next_intent_state']))
-        speech = "Du musst zuerst eine Suche starten, bevor du weitere Gerichte oder Mensen hören kanst. "
-        return handler_input.response_builder.speak(speech).set_should_end_session(True).response
+    speech = "Du musst zuerst eine Suche starten, bevor du weitere Gerichte oder Mensen hören kanst. "
+    return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
 
 
 ## AMAZON.HelpIntent
@@ -738,8 +738,7 @@ def exit_intent_handler(handler_input):
 
     # type: (HandlerInput) -> Response
     print("In ExitIntentHandler")
-    handler_input.response_builder.speak("Guten Hunger! ").set_should_end_session(True)
-    return handler_input.response_builder.response
+    return handler_input.response_builder.speak("Guten Hunger! ").set_should_end_session(True).response
 
 ## ExitAppIntent (schließen, verlassen...)
 @sb.request_handler(can_handle_func=lambda input: is_request_type("SessionEndedRequest")(input))
@@ -764,7 +763,7 @@ def session_ended_request_handler(handler_input):
 def fallback_intent_handler(handler_input):
     """
     Der Intent informiert den Benutzer darüber, dass der Skill die gewünschte Funktionalität nicht besitzt
-    und beendet ihn.
+    und fragt den User, ob er eine andere Suche starten möchte.
 
     :param handler_input: HandlerInput
     :type handler_input: (HandlerInput) -> Response
@@ -773,7 +772,7 @@ def fallback_intent_handler(handler_input):
     """
     # type: (HandlerInput) -> Response
     print("In FallbackIntentHandler")
-    return handler_input.response_builder.speak(ERROR_PROMPT).set_should_end_session(True).response
+    return handler_input.response_builder.speak(ERROR_PROMPT).ask(utility.random_phrase(REPROMPTS)).response
 
 ## Exception Handler
 @sb.exception_handler(can_handle_func=lambda i, e: True)
