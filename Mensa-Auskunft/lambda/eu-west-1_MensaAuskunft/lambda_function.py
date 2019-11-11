@@ -1,19 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import logging
-import requests
-import six
-import random
-from datetime import datetime
+import logging, requests
 import lambda_utility as utility
 
 from ask_sdk_core.skill_builder import SkillBuilder
-# from ask_sdk.standard import StandardSkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_core.handler_input import HandlerInput
-from ask_sdk_model.slu.entityresolution import StatusCode
-from ask_sdk_model import Response
 
+from ask_sdk_model import Response
 from ask_sdk_model.ui import AskForPermissionsConsentCard
 from haversine import haversine
 
@@ -28,7 +22,6 @@ logger.setLevel(logging.INFO)
 #########################
 
 # Skill Builder object
-# sb = StandardSkillBuilder(table_name="Mensa-Auskunft", auto_create_table=True)
 sb = SkillBuilder()
 
 ##################################################
@@ -77,7 +70,7 @@ def details_intent_handler(handler_input):
 
     Dazu gehören:
         - Der vollständige Titel des Gerichts
-        - Die Preise für Studenten, Angestellte und Andere
+        - Die Preise für Studierende, Angestellte und Andere
         - Die Kategorie des Gerichts
         - Die zusätzlichen Notes
     Der Benutzeranfrage und den bereitgestellten Slot Values werden folgende Daten entnommen:
@@ -101,7 +94,7 @@ def details_intent_handler(handler_input):
     filled_slots = handler_input.request_envelope.request.intent.slots
     # get previous response from session attributes 
     session_attr = handler_input.attributes_manager.session_attributes
-    user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studenten']
+    user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
 
     if 'all_dishes' not in session_attr:
         return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
@@ -274,7 +267,7 @@ def list_dishes_intent_handler(handler_input):
 def price_intent_handler(handler_input):
     """Der Intent gibt den Preis für ein bestimmtes Gericht zurück. 
     Der Benutzer muss dabei die Nummer des Gerichts angeben und kann optional eine Zielgruppe
-    (Studenten, Angestellte, Andere) definieren.
+    (Studierende, Angestellte, Andere) definieren.
 
     Der Benutzeranfrage und den bereitgestellten Slot Values werden folgende Daten entlockt:
         - Nummer des Gerichts (erforderlich)
@@ -300,7 +293,7 @@ def price_intent_handler(handler_input):
                 bevor du einen Preis erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
     
     # define user group names
-    user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studenten']
+    user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
 
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
@@ -420,7 +413,6 @@ def list_mensas_intent_handler(handler_input):
     # no mensas found
     speech = "Leider keine Mensen in {} gefunden. Du kannst eine andere Stadt in Deutschland wählen. ".format(city)
     return handler_input.response_builder.speak(speech+utility.random_phrase(REPROMPTS)).ask(utility.random_phrase(REPROMPTS)).response
-
 
 ############## GetNearestMensaIntent ########################
 
@@ -725,12 +717,7 @@ def help_intent_handler(handler_input):
     print("In HelpIntentHandler")
     speech = "Mensaauskunft kann dir dabei helfen, passende Gerichte in deiner Mensa zu finden! \
             Du kannst nach dem Tagesplan, nach Mensen in deiner Nähe, Adressen und nach einem Gericht mit Zutaten deiner Wahl suchen. \
-            Sag zum Beispiel: \
-            Alexa, Frage Mensaauskunft, wo die nächste Mensa ist. \
-            Alexa, Sag Mensaauskunft, ich brauche die Adresse der Mensa Golm. \
-            Alexa, Gib mir den Tagesplan von Mensaauskunft. \
-            Alexa, Suche ein Gericht ohne Fleisch für morgen in der Mensa Golm mit Mensaauskunft. \
-            Alexa, Frag Mensaauskunft Golm, was es morgen zu essen gibt."
+            Sag zum Beispiel: {}.".format(utility.random_phrase(HELP_SAMPLES))
     return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
 ## AMAZON.StopIntent
@@ -748,7 +735,7 @@ def exit_intent_handler(handler_input):
 
     # type: (HandlerInput) -> Response
     print("In ExitIntentHandler")
-    return andler_input.response_builder.speak("Guten Hunger! ").set_should_end_session(True).response
+    return handler_input.response_builder.speak("Guten Hunger! ").set_should_end_session(True).response
 
 ## ExitAppIntent (schließen, verlassen...)
 @sb.request_handler(can_handle_func=lambda input: is_request_type("SessionEndedRequest")(input))

@@ -1,7 +1,4 @@
-import itertools
-import logging
-import random, requests, six
-import string
+import itertools, logging, random, requests, six, string
 from ask_sdk_model.slu.entityresolution import StatusCode
 from haversine import haversine
 
