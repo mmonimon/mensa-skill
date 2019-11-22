@@ -68,6 +68,14 @@
                         }
                     ],
                     "samples": [
+                        "suche ein {synonyms_gericht} {first_prep} {first_ingredient} für {date} in der mensa {mensa_name}",
+                        "was es am {date} zu essen gibt",
+                        "was es {date} zu essen gibt",
+                        "was gibt es am {date} zu essen",
+                        "was gibt es {date} zu essen",
+                        "was es {date} in der mensa {mensa_name} gibt",
+                        "was es {date} in der {mensa_name} gibt",
+                        "dem essensplan für {date}",
                         "{mensa_name} was es {date} zu essen gibt",
                         "suche ein {synonyms_gericht} {first_prep} {first_ingredient} für {date} in der {mensa_name} ",
                         "gib mir den tagesplan",
