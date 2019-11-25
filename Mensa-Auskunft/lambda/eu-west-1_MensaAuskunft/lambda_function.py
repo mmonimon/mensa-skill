@@ -32,18 +32,19 @@ sb = SkillBuilder()
 ERROR_PROMPT = "Sorry, das kann Mensa-Auskunft leider nicht verstehen. Bitte formuliere deine Frage anders. "
 ERROR_PROMPT2 = "Oh je. Es scheint, als würde dieser Service zurzeit nicht funktionieren. Bitte versuche es später noch einmal! "
 HELP_SAMPLES = [
-    "Alexa, Frage Mensaauskunft, wo die nächste Mensa ist. ",
-    "Alexa, Frage Mensaauskunft, Gibt es morgen vegane Gerichte in der Mensa Golm? ",
-    "Alexa, Frage Mensaauskunft, Welche Mensen gibt es in Berlin? ",
-    "Alexa, Sag Mensaauskunft, Finde Gerichte ohne Fleisch! ",
-    "Alexa, Frag Mensaauskunft, Wie ist die Adresse der Mensa Golm? ",
-    "Alexa, Sag Mensaauskunft, Gib mir den Essensplan! ",
-    "Alexa, Sag Mensaauskunft, Lies mir den Plan für Montag vor! ",
-    "Alexa, Sag Mensaauskunft, ich brauche die Adresse der Mensa Golm. ",
-    "Alexa, Gib mir den Tagesplan von Mensaauskunft. ",
-    "Alexa, Suche ein Gericht ohne Fleisch für morgen in der Mensa Golm mit Mensaauskunft. ",
-    "Alexa, Frag Mensaauskunft Golm, was es morgen zu essen gibt. "
+    "Wo ist die nächste Mensa? ",
+    "Gibt es morgen vegane Gerichte in der Mensa Golm? ",
+    "Welche Mensen gibt es in Berlin? ",
+    "Finde Gerichte ohne Fleisch! ",
+    "Wie ist die Adresse der Mensa Golm? ",
+    "Gib mir den Essensplan! ",
+    "Lies mir den Plan für Montag vor! ",
+    "Ich brauche die Adresse der Mensa Golm. ",
+    "Gib mir den Tagesplan von Mensaauskunft. ",
+    "Suche ein Gericht ohne Fleisch für morgen in der Mensa Golm. ",
+    "Was gibt es morgen zu essen? "
 ]
+
 REPROMPTS = [
     "Möchtest du eine neue Suche starten? ",
     "Bitte starte eine neue Suche oder sage STOP. ",
@@ -312,7 +313,11 @@ def price_intent_handler(handler_input):
         # if user asked for a specific user group, only read this price
         if current_usergroup_id:
             price = dish_prices[current_usergroup_id]
-            speech += utility.build_price_speech(price, current_user)
+            if price != None:
+                speech += utility.build_price_speech(price, current_user)
+            else:
+                price = dish_prices['others']
+                speech += utility.build_price_speech(price, current_user)
         # if not: read all prices for each available user group
         else:
             for i in range(len(user_groups)):
@@ -718,7 +723,7 @@ def help_intent_handler(handler_input):
     speech = "Mensaauskunft kann dir dabei helfen, passende Gerichte in deiner Mensa zu finden! \
             Du kannst nach dem Tagesplan, nach Mensen in deiner Nähe, Adressen und nach einem Gericht mit Zutaten deiner Wahl suchen. \
             Sag zum Beispiel: {}.".format(utility.random_phrase(HELP_SAMPLES))
-    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
+    return handler_input.response_builder.speak(speech).ask('Was möchtest du tun? ').response
 
 ## AMAZON.StopIntent
 @sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.CancelIntent")(input) or
