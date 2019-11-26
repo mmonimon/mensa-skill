@@ -9,6 +9,7 @@ from ask_sdk_core.handler_input import HandlerInput
 
 from ask_sdk_model import Response
 from ask_sdk_model.ui import AskForPermissionsConsentCard
+from ask_sdk_model.dialog import DelegateDirective
 from haversine import haversine
 
 ####### LOGGER ##########
@@ -63,8 +64,42 @@ all_mensas = utility.http_get_iterate(api_url_base)
 
 ############## DetailsIntent ########################
 
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("DetailsIntent")(input))
-def details_intent_handler(handler_input):
+def can_handle_details_unvalid(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    return is_intent_name("DetailsIntent")(handler_input) and ('all_dishes' not in session_attr)
+
+def can_handle_details_valid_uncompleted(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    request = handler_input.request_envelope.request
+    return (is_intent_name("DetailsIntent")(handler_input)) and \
+           ('all_dishes' in session_attr) and \
+           (str(request.dialog_state) == 'DialogState.STARTED')
+
+def can_handle_details_valid_completed(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    request = handler_input.request_envelope.request
+    return (is_intent_name("DetailsIntent")(handler_input)) and \
+           ('all_dishes' in session_attr) and \
+           (str(request.dialog_state) in ['DialogState.COMPLETED', 'DialogState.IN_PROGRESS'])
+
+# DetailsIntent unvalid because user has not made asked for dishes yet
+@sb.request_handler(can_handle_details_unvalid)
+def details_intent_handler_unvalid(handler_input):
+    print("In DetailsIntent – unvalid")
+    request = handler_input.request_envelope.request
+    return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
+                bevor du Details über ein Gericht erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
+
+# DetailsIntent valid, but dish number is missing -> ask user to provide it
+@sb.request_handler(can_handle_details_valid_uncompleted)
+def details_intent_handler_valid_uncompleted(handler_input):
+    print("In DetailsIntent – valid & uncompleted")
+    current_intent = handler_input.request_envelope.request.intent
+    return handler_input.response_builder.add_directive(DelegateDirective()).response
+
+# DetailsIntent valid
+@sb.request_handler(can_handle_details_valid_completed)
+def details_intent_handler_valid_completed(handler_input):
     """Der Intent listet die Details zu einem bestimmten Gericht auf.
 
     (Alle verfügbaren Informationen der OpenMensa API.)
@@ -90,16 +125,12 @@ def details_intent_handler(handler_input):
     :rtype: Response
     """
     # type: 
-    print("In DetailsIntent")
+    print("In DetailsIntent – valid & completed")
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
     # get previous response from session attributes 
     session_attr = handler_input.attributes_manager.session_attributes
     user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
-
-    if 'all_dishes' not in session_attr:
-        return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du Details über ein Gericht erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
     
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
@@ -264,8 +295,43 @@ def list_dishes_intent_handler(handler_input):
 
 ############## PriceIntent ########################
 
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("PriceIntent")(input))
-def price_intent_handler(handler_input):
+def can_handle_price_unvalid(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    print(is_intent_name("PriceIntent")(handler_input) and ('all_dishes' not in session_attr))
+    return is_intent_name("PriceIntent")(handler_input) and ('all_dishes' not in session_attr)
+
+def can_handle_price_valid_uncompleted(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    request = handler_input.request_envelope.request
+    return (is_intent_name("PriceIntent")(handler_input)) and \
+           ('all_dishes' in session_attr) and \
+           (str(request.dialog_state) == 'DialogState.STARTED')
+
+def can_handle_price_valid_completed(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    request = handler_input.request_envelope.request
+    return (is_intent_name("PriceIntent")(handler_input)) and \
+           ('all_dishes' in session_attr) and \
+           (str(request.dialog_state) in ['DialogState.COMPLETED', 'DialogState.IN_PROGRESS'])
+
+# PriceIntent unvalid because user has not made asked for dishes yet
+@sb.request_handler(can_handle_price_unvalid)
+def details_intent_handler_unvalid(handler_input):
+    print("In PriceIntent – unvalid")
+    request = handler_input.request_envelope.request
+    return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
+                bevor du einen Preis erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
+
+# PriceIntent valid, but dish number is missing -> ask user to provide it
+@sb.request_handler(can_handle_price_valid_uncompleted)
+def details_intent_handler_valid_uncompleted(handler_input):
+    print("In PriceIntent – valid & uncompleted")
+    current_intent = handler_input.request_envelope.request.intent
+    return handler_input.response_builder.add_directive(DelegateDirective()).response
+
+# PriceIntent valid
+@sb.request_handler(can_handle_price_valid_completed)
+def price_intent_handler_valid_completed(handler_input):
     """Der Intent gibt den Preis für ein bestimmtes Gericht zurück. 
     Der Benutzer muss dabei die Nummer des Gerichts angeben und kann optional eine Zielgruppe
     (Studierende, Angestellte, Andere) definieren.
@@ -285,14 +351,11 @@ def price_intent_handler(handler_input):
     :rtype: Response
     """
     # type: (HandlerInput) -> Response
-    print("In PriceIntent")
+    print("In PriceIntent – valid")
 
     # get previous response from session attributes 
     session_attr = handler_input.attributes_manager.session_attributes
-    if 'all_dishes' not in session_attr:
-        return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du einen Preis erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
-    
+
     # define user group names
     user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
 
@@ -332,7 +395,7 @@ def price_intent_handler(handler_input):
         speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
         return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
-
+    
     return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
 

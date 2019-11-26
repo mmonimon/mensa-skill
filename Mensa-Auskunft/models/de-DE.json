@@ -7377,6 +7377,7 @@
             "intents": [
                 {
                     "name": "PriceIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
                     "confirmationRequired": false,
                     "prompts": {},
                     "slots": [
@@ -7511,6 +7512,7 @@
                 },
                 {
                     "name": "DetailsIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
                     "confirmationRequired": false,
                     "prompts": {},
                     "slots": [
