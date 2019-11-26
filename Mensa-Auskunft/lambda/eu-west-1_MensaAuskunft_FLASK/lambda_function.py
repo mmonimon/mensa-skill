@@ -438,7 +438,9 @@ def get_nearest_mensa_intent_handler(handler_input):
            Request-JSON-Objekt extrahiert.
         b) Falls der Benutzer ein stationäres Gerät verwendet, wird die vom Benutzer in der Alexa-App
            bzw. angegebene Adresse aus der Alexa-API extrahiert. Anschließend werden die Koordinaten
-           der extrahierten Adresses mithilfe der Nominatim-API ermittelt.
+           des Nutzers anhand seiner Postleitzahl aproximiert. (Die NominatimAPI wurde entfernt, da
+           sie nicht garantiert werden kann, dass sie schnell genug eine Response liefert!
+           (Die API erlaubt nur eine Anfrage pro Sekunde.))
 
     Um dies zu ermöglichen, muss der Nutzer Zugriff auf seinen aktuellen Standort 
     bzw. auf seine Adressdaten in der Alexa-App erlauben.
@@ -446,10 +448,6 @@ def get_nearest_mensa_intent_handler(handler_input):
     Wenn der Benutzer seinen Standort nicht freigegeben hat oder dieser gerade nicht extrahierbar ist, 
     weil z.B. kein GPS-Signal verfügbar ist, werden je nach Errortype unterschiedliche Fehlermeldungen 
     ausgegeben.
-
-    Es kann vorkommen, dass die NominatimAPI (z.B. weil sie gerade sehr ausgelastet ist) zu lange braucht,
-    um die Anfrage des Skills nach den Koordinaten des Nutzers zu beantworten. Ist dies der Fall, so springt
-    der Skill in den SessionEndedRequestHandler.
 
     :param handler_input: HandlerInput
     :type handler_input: (HandlerInput) -> Response
@@ -537,16 +535,15 @@ def get_nearest_mensa_intent_handler(handler_input):
             print(e)
             return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
 
-        # get coordinates of user's address using nominatim api
-        address_string = "{},{},{},{}".format(address['addressLine1'], address['postalCode'], address['city'], address['countryCode'])
-        nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
-        try:
-            location_data = utility.http_get(nominatim_api)[0]
-            user_coordinates = (float(location_data['lat']), float(location_data['lon']))
-            print("User Coordinates:", user_coordinates)
-        except Exception as e:
-            print(e)
-            return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
+        # get approximation of user's coordinates through postal code
+        user_coordinates = utility.get_coordinates_from_postcode(address)
+        print('Coordinates:', user_coordinates)
+        # could not extract user coorddinates (Address could be from a not supported country)
+        if user_coordinates is None:
+            handler_input.response_builder.speak("Die von dir in der Alexa-App eingegebene Adresse wird leider nicht \
+                                                  für die Suche der nächsten Mensa unterstützt!")
+            handler_input.response_builder.set_should_end_session(True)
+            return handler_input.response_builder.response
 
     # calculate nearest mensa with haversine formula (airline distance)
     try:

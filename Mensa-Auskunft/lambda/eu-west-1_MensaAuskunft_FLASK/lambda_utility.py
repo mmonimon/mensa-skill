@@ -2,6 +2,7 @@ import itertools
 import logging
 import random, requests, six
 import string
+import csv
 from ask_sdk_model.slu.entityresolution import StatusCode
 from haversine import haversine
 
@@ -517,6 +518,42 @@ def ingredient_fleisch(dishlist, first_prep, second_prep, is_first_ingredient=Tr
                     if not(ingredient_in_dish('vegan', dish) or \
                            ingredient_in_dish('vegetarisch', dish) or \
                            ingredient_in_dish('fisch', dish))]
+
+# returns coordinates based on user's postal code
+def get_coordinates_from_postcode(address):
+    """Gibt die Koordinaten der Postleitzahl des Benutzers zurück.
+    (Falls deutsche, österreischische oder schweizerische Adresse.)
+
+    :param address: Adresse aus Alexa API
+    :type address: Dict
+    :return: Paar mit Längen- und Breitengrad
+    :rtype: Tuple[float]
+    """
+
+    user_postal_code = address['postalCode']
+
+    # user is from Germany
+    if address['countryCode'] == 'DE':
+        postal_codes = csv.reader(open('DE_PostalCodes.tsv', "r"), delimiter="\t")
+        for row in postal_codes:
+            if row[1] == user_postal_code:
+                return (float(row[3]), float(row[2]))
+
+    # user is from Austria
+    if address['countryCode'] == 'AT':
+        postal_codes = csv.reader(open('AT_PostalCodes.csv', "r"), delimiter=";")
+        for row in postal_codes:
+            if row[0] == user_postal_code:
+                return (float(row[2]), float(row[3]))
+
+    # user is from Switzerland
+    if address['countryCode'] == 'CH':
+        postal_codes = csv.reader(open('CH_PostalCodes.csv', "r"), delimiter=";")
+        for row in postal_codes:
+            if row[1] == user_postal_code:
+                return (float(row[7]), float(row[6]))
+
+    return
 
 # calculates nearest mensa using haversine formula (airline distance)
 def calculate_nearest_mensa(user_coordinates, mensa_list):
