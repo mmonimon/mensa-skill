@@ -145,7 +145,7 @@ def details_intent_handler_valid_completed(handler_input):
         dish_prices = session_attr['all_dishes'][int(current_number)-1]['prices']
         dish_cat = session_attr['all_dishes'][int(current_number)-1]['category']
         dish_notes = session_attr['all_dishes'][int(current_number)-1]['notes']
-        user_groups = list(dish_prices.keys())
+        user_groups = sorted(list(dish_prices.keys()))
         speech = "Du hast das Gericht {} ausgewählt. ".format(dish_name)
         speech += "Es kostet "
         # read all prices for each available user group
@@ -351,7 +351,7 @@ def price_intent_handler_valid_completed(handler_input):
     :rtype: Response
     """
     # type: (HandlerInput) -> Response
-    print("In PriceIntent – valid")
+    print("In PriceIntent – valid & completed")
 
     # get previous response from session attributes 
     session_attr = handler_input.attributes_manager.session_attributes
@@ -371,7 +371,7 @@ def price_intent_handler_valid_completed(handler_input):
     try:
         dish_name = session_attr['all_dishes'][int(current_number)-1]['name']
         dish_prices = session_attr['all_dishes'][int(current_number)-1]['prices']
-        user_groups = list(dish_prices.keys())
+        user_groups = sorted(list(dish_prices.keys()))
         speech = "Das Gericht {} kostet ".format(dish_name)
         # if user asked for a specific user group, only read this price
         if current_usergroup_id:
