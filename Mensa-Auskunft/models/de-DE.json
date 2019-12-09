@@ -386,7 +386,13 @@
                         "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} bitte",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} bitte",
                         "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} für {date} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date} bitte"
+                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date} bitte",
+                        "dem speiseplan für {date}",
+                        "speiseplan {date}",
+                        "gib mir den speiseplan",
+                        "speiseplan für {mensa_name}",
+                        "speiseplan für {date}",
+                        "speiseplan"
                     ]
                 },
                 {
