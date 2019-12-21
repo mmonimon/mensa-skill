@@ -9,6 +9,7 @@ from ask_sdk_core.handler_input import HandlerInput
 
 from ask_sdk_model import Response
 from ask_sdk_model.ui import AskForPermissionsConsentCard
+from ask_sdk_model.dialog import DelegateDirective
 from haversine import haversine
 
 ####### LOGGER ##########
@@ -63,8 +64,42 @@ all_mensas = utility.http_get_iterate(api_url_base)
 
 ############## DetailsIntent ########################
 
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("DetailsIntent")(input))
-def details_intent_handler(handler_input):
+def can_handle_details_unvalid(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    return is_intent_name("DetailsIntent")(handler_input) and ('all_dishes' not in session_attr)
+
+def can_handle_details_valid_uncompleted(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    request = handler_input.request_envelope.request
+    return (is_intent_name("DetailsIntent")(handler_input)) and \
+           ('all_dishes' in session_attr) and \
+           (str(request.dialog_state) == 'DialogState.STARTED')
+
+def can_handle_details_valid_completed(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    request = handler_input.request_envelope.request
+    return (is_intent_name("DetailsIntent")(handler_input)) and \
+           ('all_dishes' in session_attr) and \
+           (str(request.dialog_state) in ['DialogState.COMPLETED', 'DialogState.IN_PROGRESS'])
+
+# DetailsIntent unvalid because user has not made asked for dishes yet
+@sb.request_handler(can_handle_details_unvalid)
+def details_intent_handler_unvalid(handler_input):
+    print("In DetailsIntent – unvalid")
+    request = handler_input.request_envelope.request
+    return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
+                bevor du Details über ein Gericht erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
+
+# DetailsIntent valid, but dish number is missing -> ask user to provide it
+@sb.request_handler(can_handle_details_valid_uncompleted)
+def details_intent_handler_valid_uncompleted(handler_input):
+    print("In DetailsIntent – valid & uncompleted")
+    current_intent = handler_input.request_envelope.request.intent
+    return handler_input.response_builder.add_directive(DelegateDirective()).response
+
+# DetailsIntent valid
+@sb.request_handler(can_handle_details_valid_completed)
+def details_intent_handler_valid_completed(handler_input):
     """Der Intent listet die Details zu einem bestimmten Gericht auf.
 
     (Alle verfügbaren Informationen der OpenMensa API.)
@@ -90,16 +125,12 @@ def details_intent_handler(handler_input):
     :rtype: Response
     """
     # type: 
-    print("In DetailsIntent")
+    print("In DetailsIntent – valid & completed")
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
     # get previous response from session attributes 
     session_attr = handler_input.attributes_manager.session_attributes
     user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
-
-    if 'all_dishes' not in session_attr:
-        return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du Details über ein Gericht erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
     
     # extract slot values
     filled_slots = handler_input.request_envelope.request.intent.slots
@@ -114,7 +145,7 @@ def details_intent_handler(handler_input):
         dish_prices = session_attr['all_dishes'][int(current_number)-1]['prices']
         dish_cat = session_attr['all_dishes'][int(current_number)-1]['category']
         dish_notes = session_attr['all_dishes'][int(current_number)-1]['notes']
-        user_groups = list(dish_prices.keys())
+        user_groups = sorted(list(dish_prices.keys()))
         speech = "Du hast das Gericht {} ausgewählt. ".format(dish_name)
         speech += "Es kostet "
         # read all prices for each available user group
@@ -264,8 +295,43 @@ def list_dishes_intent_handler(handler_input):
 
 ############## PriceIntent ########################
 
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("PriceIntent")(input))
-def price_intent_handler(handler_input):
+def can_handle_price_unvalid(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    print(is_intent_name("PriceIntent")(handler_input) and ('all_dishes' not in session_attr))
+    return is_intent_name("PriceIntent")(handler_input) and ('all_dishes' not in session_attr)
+
+def can_handle_price_valid_uncompleted(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    request = handler_input.request_envelope.request
+    return (is_intent_name("PriceIntent")(handler_input)) and \
+           ('all_dishes' in session_attr) and \
+           (str(request.dialog_state) == 'DialogState.STARTED')
+
+def can_handle_price_valid_completed(handler_input):
+    session_attr = handler_input.attributes_manager.session_attributes
+    request = handler_input.request_envelope.request
+    return (is_intent_name("PriceIntent")(handler_input)) and \
+           ('all_dishes' in session_attr) and \
+           (str(request.dialog_state) in ['DialogState.COMPLETED', 'DialogState.IN_PROGRESS'])
+
+# PriceIntent unvalid because user has not made asked for dishes yet
+@sb.request_handler(can_handle_price_unvalid)
+def details_intent_handler_unvalid(handler_input):
+    print("In PriceIntent – unvalid")
+    request = handler_input.request_envelope.request
+    return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
+                bevor du einen Preis erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
+
+# PriceIntent valid, but dish number is missing -> ask user to provide it
+@sb.request_handler(can_handle_price_valid_uncompleted)
+def details_intent_handler_valid_uncompleted(handler_input):
+    print("In PriceIntent – valid & uncompleted")
+    current_intent = handler_input.request_envelope.request.intent
+    return handler_input.response_builder.add_directive(DelegateDirective()).response
+
+# PriceIntent valid
+@sb.request_handler(can_handle_price_valid_completed)
+def price_intent_handler_valid_completed(handler_input):
     """Der Intent gibt den Preis für ein bestimmtes Gericht zurück. 
     Der Benutzer muss dabei die Nummer des Gerichts angeben und kann optional eine Zielgruppe
     (Studierende, Angestellte, Andere) definieren.
@@ -285,14 +351,11 @@ def price_intent_handler(handler_input):
     :rtype: Response
     """
     # type: (HandlerInput) -> Response
-    print("In PriceIntent")
+    print("In PriceIntent – valid & completed")
 
     # get previous response from session attributes 
     session_attr = handler_input.attributes_manager.session_attributes
-    if 'all_dishes' not in session_attr:
-        return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du einen Preis erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
-    
+
     # define user group names
     user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
 
@@ -308,7 +371,7 @@ def price_intent_handler(handler_input):
     try:
         dish_name = session_attr['all_dishes'][int(current_number)-1]['name']
         dish_prices = session_attr['all_dishes'][int(current_number)-1]['prices']
-        user_groups = list(dish_prices.keys())
+        user_groups = sorted(list(dish_prices.keys()))
         speech = "Das Gericht {} kostet ".format(dish_name)
         # if user asked for a specific user group, only read this price
         if current_usergroup_id:
@@ -332,7 +395,7 @@ def price_intent_handler(handler_input):
         speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
         print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
         return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
-
+    
     return handler_input.response_builder.speak(speech).set_should_end_session(True).response
 
 
@@ -436,7 +499,9 @@ def get_nearest_mensa_intent_handler(handler_input):
            Request-JSON-Objekt extrahiert.
         b) Falls der Benutzer ein stationäres Gerät verwendet, wird die vom Benutzer in der Alexa-App
            bzw. angegebene Adresse aus der Alexa-API extrahiert. Anschließend werden die Koordinaten
-           der extrahierten Adresses mithilfe der Nominatim-API ermittelt.
+           des Nutzers anhand seiner Postleitzahl aproximiert. (Die NominatimAPI wurde entfernt, da
+           sie nicht garantiert werden kann, dass sie schnell genug eine Response liefert!
+           (Die API erlaubt nur eine Anfrage pro Sekunde.))
 
     Um dies zu ermöglichen, muss der Nutzer Zugriff auf seinen aktuellen Standort 
     bzw. auf seine Adressdaten in der Alexa-App erlauben.
@@ -444,10 +509,6 @@ def get_nearest_mensa_intent_handler(handler_input):
     Wenn der Benutzer seinen Standort nicht freigegeben hat oder dieser gerade nicht extrahierbar ist, 
     weil z.B. kein GPS-Signal verfügbar ist, werden je nach Errortype unterschiedliche Fehlermeldungen 
     ausgegeben.
-
-    Es kann vorkommen, dass die NominatimAPI (z.B. weil sie gerade sehr ausgelastet ist) zu lange braucht,
-    um die Anfrage des Skills nach den Koordinaten des Nutzers zu beantworten. Ist dies der Fall, so springt
-    der Skill in den SessionEndedRequestHandler.
 
     :param handler_input: HandlerInput
     :type handler_input: (HandlerInput) -> Response
@@ -535,16 +596,15 @@ def get_nearest_mensa_intent_handler(handler_input):
             print(e)
             return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
 
-        # get coordinates of user's address using nominatim api
-        address_string = "{},{},{},{}".format(address['addressLine1'], address['postalCode'], address['city'], address['countryCode'])
-        nominatim_api = "https://nominatim.openstreetmap.org/search/{}?format=json&limit=1".format(address_string)
-        try:
-            location_data = utility.http_get(nominatim_api)[0]
-            user_coordinates = (float(location_data['lat']), float(location_data['lon']))
-            print("User Coordinates:", user_coordinates)
-        except Exception as e:
-            print(e)
-            return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
+        # get approximation of user's coordinates through postal code
+        user_coordinates = utility.get_coordinates_from_postcode(address)
+        print('Coordinates:', user_coordinates)
+        # could not extract user coorddinates (Address could be from a not supported country)
+        if user_coordinates is None:
+            handler_input.response_builder.speak("Die von dir in der Alexa-App eingegebene Adresse wird leider nicht \
+                                                  für die Suche der nächsten Mensa unterstützt!")
+            handler_input.response_builder.set_should_end_session(True)
+            return handler_input.response_builder.response
 
     # calculate nearest mensa with haversine formula (airline distance)
     try:
