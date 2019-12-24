@@ -68,6 +68,7 @@
                         }
                     ],
                     "samples": [
+                        "{synonyms_gericht}",
                         "suche ein {synonyms_gericht} {first_prep} {first_ingredient} für {date} in der mensa {mensa_name}",
                         "was es am {date} zu essen gibt",
                         "was es {date} zu essen gibt",
