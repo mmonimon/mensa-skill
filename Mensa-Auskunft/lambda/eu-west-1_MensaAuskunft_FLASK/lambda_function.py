@@ -2,7 +2,6 @@
 
 import logging, requests
 import lambda_utility as utility
-from datetime import datetime
 
 from flask import Flask
 from ask_sdk_core.skill_builder import SkillBuilder
@@ -14,8 +13,9 @@ from ask_sdk_core.handler_input import HandlerInput
 
 from ask_sdk_model import Response
 from ask_sdk_model.ui import AskForPermissionsConsentCard
-from ask_sdk_model.dialog import DelegateDirective
-from haversine import haversine
+
+from ask_sdk_model.dialog import DynamicEntitiesDirective
+from ask_sdk_model.er.dynamic import UpdateBehavior, EntityListItem, Entity, EntityValueAndSynonyms
 
 ####### LOGGER ##########
 logger = logging.getLogger(__name__)
@@ -30,149 +30,34 @@ logger.setLevel(logging.INFO)
 app = Flask(__name__)
 
 # Skill Builder object
+from PriceIntent import PriceIntentInvalidHandler, PriceIntentValidCompletedHandler, PriceIntentValidIncompleteHandler, PriceDishIntentHandler
+from DetailsIntent import DetailsIntentInvalidHandler, DetailsIntentValidCompletedHandler, DetailsDishIntentHandler, DetailsIntentValidIncompleteHandler
+from ListMensasIntent import ListMensasIntentHandler
+from AddressIntent import AddressIntentHandler
+# from BuiltInIntents import
+
 sb = SkillBuilder()
+
+sb.add_request_handler(PriceIntentInvalidHandler())
+sb.add_request_handler(PriceIntentValidCompletedHandler())
+sb.add_request_handler(PriceIntentValidIncompleteHandler())
+sb.add_request_handler(PriceDishIntentHandler())
+sb.add_request_handler(DetailsDishIntentHandler())
+sb.add_request_handler(DetailsIntentInvalidHandler())
+sb.add_request_handler(DetailsIntentValidCompletedHandler())
+sb.add_request_handler(DetailsIntentValidIncompleteHandler())
 
 ##################################################
 # DATA  ##########################################
 ##################################################
 
 ### PROMPTS
-ERROR_PROMPT = "Sorry, das kann Mensa-Auskunft leider nicht verstehen. Bitte formuliere deine Frage anders. "
-ERROR_PROMPT2 = "Oh je. Es scheint, als würde dieser Service zurzeit nicht funktionieren. Bitte versuche es später noch einmal! "
-HELP_SAMPLES = [
-    "Wo ist die nächste Mensa? ",
-    "Gibt es morgen vegane Gerichte in der Mensa Golm? ",
-    "Welche Mensen gibt es in Berlin? ",
-    "Finde Gerichte ohne Fleisch! ",
-    "Wie ist die Adresse der Mensa Golm? ",
-    "Gib mir den Essensplan! ",
-    "Lies mir den Plan für Montag vor! ",
-    "Ich brauche die Adresse der Mensa Golm. ",
-    "Gib mir den Tagesplan von Mensaauskunft. ",
-    "Suche ein Gericht ohne Fleisch für morgen in der Mensa Golm. ",
-    "Was gibt es morgen zu essen? "
-]
-REPROMPTS = [
-    "Möchtest du eine neue Suche starten? ",
-    "Bitte starte eine neue Suche oder sage STOP. ",
-    "Kann ich dir sonst noch weiterhelfen? "
-]
+from prompts import REPROMPTS, ERROR_PROMPT, ERROR_PROMPT2, HELP_SAMPLES
 
 ##################################################
 # Request Handler classes ########################
 ##### OUR OWN SKILL INTENTS ######################
 ##################################################
-
-
-############## DetailsIntent ########################
-
-def can_handle_details_unvalid(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    return is_intent_name("DetailsIntent")(handler_input) and ('all_dishes' not in session_attr)
-
-def can_handle_details_valid_uncompleted(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    request = handler_input.request_envelope.request
-    return (is_intent_name("DetailsIntent")(handler_input)) and \
-           ('all_dishes' in session_attr) and \
-           (str(request.dialog_state) == 'DialogState.STARTED')
-
-def can_handle_details_valid_completed(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    request = handler_input.request_envelope.request
-    return (is_intent_name("DetailsIntent")(handler_input)) and \
-           ('all_dishes' in session_attr) and \
-           (str(request.dialog_state) in ['DialogState.COMPLETED', 'DialogState.IN_PROGRESS'])
-
-# DetailsIntent unvalid because user has not made asked for dishes yet
-@sb.request_handler(can_handle_details_unvalid)
-def details_intent_handler_unvalid(handler_input):
-    print("In DetailsIntent – unvalid")
-    request = handler_input.request_envelope.request
-    return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du Details über ein Gericht erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
-
-# DetailsIntent valid, but dish number is missing -> ask user to provide it
-@sb.request_handler(can_handle_details_valid_uncompleted)
-def details_intent_handler_valid_uncompleted(handler_input):
-    print("In DetailsIntent – valid & uncompleted")
-    current_intent = handler_input.request_envelope.request.intent
-    return handler_input.response_builder.add_directive(DelegateDirective()).response
-
-# DetailsIntent valid
-@sb.request_handler(can_handle_details_valid_completed)
-def details_intent_handler_valid_completed(handler_input):
-    """Der Intent listet die Details zu einem bestimmten Gericht auf.
-
-    (Alle verfügbaren Informationen der OpenMensa API.)
-
-    Dazu gehören:
-        - Der vollständige Titel des Gerichts
-        - Die Preise für Studierende, Angestellte und Andere
-        - Die Kategorie des Gerichts
-        - Die zusätzlichen Notes
-    Der Benutzeranfrage und den bereitgestellten Slot Values werden folgende Daten entnommen:
-        - Gerichtnummer
-
-    Über die Session-Attributes müssen folgende Daten abgerufen werden:
-        - Daten zu den gespeicherten Gerichten:
-            - 'name'
-            - 'price'
-            - 'category'
-            - 'notes'
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-    # type: 
-    print("In DetailsIntent – valid & completed")
-    # extract slot values
-    filled_slots = handler_input.request_envelope.request.intent.slots
-    # get previous response from session attributes 
-    session_attr = handler_input.attributes_manager.session_attributes
-    user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
-    
-    # extract slot values
-    filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = utility.get_slot_values(filled_slots)
-    print(slot_values)
-    print(session_attr)
-    current_number = slot_values['number']['resolved']
-    
-    # try to get dish by index
-    try:
-        dish_name = session_attr['all_dishes'][int(current_number)-1]['name']
-        dish_prices = session_attr['all_dishes'][int(current_number)-1]['prices']
-        dish_cat = session_attr['all_dishes'][int(current_number)-1]['category']
-        dish_notes = session_attr['all_dishes'][int(current_number)-1]['notes']
-        user_groups = sorted(list(dish_prices.keys()))
-        speech = "Du hast das Gericht {} ausgewählt. ".format(dish_name)
-        speech += "Es kostet "
-        # read all prices for each available user group
-        for i in range(len(user_groups)):
-            price = dish_prices[user_groups[i]]
-            if price == None:
-                continue
-            speech += utility.build_price_speech(price, user_groups_de[i])
-        speech += '. Es gehört zur Kategorie: {} und enthält '.format(dish_cat)
-        for i in range(len(dish_notes)):
-            if i == len(dish_notes)-2:
-                speech += dish_notes[i] + ' und '
-            else:
-                speech += dish_notes[i] + ', '
-        speech += '. '
-
-
-    # dish cannot be found any more: user may have used a higher number
-    except Exception as e:
-        speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
-        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-        return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
-    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
-
-
 
 ############## ListDishesIntent ########################
 
@@ -264,7 +149,18 @@ def list_dishes_intent_handler(handler_input):
     # try to find matching dishes
     session_attr['all_dishes'] = utility.find_matching_dishes(api_response, ingredients)
     # build speech for dish list
-    dish_speech, session_attr['last_idx'] = utility.build_dish_speech(session_attr['all_dishes'], 0)
+    dishes_names = [d['name'] for d in session_attr['all_dishes']]
+    chunked_dishes = utility.make_chunking(dishes_names)
+    dish_speech, session_attr['last_idx'] = utility.build_dish_speech(chunked_dishes, 0)
+    updated_values = [Entity(id=i, name=EntityValueAndSynonyms(value=d, synonyms=d.split()
+                                                          )
+                    )
+              for i, d in enumerate(chunked_dishes)
+            ]
+    print(updated_values)
+    replace_entity_directive = DynamicEntitiesDirective(update_behavior=UpdateBehavior.REPLACE,
+                                                        types=[EntityListItem(name="Dish", values=updated_values)])
+    
     ingredients_pre, ingredients_post = utility.build_preposition_speech(ingredients)
 
     # dishes found: build speech with a list of dishes
@@ -292,333 +188,7 @@ def list_dishes_intent_handler(handler_input):
             speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage. '
         speech += question
     print('Session attributes: ',session_attr)
-    return handler_input.response_builder.speak(speech).ask(question).response
-
-
-############## PriceIntent ########################
-
-def can_handle_price_unvalid(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    print(is_intent_name("PriceIntent")(handler_input) and ('all_dishes' not in session_attr))
-    return is_intent_name("PriceIntent")(handler_input) and ('all_dishes' not in session_attr)
-
-def can_handle_price_valid_uncompleted(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    request = handler_input.request_envelope.request
-    return (is_intent_name("PriceIntent")(handler_input)) and \
-           ('all_dishes' in session_attr) and \
-           (str(request.dialog_state) == 'DialogState.STARTED')
-
-def can_handle_price_valid_completed(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    request = handler_input.request_envelope.request
-    return (is_intent_name("PriceIntent")(handler_input)) and \
-           ('all_dishes' in session_attr) and \
-           (str(request.dialog_state) in ['DialogState.COMPLETED', 'DialogState.IN_PROGRESS'])
-
-# PriceIntent unvalid because user has not made asked for dishes yet
-@sb.request_handler(can_handle_price_unvalid)
-def details_intent_handler_unvalid(handler_input):
-    print("In PriceIntent – unvalid")
-    request = handler_input.request_envelope.request
-    return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du einen Preis erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
-
-# PriceIntent valid, but dish number is missing -> ask user to provide it
-@sb.request_handler(can_handle_price_valid_uncompleted)
-def details_intent_handler_valid_uncompleted(handler_input):
-    print("In PriceIntent – valid & uncompleted")
-    current_intent = handler_input.request_envelope.request.intent
-    return handler_input.response_builder.add_directive(DelegateDirective()).response
-
-# PriceIntent valid
-@sb.request_handler(can_handle_price_valid_completed)
-def price_intent_handler_valid_completed(handler_input):
-    """Der Intent gibt den Preis für ein bestimmtes Gericht zurück. 
-    Der Benutzer muss dabei die Nummer des Gerichts angeben und kann optional eine Zielgruppe
-    (Studierende, Angestellte, Andere) definieren.
-
-    Der Benutzeranfrage und den bereitgestellten Slot Values werden folgende Daten entlockt:
-        - Nummer des Gerichts (erforderlich)
-        - Zielgruppe (optional)
-
-    Über die Session-Attributes müssen folgende Daten abgerufen werden:
-        - Daten zu den gespeicherten Gerichten:
-            - 'name'
-            - 'prices'
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-    # type: (HandlerInput) -> Response
-    print("In PriceIntent – valid & completed")
-
-    # get previous response from session attributes 
-    session_attr = handler_input.attributes_manager.session_attributes
-
-    # define user group names
-    user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
-
-    # extract slot values
-    filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = utility.get_slot_values(filled_slots)
-    print(slot_values)
-    current_number = slot_values['number']['resolved']
-    current_usergroup_id = slot_values['user_group']['id']
-    current_user = slot_values['user_group']['resolved']
-
-    # try to get dish by index
-    try:
-        dish_name = session_attr['all_dishes'][int(current_number)-1]['name']
-        dish_prices = session_attr['all_dishes'][int(current_number)-1]['prices']
-        user_groups = sorted(list(dish_prices.keys()))
-        speech = "Das Gericht {} kostet ".format(dish_name)
-        # if user asked for a specific user group, only read this price
-        if current_usergroup_id:
-            price = dish_prices[current_usergroup_id]
-            if price != None:
-                speech += utility.build_price_speech(price, current_user)
-            else:
-                price = dish_prices['others']
-                speech += utility.build_price_speech(price, current_user)
-        # if not: read all prices for each available user group
-        else:
-            for i in range(len(user_groups)):
-                price = dish_prices[user_groups[i]]
-                if price == None:
-                    continue
-                speech += utility.build_price_speech(price, user_groups_de[i])
-        speech += '. '
-
-    # dish cannot be found any more: user may have used a higher number
-    except Exception as e:
-        speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
-        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-        return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
-    
-    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
-
-
-############## AddressIntent ########################
-
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("AddressIntent")(input))
-def address_intent_handler(handler_input) :
-    """Der Intent gibt die Adresse einer Mensa zurück. Benötigt wird der Name der Mensa.
-    Ist dieser im Katalog, wird die Adresse zurückgegeben.
-    Ist dieser nicht vorhanden, wird eine Fehlermeldung zurückgegeben.
-
-    Der Benutzeranfrage und den bereitgestellten Slot Values werden folgende Daten entlockt:
-        - Name und ID der Mensa (erforderlich)
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-    # type: (HandlerInput) -> Response
-    print("In AddressIntent")
-    filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = utility.get_slot_values(filled_slots)
-    print(slot_values)
-    current_mensa_id = slot_values['mensa_name']['id']
-    current_mensa_name = slot_values['mensa_name']['resolved']
-    try:
-        name_address = [(j['name'], j['address']) for j in all_mensas if j['id'] == int(current_mensa_id)]
-        speech = "Die Adresse der {} lautet {}".format(name_address[0][0], name_address[0][1])
-        speech = utility.convert_acronyms(speech)
-    except Exception as e:
-        speech = "Die Adresse der angefragten Mensa {} konnte leider nicht gefunden werden".format(current_mensa_name)
-        speech = utility.convert_acronyms(speech) + ". "
-        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-        return handler_input.response_builder.speak(speech+utility.random_phrase(REPROMPTS)).ask(utility.random_phrase(REPROMPTS)).response
-    
-    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
-
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("ListMensasIntent")(input))
-def list_mensas_intent_handler(handler_input):
-    """Der Intent gibt eine Liste mit Mensen in einer Stadt zurück. Benötigt wird der Name der Stadt.
-    Sind Mensen vorhanden, werden diese zurückgegeben; gibt es keine oder ist die Stadt nicht in der
-    Datenbank, wird eine Fehldermeldung zurückgegeben.
-
-    Bei jedem Turn werden nur vier Mensen ausgegeben. Will der Nutzer mehr Mensen erfahren, muss er 
-    nach \"weiteren Mensen\" fragen.
-
-    Der Benutzeranfrage und den bereitgestellten Slot Values werden folgende Daten entlockt:
-        - Stadt (erforderlich)
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-
-    # type: (HandlerInput) -> Response
-    print("In ListMensasIntent")
-    # set state for AMAZON.NextIntent
-    session_attr = handler_input.attributes_manager.session_attributes
-    session_attr['next_intent_state'] = "ListMensas"
-    session_attr['last_idx_mensas'] = 0
-
-    filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = utility.get_slot_values(filled_slots)
-    print(slot_values)
-    city = slot_values['city']['resolved']
-    city_mensas = [d['name'] for d in all_mensas if d['city'].lower() == city]
-
-    # mensas found: build speech with a list of mensas
-    if city_mensas:
-      if len(city_mensas) == 1:
-        speech = "Ich habe eine Mensa in {} gefunden: {}".format(city, city_mensas[0])
-      else:
-        session_attr['city_mensas'] = city_mensas
-        first_mensas, session_attr['last_idx'] = utility.build_mensa_speech(city_mensas, 0)
-        speech = "Ich habe {} Mensen in {} gefunden: {}".format(len(city_mensas), city, first_mensas)
-        speech = utility.convert_acronyms(speech)
-        if session_attr['last_idx_mensas'] < len(city_mensas):
-            question = "Möchtest du mehr Mensen hören? Sag: Weiter!"
-            return handler_input.response_builder.speak(speech+question).ask(question).response
-
-    # no mensas found
-    speech = "Leider keine Mensen in {} gefunden. Du kannst eine andere Stadt in Deutschland wählen. ".format(city)
-    return handler_input.response_builder.speak(speech+utility.random_phrase(REPROMPTS)).ask(utility.random_phrase(REPROMPTS)).response
-
-############## GetNearestMensaIntent ########################
-
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("GetNearestMensaIntent")(input))
-def get_nearest_mensa_intent_handler(handler_input):
-    """Der Intent gibt die vom Standort des Nutzers aus nächste Mensa und ihre Adresse zurück. 
-    Dafür muss der Benutzer seinen Standort für den Skill freigegeben haben. 
-
-    Um die nächste Mensa berechnen zu können, werden die Koordinaten des Nutzers extrahiert. 
-    Anschließend wird mithilfe der Haversine-Formel die zum Benutzer nächstgelegene Mensa berechnet.
-    Es wird also die Mensa mit der kleinsten Luftlinie zum Nutzer zurückgegeben. 
-
-    Die Koordinaten des Nutzer werden folgendermaßen extrahiert:
-        a) Falls der Benutzer ein mobiles Gerät verwendet, werden die aktuellen Koordinaten aus 
-           dem GPS-Sensor des Geräts des Nutzers aus dem von Alexa an das Backend gesendete 
-           Request-JSON-Objekt extrahiert.
-        b) Falls der Benutzer ein stationäres Gerät verwendet, wird die vom Benutzer in der Alexa-App
-           bzw. angegebene Adresse aus der Alexa-API extrahiert. Anschließend werden die Koordinaten
-           des Nutzers anhand seiner Postleitzahl aproximiert. (Die NominatimAPI wurde entfernt, da
-           sie nicht garantiert werden kann, dass sie schnell genug eine Response liefert!
-           (Die API erlaubt nur eine Anfrage pro Sekunde.))
-
-    Um dies zu ermöglichen, muss der Nutzer Zugriff auf seinen aktuellen Standort 
-    bzw. auf seine Adressdaten in der Alexa-App erlauben.
-
-    Wenn der Benutzer seinen Standort nicht freigegeben hat oder dieser gerade nicht extrahierbar ist, 
-    weil z.B. kein GPS-Signal verfügbar ist, werden je nach Errortype unterschiedliche Fehlermeldungen 
-    ausgegeben.
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-    print("In GetNearestMensaIntent")
-
-    system_context = handler_input.request_envelope.context.system
-    # check if mobile device (to get current coordinates of user)
-    if system_context.device.supported_interfaces.geolocation:
-        geo_location = handler_input.request_envelope.context.geolocation
-        # check if coordinates are available
-        if geo_location:
-            user_coordinates = (float(geo_location.coordinate.latitude_in_degrees),
-                                float(geo_location.coordinate.longitude_in_degrees))
-            print('User Coordinates:', user_coordinates)
-
-        # coordinates not available
-        else:
-            # check if user gave skill permissions to read location data
-            if system_context.user.permissions.scopes['alexa::devices:all:geolocation:read'].status.to_str() == "'GRANTED'":
-                # check if location sharing is turned on on user's mobile device
-                if geo_location:
-                    
-                    # location is turned on -> something else must have gone wrong
-                    print("ERROR: Cannot get location although turned on and permission available.")
-                    handler_input.response_builder.set_should_end_session(True)
-                    return handler_input.response_builder.speak("Oh je. Es scheint, als hätte ich zurzeit Probleme, \
-                            deinen Standort ausfindig zu machen. Bitte versuche es später noch einmal. ").response
-
-                # location sharing is turned off on user's device -> ask to turn on
-                else:
-                    print("Location sharing is turned off on device.")
-                    handler_input.response_builder.set_should_end_session(True)
-                    return handler_input.response_builder.speak("Ich kann nicht auf deinen Standort zugreifen. \
-                            Bitte gehe in die Einstellungen deines Geräts und erlaube das Teilen deines Standorts. ").response
-
-            # user did not give permission to skill to share location data -> ask for permission
-            else:
-                print("Alexa has no permission to get user's location.")
-                handler_input.response_builder.speak("Um die nächste Mensa zu finden, benötige ich Deinen Standort. \
-                                                    Bitte öffne die Alexa-App, um deinen Standort mit mir zu teilen. ")
-                handler_input.response_builder.set_card(AskForPermissionsConsentCard(permissions=['alexa::devices:all:geolocation:read']))
-                handler_input.response_builder.set_should_end_session(True)
-                return handler_input.response_builder.response
-
-    # if not mobile device, check if user has permitted to use their address
-    else:
-        device_id = system_context.device.device_id
-        alexa_api = "https://api.eu.amazonalexa.com/v1/devices/{}/settings/address".format(device_id)
-
-        api_access_token = system_context.api_access_token
-        http_header = {'Accept' : 'application/json',
-                       'Authorization' : 'Bearer {}'.format(api_access_token)}
-
-        try:
-            # retrieve user's address from Alexa API
-            address = utility.http_get(alexa_api, headers=http_header)
-            print(address)
-        except requests.exceptions.HTTPError as e:
-            # user has not permitted to use their address -> ask for permission
-            if '403 Client Error' in str(e):
-                print("Alexa has no permission to get user's address.")
-                handler_input.response_builder.speak("Um die nächste Mensa zu finden, benötige ich Deine Adresse. \
-                                                    Bitte öffne die Alexa-App, um deine Adresse mit mir zu teilen. ")
-                handler_input.response_builder.set_card(AskForPermissionsConsentCard(permissions=['read::alexa:device:all:address']))
-                handler_input.response_builder.set_should_end_session(True)
-                return handler_input.response_builder.response
-            # some error ocurred while trying to retrieve user's address
-            else:
-                print("ERROR: Alexa has permission but still can't get user's address.")
-                print(e)
-                return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
-        # user has permitted to use their address, but hasn't filled in address information -> ask to fill in
-        except ValueError as e:
-            print("Alexa has permission to get user address, but there is no address information.")
-            print(e)
-            handler_input.response_builder.set_should_end_session(True)
-            return handler_input.response_builder.speak("Um die nächste Mensa für Dich zu finden, benötige ich Deine Adresse. \
-                    Bitte füge sie in der Alexa-App hinzu. ").response
-        # some error ocurred while trying to retrieve user's address
-        except Exception as e:
-            print("ERROR: Alexa has permission but still can't get user's address.")
-            print(e)
-            return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
-
-        # get approximation of user's coordinates through postal code
-        user_coordinates = utility.get_coordinates_from_postcode(address)
-        print('Coordinates:', user_coordinates)
-        # could not extract user coorddinates (Address could be from a not supported country)
-        if user_coordinates is None:
-            handler_input.response_builder.speak("Die von dir in der Alexa-App eingegebene Adresse wird leider nicht \
-                                                  für die Suche der nächsten Mensa unterstützt!")
-            handler_input.response_builder.set_should_end_session(True)
-            return handler_input.response_builder.response
-
-    # calculate nearest mensa with haversine formula (airline distance)
-    try:
-       nearest_mensa_name, nearest_mensa_address = utility.calculate_nearest_mensa(user_coordinates, all_mensas)
-    except Exception as e:
-        print(e)
-        return handler_input.response_builder.speak(ERROR_PROMPT2).set_should_end_session(True).response
-
-    nearest_mensa_speech = "Die nächste Mensa ist {} in {}.".format(nearest_mensa_name, nearest_mensa_address)
-    nearest_mensa_speech = utility.convert_acronyms(nearest_mensa_speech)
-    return handler_input.response_builder.speak(nearest_mensa_speech).set_should_end_session(True).response
-
+    return handler_input.response_builder.speak(speech).ask(question).add_directive(replace_entity_directive).response
 
 ################################################
 # Request and Response Loggers #################
@@ -637,207 +207,6 @@ def log_request(handler_input):
     logger.info("Request Envelope: {}".format(
                 handler_input.request_envelope))
 
-##################################################
-# Request Handler classes ########################
-##### BUILT IN INTENTS ###########################
-##################################################
-
-## AMAZON.WelcomeIntent
-@sb.request_handler(can_handle_func=lambda input: is_request_type("LaunchRequest")(input))
-def launch_request_handler(handler_input):
-    """Der Intent wird beim Öffnen des Skills durch Modal-Launchphrasing getriggert. 
-    Er gibt eine Willkommensnachricht zurück.
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-
-    # type: (HandlerInput) -> Response
-    print("In LaunchRequestHandler")
-    # persist_attr = handler_input.attributes_manager.persistent_attributes
-    # print(persist_attr)
-    # if persist_attr:
-    #     handler_input.attributes_manager.session_attributes = persist_attr
-    #     session_attr = handler_input.attributes_manager.session_attributes
-    #     session_attr['mensa_name'] = [mensa['name'] for mensa in all_mensas if int(persist_attr['mensa_id']) == mensa['id']][0]
-    #     print('Previous Mensa:', session_attr['mensa_name'])
-    #     reprompt = 'Möchtest du wieder den Tagesplan für {} hören? '.format(session_attr['mensa_name'])
-    #     speech = "Willkommen bei der Mensa-Auskunft! " + reprompt
-    #     return handler_input.response_builder.speak(speech).ask(reprompt).response
-    speech = "Willkommen bei der Mensaauskunft! Wenn du Hilfe bei der Bedienung brauchst, \
-            sag bitte HILFE. Was möchtest du wissen? "
-    return handler_input.response_builder.speak(speech).ask("Suchst du nach dem Tagesplan, \
-                                                            der Adresse einer Mensa oder eine Auflistung \
-                                                            aller Mensen in deiner Stadt? ").response
-
-## AMAZON.YesIntent
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.YesIntent")(input))
-def yes_intent_handler(handler_input):
-    # type: (HandlerInput) -> Response
-    print("In YesIntentHandler")
-    # session_attr = handler_input.attributes_manager.session_attributes
-    # print(session_attr)
-
-    # if not session_attr:
-    #     speech = "Du musst zuerst eine Mensa auswählen! " + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-    #     return handler_input.response_builder.speak(speech).ask(speech).response
-    
-    # # current date should be today => TODO: maybe tomorrow? maybe asking the user again?
-    # current_date = datetime.now().strftime("%Y-%m-%d")
-    # print(current_date)
-    # try:
-    #     speech, question = list_dishes(session_attr, current_date)
-    #     print(speech, question)
-    # except Exception as e:
-    #     speech = "Sorry, für den ausgewählten Tag {} gibt es leider keinen Essensplan für {}. ".format(current_date, session_attr['mensa_name'])
-    #     question = REPROMPT
-    #     print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-    return handler_input.response_builder.speak("Los geht's! Was möchtest du wissen? ").ask(utility.random_phrase(REPROMPTS)).response
-
-## AMAZON.NoIntent
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.NoIntent")(input))
-def no_intent_handler(handler_input):
-    """
-    Der Intent wird ausgelöst, wenn der Benutzer eine Rückfrage des Skills verneint.
-    Er gibt eine Verabschiedung zurück und beendet den Skill.
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-
-    # type: (HandlerInput) -> Response
-    print("In NoIntentHandler")
-    # speech = 'Okay, was möchtest du tun? ' + random_phrase([SAMPLES1, SAMPLES2, SAMPLES3])
-    # handler_input.response_builder.speak(speech).ask(REPROMPT)
-    return handler_input.response_builder.speak('Okay, tschüss!').set_should_end_session(True).response
-
-## AMAZON.NextIntent
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.NextIntent")(input))
-def next_intent_handler(handler_input):
-    """
-    Der Intent führt den ListDishesIntent weiter und listet weitere Gerichte auf.
-    Die benötigten Daten werden aus den Session-Attributes entnommen.
-
-    Jeder Turn gibt nur vier Gerichte aus. Will der Nutzer mehr Gerichte erfahren, 
-    muss er nach \"weiteren Gerichten\" fragen.
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-
-    # type: (HandlerInput) -> Response
-    print("In AMAZON.NextIntent")
-
-    # get previous response from session attributes 
-    session_attr = handler_input.attributes_manager.session_attributes
-
-    # if dialogue state for NextIntent not set, unvalid intent
-    if 'next_intent_state' in session_attr:
-
-        # dialogue state for NextIntent in ListDishes
-        if session_attr['next_intent_state'] == 'ListDishes' and 'all_dishes' in session_attr:
-            more_dish_speech, session_attr['last_idx'] = utility.build_dish_speech(session_attr['all_dishes'], session_attr['last_idx'])
-            if session_attr['last_idx'] < len(session_attr['all_dishes']):
-                question = 'Möchtest du mehr Gerichte hören oder Details? '
-            else:
-                question = 'Möchtest du Details zu einem dieser Gerichte erfahren? \
-                            Sag zum Beispiel: Details. oder: Wie viel kostet Gericht Nummer 2 für Studierende. '
-            return handler_input.response_builder.speak(more_dish_speech+question).ask(question).response
-
-        # dialogue state for NextIntent in ListMensas
-        elif session_attr['next_intent_state'] == 'ListMensas':
-            more_mensa_speech, session_attr['last_idx_mensas'] = utility.build_mensa_speech(session_attr['city_mensas'], session_attr['last_idx_mensas'])
-            more_mensa_speech = utility.convert_acronyms(more_mensa_speech)
-            if session_attr['last_idx_mensas'] < len(session_attr['city_mensas']):
-                question = "Möchtest du mehr Mensen hören? Sage: Weiter! "
-                return handler_input.response_builder.speak(more_mensa_speech+question).ask(question).response
-            else:
-                goodbye = "<say-as interpret-as=\"interjection\">zum wohl</say-as>."
-                return handler_input.response_builder.speak(more_mensa_speech+goodbye).set_should_end_session(True).response
-
-        # undefined dialogue state
-        print("Undefined Dialogue State {} in NextIntent".format(session_attr['next_intent_state']))
-    speech = "Du musst zuerst eine Suche starten, bevor du weitere Gerichte oder Mensen hören kanst. "
-    return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
-
-
-## AMAZON.HelpIntent
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.HelpIntent")(input))
-def help_intent_handler(handler_input):
-    """
-    Der Intent unterstützt den Nutzer bei der Bedienung des Skills. 
-    Er informiert den Nutzer über den Umfang des Skills und gibt Beispielanfragen zurück.
-    
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-
-    # type: (HandlerInput) -> Response
-    print("In HelpIntentHandler")
-    speech = "Mensaauskunft kann dir dabei helfen, passende Gerichte in deiner Mensa zu finden! \
-            Du kannst nach dem Tagesplan, nach Mensen in deiner Nähe, Adressen und nach einem Gericht mit Zutaten deiner Wahl suchen. \
-            Sag zum Beispiel: {}.".format(utility.random_phrase(HELP_SAMPLES))
-    return handler_input.response_builder.speak(speech).ask('Was möchtest du tun? ').response
-
-## AMAZON.StopIntent
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.CancelIntent")(input) or
-                is_intent_name("AMAZON.StopIntent")(input))
-def exit_intent_handler(handler_input):
-    """
-    Der Intent stoppt den Skill mit einer Verabschiedung.
-    
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-
-    # type: (HandlerInput) -> Response
-    print("In ExitIntentHandler")
-    return handler_input.response_builder.speak("Guten Hunger! ").set_should_end_session(True).response
-
-## ExitAppIntent (schließen, verlassen...)
-@sb.request_handler(can_handle_func=lambda input: is_request_type("SessionEndedRequest")(input))
-def session_ended_request_handler(handler_input):
-    """
-    Der Intent stoppt den Skill ohne Verabschiedung.
-    
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die response ohne Antwort zurück
-    :rtype: Response
-    """
-
-    # type: (HandlerInput) -> Response
-    print("In SessionEndedRequestHandler")
-    print("Session ended with reason: {}".format(handler_input.request_envelope.request.reason))
-    return handler_input.response_builder.set_should_end_session(True).response
-
-
-## AMAZON.FallbackIntent
-@sb.request_handler(can_handle_func=lambda input: is_intent_name("AMAZON.FallbackIntent")(input))
-def fallback_intent_handler(handler_input):
-    """
-    Der Intent informiert den Benutzer darüber, dass der Skill die gewünschte Funktionalität nicht besitzt
-    und fragt den User, ob er eine andere Suche starten möchte.
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-    # type: (HandlerInput) -> Response
-    print("In FallbackIntentHandler")
-    return handler_input.response_builder.speak(ERROR_PROMPT).ask(utility.random_phrase(REPROMPTS)).response
-
 ## Exception Handler
 @sb.exception_handler(can_handle_func=lambda i, e: True)
 def all_exception_handler(handler_input, exception):
@@ -853,22 +222,6 @@ def all_exception_handler(handler_input, exception):
 
     # type: (HandlerInput, Exception) -> Response
     logger.error(exception, exc_info=True)
-    return handler_input.response_builder.speak(ERROR_PROMPT).set_should_end_session(True).response
-
-## Unhandled handler
-@sb.request_handler(can_handle_func=lambda input: True)
-def unhandled_intent_handler(handler_input):
-    """
-    Ein Intent für alle "Unhandled requests". Er informiert darüber, 
-    dass der Skill die gewünschte Funktionalität nicht besitzt und beendet ihn.
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-
-    # type: (HandlerInput) -> Response
     return handler_input.response_builder.speak(ERROR_PROMPT).set_should_end_session(True).response
 
 lambda_handler = sb.lambda_handler()
