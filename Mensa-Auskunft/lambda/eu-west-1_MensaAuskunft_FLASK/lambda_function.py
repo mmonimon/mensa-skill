@@ -17,6 +17,9 @@ from ask_sdk_model.ui import AskForPermissionsConsentCard
 from ask_sdk_model.dialog import DelegateDirective
 from haversine import haversine
 
+from ask_sdk_model.dialog import DynamicEntitiesDirective
+from ask_sdk_model.er.dynamic import UpdateBehavior, EntityListItem, Entity, EntityValueAndSynonyms
+
 ####### LOGGER ##########
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -30,149 +33,35 @@ logger.setLevel(logging.INFO)
 app = Flask(__name__)
 
 # Skill Builder object
+from PriceIntent import PriceIntentInvalidHandler, PriceIntentValidCompletedHandler, PriceIntentValidIncompleteHandler, PriceDishIntentHandler
+from DetailsIntent import DetailsIntentInvalidHandler, DetailsIntentValidCompletedHandler, DetailsDishIntentHandler, DetailsIntentValidIncompleteHandler
+from ListMensasIntent import ListMensasIntentHandler
+from AddressIntent import AddressIntentHandler
+# from BuiltInIntents import
+
 sb = SkillBuilder()
+
+sb.add_request_handler(PriceIntentInvalidHandler())
+sb.add_request_handler(PriceIntentValidCompletedHandler())
+sb.add_request_handler(PriceIntentValidIncompleteHandler())
+sb.add_request_handler(PriceDishIntentHandler())
+sb.add_request_handler(DetailsDishIntentHandler())
+sb.add_request_handler(DetailsIntentInvalidHandler())
+sb.add_request_handler(DetailsIntentValidCompletedHandler())
+sb.add_request_handler(DetailsIntentValidIncompleteHandler())
+
 
 ##################################################
 # DATA  ##########################################
 ##################################################
 
 ### PROMPTS
-ERROR_PROMPT = "Sorry, das kann Mensa-Auskunft leider nicht verstehen. Bitte formuliere deine Frage anders. "
-ERROR_PROMPT2 = "Oh je. Es scheint, als würde dieser Service zurzeit nicht funktionieren. Bitte versuche es später noch einmal! "
-HELP_SAMPLES = [
-    "Wo ist die nächste Mensa? ",
-    "Gibt es morgen vegane Gerichte in der Mensa Golm? ",
-    "Welche Mensen gibt es in Berlin? ",
-    "Finde Gerichte ohne Fleisch! ",
-    "Wie ist die Adresse der Mensa Golm? ",
-    "Gib mir den Essensplan! ",
-    "Lies mir den Plan für Montag vor! ",
-    "Ich brauche die Adresse der Mensa Golm. ",
-    "Gib mir den Tagesplan von Mensaauskunft. ",
-    "Suche ein Gericht ohne Fleisch für morgen in der Mensa Golm. ",
-    "Was gibt es morgen zu essen? "
-]
-REPROMPTS = [
-    "Möchtest du eine neue Suche starten? ",
-    "Bitte starte eine neue Suche oder sage STOP. ",
-    "Kann ich dir sonst noch weiterhelfen? "
-]
+from prompts import REPROMPTS, ERROR_PROMPT, ERROR_PROMPT2, HELP_SAMPLES
 
 ##################################################
 # Request Handler classes ########################
 ##### OUR OWN SKILL INTENTS ######################
 ##################################################
-
-
-############## DetailsIntent ########################
-
-def can_handle_details_unvalid(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    return is_intent_name("DetailsIntent")(handler_input) and ('all_dishes' not in session_attr)
-
-def can_handle_details_valid_uncompleted(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    request = handler_input.request_envelope.request
-    return (is_intent_name("DetailsIntent")(handler_input)) and \
-           ('all_dishes' in session_attr) and \
-           (str(request.dialog_state) == 'DialogState.STARTED')
-
-def can_handle_details_valid_completed(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    request = handler_input.request_envelope.request
-    return (is_intent_name("DetailsIntent")(handler_input)) and \
-           ('all_dishes' in session_attr) and \
-           (str(request.dialog_state) in ['DialogState.COMPLETED', 'DialogState.IN_PROGRESS'])
-
-# DetailsIntent unvalid because user has not made asked for dishes yet
-@sb.request_handler(can_handle_details_unvalid)
-def details_intent_handler_unvalid(handler_input):
-    print("In DetailsIntent – unvalid")
-    request = handler_input.request_envelope.request
-    return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du Details über ein Gericht erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
-
-# DetailsIntent valid, but dish number is missing -> ask user to provide it
-@sb.request_handler(can_handle_details_valid_uncompleted)
-def details_intent_handler_valid_uncompleted(handler_input):
-    print("In DetailsIntent – valid & uncompleted")
-    current_intent = handler_input.request_envelope.request.intent
-    return handler_input.response_builder.add_directive(DelegateDirective()).response
-
-# DetailsIntent valid
-@sb.request_handler(can_handle_details_valid_completed)
-def details_intent_handler_valid_completed(handler_input):
-    """Der Intent listet die Details zu einem bestimmten Gericht auf.
-
-    (Alle verfügbaren Informationen der OpenMensa API.)
-
-    Dazu gehören:
-        - Der vollständige Titel des Gerichts
-        - Die Preise für Studierende, Angestellte und Andere
-        - Die Kategorie des Gerichts
-        - Die zusätzlichen Notes
-    Der Benutzeranfrage und den bereitgestellten Slot Values werden folgende Daten entnommen:
-        - Gerichtnummer
-
-    Über die Session-Attributes müssen folgende Daten abgerufen werden:
-        - Daten zu den gespeicherten Gerichten:
-            - 'name'
-            - 'price'
-            - 'category'
-            - 'notes'
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-    # type: 
-    print("In DetailsIntent – valid & completed")
-    # extract slot values
-    filled_slots = handler_input.request_envelope.request.intent.slots
-    # get previous response from session attributes 
-    session_attr = handler_input.attributes_manager.session_attributes
-    user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
-    
-    # extract slot values
-    filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = utility.get_slot_values(filled_slots)
-    print(slot_values)
-    print(session_attr)
-    current_number = slot_values['number']['resolved']
-    
-    # try to get dish by index
-    try:
-        dish_name = session_attr['all_dishes'][int(current_number)-1]['name']
-        dish_prices = session_attr['all_dishes'][int(current_number)-1]['prices']
-        dish_cat = session_attr['all_dishes'][int(current_number)-1]['category']
-        dish_notes = session_attr['all_dishes'][int(current_number)-1]['notes']
-        user_groups = sorted(list(dish_prices.keys()))
-        speech = "Du hast das Gericht {} ausgewählt. ".format(dish_name)
-        speech += "Es kostet "
-        # read all prices for each available user group
-        for i in range(len(user_groups)):
-            price = dish_prices[user_groups[i]]
-            if price == None:
-                continue
-            speech += utility.build_price_speech(price, user_groups_de[i])
-        speech += '. Es gehört zur Kategorie: {} und enthält '.format(dish_cat)
-        for i in range(len(dish_notes)):
-            if i == len(dish_notes)-2:
-                speech += dish_notes[i] + ' und '
-            else:
-                speech += dish_notes[i] + ', '
-        speech += '. '
-
-
-    # dish cannot be found any more: user may have used a higher number
-    except Exception as e:
-        speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
-        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-        return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
-    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
-
-
 
 ############## ListDishesIntent ########################
 
@@ -264,7 +153,18 @@ def list_dishes_intent_handler(handler_input):
     # try to find matching dishes
     session_attr['all_dishes'] = utility.find_matching_dishes(api_response, ingredients)
     # build speech for dish list
-    dish_speech, session_attr['last_idx'] = utility.build_dish_speech(session_attr['all_dishes'], 0)
+    dishes_names = [d['name'] for d in session_attr['all_dishes']]
+    chunked_dishes = utility.make_chunking(dishes_names)
+    dish_speech, session_attr['last_idx'] = utility.build_dish_speech(chunked_dishes, 0)
+    updated_values = [Entity(id=i, name=EntityValueAndSynonyms(value=d, synonyms=d.split()
+                                                          )
+                    )
+              for i, d in enumerate(chunked_dishes)
+            ]
+    print(updated_values)
+    replace_entity_directive = DynamicEntitiesDirective(update_behavior=UpdateBehavior.REPLACE,
+                                                        types=[EntityListItem(name="Dish", values=updated_values)])
+    
     ingredients_pre, ingredients_post = utility.build_preposition_speech(ingredients)
 
     # dishes found: build speech with a list of dishes
@@ -292,114 +192,7 @@ def list_dishes_intent_handler(handler_input):
             speech = 'Es gibt leider keine passenden Gerichte zu deiner Anfrage. '
         speech += question
     print('Session attributes: ',session_attr)
-    return handler_input.response_builder.speak(speech).ask(question).response
-
-
-############## PriceIntent ########################
-
-def can_handle_price_unvalid(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    print(is_intent_name("PriceIntent")(handler_input) and ('all_dishes' not in session_attr))
-    return is_intent_name("PriceIntent")(handler_input) and ('all_dishes' not in session_attr)
-
-def can_handle_price_valid_uncompleted(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    request = handler_input.request_envelope.request
-    return (is_intent_name("PriceIntent")(handler_input)) and \
-           ('all_dishes' in session_attr) and \
-           (str(request.dialog_state) == 'DialogState.STARTED')
-
-def can_handle_price_valid_completed(handler_input):
-    session_attr = handler_input.attributes_manager.session_attributes
-    request = handler_input.request_envelope.request
-    return (is_intent_name("PriceIntent")(handler_input)) and \
-           ('all_dishes' in session_attr) and \
-           (str(request.dialog_state) in ['DialogState.COMPLETED', 'DialogState.IN_PROGRESS'])
-
-# PriceIntent unvalid because user has not made asked for dishes yet
-@sb.request_handler(can_handle_price_unvalid)
-def details_intent_handler_unvalid(handler_input):
-    print("In PriceIntent – unvalid")
-    request = handler_input.request_envelope.request
-    return handler_input.response_builder.speak("Du musst zuerst Gerichte erfragen,\
-                bevor du einen Preis erfahren kannst. ").ask(utility.random_phrase(REPROMPTS)).response
-
-# PriceIntent valid, but dish number is missing -> ask user to provide it
-@sb.request_handler(can_handle_price_valid_uncompleted)
-def details_intent_handler_valid_uncompleted(handler_input):
-    print("In PriceIntent – valid & uncompleted")
-    current_intent = handler_input.request_envelope.request.intent
-    return handler_input.response_builder.add_directive(DelegateDirective()).response
-
-# PriceIntent valid
-@sb.request_handler(can_handle_price_valid_completed)
-def price_intent_handler_valid_completed(handler_input):
-    """Der Intent gibt den Preis für ein bestimmtes Gericht zurück. 
-    Der Benutzer muss dabei die Nummer des Gerichts angeben und kann optional eine Zielgruppe
-    (Studierende, Angestellte, Andere) definieren.
-
-    Der Benutzeranfrage und den bereitgestellten Slot Values werden folgende Daten entlockt:
-        - Nummer des Gerichts (erforderlich)
-        - Zielgruppe (optional)
-
-    Über die Session-Attributes müssen folgende Daten abgerufen werden:
-        - Daten zu den gespeicherten Gerichten:
-            - 'name'
-            - 'prices'
-
-    :param handler_input: HandlerInput
-    :type handler_input: (HandlerInput) -> Response
-    :return: Gibt die vollständige Skill-Antwort zurück
-    :rtype: Response
-    """
-    # type: (HandlerInput) -> Response
-    print("In PriceIntent – valid & completed")
-
-    # get previous response from session attributes 
-    session_attr = handler_input.attributes_manager.session_attributes
-
-    # define user group names
-    user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
-
-    # extract slot values
-    filled_slots = handler_input.request_envelope.request.intent.slots
-    slot_values = utility.get_slot_values(filled_slots)
-    print(slot_values)
-    current_number = slot_values['number']['resolved']
-    current_usergroup_id = slot_values['user_group']['id']
-    current_user = slot_values['user_group']['resolved']
-
-    # try to get dish by index
-    try:
-        dish_name = session_attr['all_dishes'][int(current_number)-1]['name']
-        dish_prices = session_attr['all_dishes'][int(current_number)-1]['prices']
-        user_groups = sorted(list(dish_prices.keys()))
-        speech = "Das Gericht {} kostet ".format(dish_name)
-        # if user asked for a specific user group, only read this price
-        if current_usergroup_id:
-            price = dish_prices[current_usergroup_id]
-            if price != None:
-                speech += utility.build_price_speech(price, current_user)
-            else:
-                price = dish_prices['others']
-                speech += utility.build_price_speech(price, current_user)
-        # if not: read all prices for each available user group
-        else:
-            for i in range(len(user_groups)):
-                price = dish_prices[user_groups[i]]
-                if price == None:
-                    continue
-                speech += utility.build_price_speech(price, user_groups_de[i])
-        speech += '. '
-
-    # dish cannot be found any more: user may have used a higher number
-    except Exception as e:
-        speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_number)
-        print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-        return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
-    
-    return handler_input.response_builder.speak(speech).set_should_end_session(True).response
-
+    return handler_input.response_builder.speak(speech).ask(question).add_directive(replace_entity_directive).response
 
 ############## AddressIntent ########################
 
