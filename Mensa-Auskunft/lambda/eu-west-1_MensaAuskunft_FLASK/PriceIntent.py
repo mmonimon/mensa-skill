@@ -71,6 +71,65 @@ class PriceIntentValidCompletedHandler(AbstractRequestHandler):
         # define user group names
         user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
 
+        filled_slots = handler_input.request_envelope.request.intent.slots
+        slot_values = utility.get_slot_values(filled_slots)
+        print(slot_values)
+        current_number = slot_values['number']['resolved']
+        current_usergroup_id = slot_values['user_group']['id']
+        current_user = slot_values['user_group']['resolved']
+
+        # try to get dish by index
+        try:
+            dish_name = session_attr['all_dishes'][int(current_number)]['name']
+            dish_prices = session_attr['all_dishes'][int(current_number)]['prices']
+            user_groups = sorted(list(dish_prices.keys()))
+            speech = "Das Gericht {} kostet ".format(dish_name)
+            # if user asked for a specific user group, only read this price
+            if current_usergroup_id:
+                price = dish_prices[current_usergroup_id]
+                if price != None:
+                    speech += utility.build_price_speech(price, current_user)
+                else:
+                    price = dish_prices['others']
+                    speech += utility.build_price_speech(price, current_user)
+            # if not: read all prices for each available user group
+            else:
+                for i in range(len(user_groups)):
+                    price = dish_prices[user_groups[i]]
+                    if price == None:
+                        continue
+                    speech += utility.build_price_speech(price, user_groups_de[i])
+            speech += '. '
+        # dish cannot be found any more
+        except Exception as e:
+            speech = "Nanu! Das Gericht {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(dish_name)
+            print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
+            return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
+        return handler_input.response_builder.speak(speech).response
+
+############## PriceDishIntent ########################
+
+class PriceDishIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        session_attr = handler_input.attributes_manager.session_attributes
+        request = handler_input.request_envelope.request
+        return (is_intent_name("PriceDishIntent")(handler_input)) and \
+            ('all_dishes' in session_attr) and \
+            (str(request.dialog_state) in ['DialogState.COMPLETED', 'DialogState.IN_PROGRESS'])
+
+    def handle(self, handler_input):
+        print("In PriceDishIntent – valid & completed")
+
+        # type: (HandlerInput) -> Response
+        print("In PriceIntent – valid & completed")
+
+        # get previous response from session attributes 
+        session_attr = handler_input.attributes_manager.session_attributes
+
+        # define user group names
+        user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
+
+        # extract slot values
         # extract slot values
         filled_slots = handler_input.request_envelope.request.intent.slots
         slot_values = utility.get_slot_values(filled_slots)
@@ -110,62 +169,3 @@ class PriceIntentValidCompletedHandler(AbstractRequestHandler):
             return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
         
         return handler_input.response_builder.speak(speech).set_should_end_session(True).response
-
-############## PriceDishIntent ########################
-
-class PriceDishIntentHandler(AbstractRequestHandler):
-    def can_handle(self, handler_input):
-        session_attr = handler_input.attributes_manager.session_attributes
-        request = handler_input.request_envelope.request
-        return (is_intent_name("PriceDishIntent")(handler_input)) and \
-            ('all_dishes' in session_attr) and \
-            (str(request.dialog_state) in ['DialogState.COMPLETED', 'DialogState.IN_PROGRESS'])
-
-    def handle(self, handler_input):
-        print("In PriceDishIntent – valid & completed")
-
-        # type: (HandlerInput) -> Response
-        print("In PriceIntent – valid & completed")
-
-        # get previous response from session attributes 
-        session_attr = handler_input.attributes_manager.session_attributes
-
-        # define user group names
-        user_groups_de = ['Angestellte', 'Andere', 'Schüler', 'Studierende']
-
-        # extract slot values
-        filled_slots = handler_input.request_envelope.request.intent.slots
-        slot_values = utility.get_slot_values(filled_slots)
-        print(slot_values)
-        current_number = slot_values['number']['resolved']
-        current_usergroup_id = slot_values['user_group']['id']
-        current_user = slot_values['user_group']['resolved']
-
-        # try to get dish by index
-        try:
-            dish_name = session_attr['all_dishes'][int(current_number)]['name']
-            dish_prices = session_attr['all_dishes'][int(current_number)]['prices']
-            user_groups = sorted(list(dish_prices.keys()))
-            speech = "Das Gericht {} kostet ".format(dish_name)
-            # if user asked for a specific user group, only read this price
-            if current_usergroup_id:
-                price = dish_prices[current_usergroup_id]
-                if price != None:
-                    speech += utility.build_price_speech(price, current_user)
-                else:
-                    price = dish_prices['others']
-                    speech += utility.build_price_speech(price, current_user)
-            # if not: read all prices for each available user group
-            else:
-                for i in range(len(user_groups)):
-                    price = dish_prices[user_groups[i]]
-                    if price == None:
-                        continue
-                    speech += utility.build_price_speech(price, user_groups_de[i])
-            speech += '. '
-        # dish cannot be found any more
-        except Exception as e:
-            speech = "Nanu! Das Gericht {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_dish)
-            print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
-            return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
-        return handler_input.response_builder.speak(speech).response
