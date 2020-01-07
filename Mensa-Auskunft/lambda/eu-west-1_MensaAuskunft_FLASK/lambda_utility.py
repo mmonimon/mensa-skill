@@ -89,7 +89,7 @@ def chunking(meal):
     :return: Gibt den verkürzten String zurück.
     :rtype: str
     """
-    dish = list(filter(None, meal.split(' ')))
+    dish = list(filter(None, meal.split(' '))) # meal.split() would also work, but what about preposition '\n'? (Is this really used as a 'preposition'?)
     preposition_list = ['\n', 'aus', '\naus', 'dazu', '\ndazu', 'oder', '\noder', 'mit', '\nmit', 'im', '\nim', 'auf', '\nauf', 'in', '\nin', 'an', '\nan']
     first_prep_found = next((word for word in dish if word in preposition_list), None)
 
