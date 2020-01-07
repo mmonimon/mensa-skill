@@ -89,12 +89,13 @@ def chunking(meal):
     :return: Gibt den verkürzten String zurück.
     :rtype: str
     """
-    dish = meal.split(' ')
+    dish = list(filter(None, meal.split(' ')))
     preposition_list = ['\n', 'aus', '\naus', 'dazu', '\ndazu', 'oder', '\noder', 'mit', '\nmit', 'im', '\nim', 'auf', '\nauf', 'in', '\nin', 'an', '\nan']
     first_prep_found = next((word for word in dish if word in preposition_list), None)
 
     if first_prep_found != None:
         ind = dish.index(first_prep_found)
+        print(dish)
         first_noun_ind = next(i for i in range(ind, len(dish)) if dish[i][0].isupper())
         cut_dish = dish[:ind] + dish[ind:first_noun_ind + 1]
         # print(cut_dish)
