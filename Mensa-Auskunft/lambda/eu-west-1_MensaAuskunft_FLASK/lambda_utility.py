@@ -89,12 +89,13 @@ def chunking(meal):
     :return: Gibt den verkürzten String zurück.
     :rtype: str
     """
-    dish = meal.split(' ')
+    dish = list(filter(None, meal.split(' '))) # meal.split() would also work, but what about preposition '\n'? (Is this really used as a 'preposition'?)
     preposition_list = ['\n', 'aus', '\naus', 'dazu', '\ndazu', 'oder', '\noder', 'mit', '\nmit', 'im', '\nim', 'auf', '\nauf', 'in', '\nin', 'an', '\nan']
     first_prep_found = next((word for word in dish if word in preposition_list), None)
 
     if first_prep_found != None:
         ind = dish.index(first_prep_found)
+        print(dish)
         first_noun_ind = next(i for i in range(ind, len(dish)) if dish[i][0].isupper())
         cut_dish = dish[:ind] + dish[ind:first_noun_ind + 1]
         # print(cut_dish)
@@ -224,11 +225,10 @@ def build_dish_speech(dishlist, start_idx):
 
     dishlist_string = ''
     last_idx = start_idx + 3 # TODO
-    dishes_names = [d['name'] for d in dishlist]
-    chunked_dishes = make_chunking(dishes_names)
-    for i in range(start_idx, len(chunked_dishes)):
 
-        current_dish = chunked_dishes[i]
+    for i in range(start_idx, len(dishlist)):
+
+        current_dish = dishlist[i]
         count = i+1
         if i == last_idx:
             dishlist_string += '{}. {}. '.format(count, current_dish)
@@ -330,36 +330,40 @@ def get_slot_values(filled_slots):
     slot_values = {}
     # print("Filled slots: {}".format(filled_slots))
     
-    for key, slot_item in six.iteritems(filled_slots):
+    for key, slot_item in filled_slots.items():
         name = slot_item.name
-        try:
-            status_code = slot_item.resolutions.resolutions_per_authority[0].status.code
-            
-            if status_code == StatusCode.ER_SUCCESS_MATCH:
-                slot_values[name] = {
-                    "synonym": slot_item.value,
-                    "resolved": slot_item.resolutions.resolutions_per_authority[0].values[0].value.name,
-                    "id": slot_item.resolutions.resolutions_per_authority[0].values[0].value.id,
-                    "is_validated": True,
-            }
-            elif status_code == StatusCode.ER_SUCCESS_NO_MATCH:
-                slot_values[name] = {
-                    "synonym": slot_item.value,
-                    "resolved": slot_item.value,
-                    "id": None,
-                    "is_validated": False,
-            }
-            else:
-                pass
+        try: 
+            resolutions = slot_item.resolutions.resolutions_per_authority
+            for i in range(len(resolutions)):
+                status_code = resolutions[i].status.code
+                if status_code == StatusCode.ER_SUCCESS_MATCH:
+                    slot_values[name] = {
+                        "synonym": slot_item.value,
+                        "resolved": slot_item.resolutions.resolutions_per_authority[i].values[0].value.name,
+                        "id": slot_item.resolutions.resolutions_per_authority[i].values[0].value.id,
+                        "is_validated": True,
+                    }
+                elif status_code == StatusCode.ER_SUCCESS_NO_MATCH:
+                    if name not in slot_values:
+                        slot_values[name] = {
+                            "synonym": slot_item.value,
+                            "resolved": slot_item.value,
+                            "id": None,
+                            "is_validated": False,
+                        }
+                else:
+                    pass
+                
         except (AttributeError, ValueError, KeyError, IndexError, TypeError) as e:
-            # print("Couldn't resolve status_code for slot item: {}".format(slot_item))
+            print("Couldn't resolve status_code for slot item: {}".format(slot_item))
             print(e)
-            slot_values[name] = {
-                "synonym": slot_item.value,
-                    "resolved": slot_item.value,
-                        "id": None,
-                        "is_validated": False,
-                }
+            if name not in slot_values:
+                slot_values[name] = {
+                    "synonym": slot_item.value,
+                        "resolved": slot_item.value,
+                            "id": None,
+                            "is_validated": False,
+                    }
     return slot_values
 
 
