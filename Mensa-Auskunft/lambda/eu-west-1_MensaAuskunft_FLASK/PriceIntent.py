@@ -164,7 +164,7 @@ class PriceDishIntentHandler(AbstractRequestHandler):
 
         # dish cannot be found any more: user may have used a higher number
         except Exception as e:
-            speech = "Nanu! Das Gericht Nummer {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_dish)
+            speech = "Nanu! Das Gericht {} konnte nicht wiedergefunden werden. Bitte versuche es erneut. ".format(current_dish)
             print("Intent: {}: message: {}".format(handler_input.request_envelope.request.intent.name, str(e)))
             return handler_input.response_builder.speak(speech).ask(utility.random_phrase(REPROMPTS)).response
         

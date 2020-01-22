@@ -280,21 +280,21 @@
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name}",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name}",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient}",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient}",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient}",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name} für {date}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name} für {date}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name} für {date}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} für {date}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} für {date}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} für {date}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name} für {date}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name} für {date}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name} für {date}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} für {date}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} für {date}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} für {date}",
                         "für {date} bitte nach {synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name}",
                         "für {date} bitte nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name}",
                         "für {date} bitte nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name}",
@@ -316,21 +316,21 @@
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name} bitte",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name} bitte",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} bitte",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} bitte",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} bitte",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name} für {date} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name} für {date} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name} für {date} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} für {date} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} für {date} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} für {date} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} in {mensa_name} für {date} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} in {mensa_name} für {date} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} in {mensa_name} für {date} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} für {date} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_ingredient} für {date} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} und {second_prep} {second_ingredient} für {date} bitte",
                         "such mir bitte für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
                         "such {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} von {mensa_name}",
                         "{first_prep} {first_ingredient} {second_prep} {second_ingredient}",
@@ -374,11 +374,11 @@
                         "such mir {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} bitte",
                         "such mir für {date} {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} bitte",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} für {date}",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} für {date}",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date}",
                         "für {date} bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
                         "bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name}",
                         "bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient}",
@@ -386,11 +386,11 @@
                         "bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} für {date}",
                         "bitte nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date}",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} bitte",
                         "für {date} nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} für {date} bitte",
-                        "nach {synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} in {mensa_name} für {date} bitte",
+                        "{synonyms_gericht} {first_prep} {first_ingredient} {second_prep} {second_ingredient} für {date} bitte",
                         "dem speiseplan für {date}",
                         "speiseplan {date}",
                         "gib mir den speiseplan",
@@ -573,27 +573,15 @@
                         }
                     ],
                     "samples": [
-                        "wie viel kostet das denn",
                         "wie viel kostet gericht nummer {number}",
                         "wie viel kostet das gericht nummer {number}",
                         "wie viel kostet das gericht {number}",
-                        "wie viel kostet das gericht",
-                        "was kostet das",
-                        "wie viel muss ich dafür bezahlen",
                         "wie viel muss ein {user_group} für gericht {number} bezahlen",
                         "wie viel muss ein {user_group} für nummer {number} bezahlen",
-                        "wie viel muss ein {user_group} bezahlen",
-                        "wie viel bezahlt ein {user_group}",
-                        "wie viel bezahlen {user_group}",
-                        "kosten",
-                        "preise",
-                        "preis",
                         "wie viel muss ich für das gericht nummer {number} bezahlen",
                         "wie viel muss ich für die {number} bezahlen",
                         "wie viel muss ich für gericht nummer {number} bezahlen",
                         "wie viel muss ich für nummer {number} bezahlen",
-                        "was muss ich bezahlen",
-                        "wie teuer",
                         "preis für {number}",
                         "preis für gericht nummer {number}",
                         "sag mir den preis für gericht {number}",
@@ -601,7 +589,6 @@
                         "sag mir den preis für {number}",
                         "sag mir den preis für nummer {number}",
                         "wie teuer ist das {number} gericht",
-                        "wie teuer ist das",
                         "wie teuer ist nummer {number} für {user_group}",
                         "der preis für nummer {number}",
                         "der preis für {number}",
@@ -613,7 +600,6 @@
                         "wie viel kostet gericht {number}",
                         "was kostet die nummer {number} gericht",
                         "wie viel kostet die nummer {number} gericht",
-                        "{user_group}",
                         "{number}",
                         "{user_group} {number}",
                         "{number} für {user_group}",
@@ -624,8 +610,7 @@
                         "preis für nummer {number}",
                         "wie viel kostet nummer {number}",
                         "wie viel kostet die {number} für {user_group}",
-                        "wie viel kostet die {number}",
-                        "wie viel kostet das"
+                        "wie viel kostet die {number}"
                     ]
                 },
                 {
@@ -1044,9 +1029,6 @@
                         "details für das gericht nummer {number}",
                         "details für das gericht {number}",
                         "details für {number}",
-                        "infos",
-                        "mehr infos",
-                        "mehr details",
                         "gib mir details für {number}",
                         "gib mir details für {number} bitte",
                         "bitte gib mir details für {number}",
@@ -1057,15 +1039,9 @@
                         "details für gericht {number} bitte",
                         "details für gericht {number}",
                         "bitte details für gericht {number}",
-                        "gib mir details",
-                        "bitte gib mir details",
-                        "gib mir details bitte",
-                        "gib mir bitte details",
                         "details für nummer {number}",
                         "details für nummer {number} bitte",
                         "bitte details für nummer {number}",
-                        "details",
-                        "details bitte",
                         "ich würde gerne mehr über gericht nummer {number} erfahren",
                         "informationen über gericht nummer {number}",
                         "informationen über gericht nummer {number} bitte",
@@ -1221,6 +1197,10 @@
                         "lies weiter",
                         "weitere gerichte",
                         "mehr",
+                        "noch mehr",
+                        "mehr weiter weiter",
+                        "mehr weiter",
+                        "weiter weiter",
                         "weiter"
                     ]
                 },
@@ -1240,6 +1220,199 @@
                         }
                     ],
                     "samples": [
+                        "was gibt's noch über die {dish} zu wissen",
+                        "was gibt's noch über den {dish} zu wissen",
+                        "was gibt's noch über das {dish} zu wissen",
+                        "was gibt's noch über {dish} zu wissen",
+                        "was kann ich noch über das gericht {dish} erfahren",
+                        "was kann ich noch über die {dish} erfahren",
+                        "was kann ich noch über das {dish} erfahren",
+                        "was kann ich noch über den {dish} erfahren",
+                        "was kann ich noch über {dish} erfahren",
+                        "sag mir die details für das gericht {dish}",
+                        "sag mir die details für die {dish}",
+                        "sag mir die details für das {dish}",
+                        "sag mir die details für den {dish}",
+                        "sag mir die details für {dish}",
+                        "details für das gericht {dish} vorlesen",
+                        "details für das {dish} vorlesen",
+                        "details für den {dish} vorlesen",
+                        "details für {dish} vorlesen",
+                        "details für die {dish} vorlesen",
+                        "gericht {dish} komplett vorlesen",
+                        "{dish} komplett vorlesen",
+                        "das {dish} komplett vorlesen",
+                        "alles zu {dish} vorlesen",
+                        "gericht {dish} öffnen",
+                        "{dish} öffnen",
+                        "gib mir details für {dish}",
+                        "gib mir details für den {dish}",
+                        "gib mir details für das {dish}",
+                        "gib mir details für die {dish}",
+                        "sag mir details für den {dish}",
+                        "sag mir details für das {dish}",
+                        "sag mir details für die {dish}",
+                        "sag mir details für {dish}",
+                        "details für das {dish}",
+                        "details für die {dish}",
+                        "details für den {dish}",
+                        "sag mir details für das gericht {dish}",
+                        "gib mir details für das gericht {dish}",
+                        "details für das gericht {dish}",
+                        "details für das gericht {dish}",
+                        "details für {dish}",
+                        "gib mir details für {dish}",
+                        "gib mir details für {dish} bitte",
+                        "bitte gib mir details für {dish}",
+                        "gib mir bitte details für {dish}",
+                        "details für gericht {dish} bitte",
+                        "details für gericht {dish}",
+                        "bitte details für gericht {dish}",
+                        "details für {dish} bitte",
+                        "bitte details für {dish}",
+                        "ich würde gerne mehr über gericht {dish} erfahren",
+                        "informationen über gericht {dish}",
+                        "informationen über gericht {dish} bitte",
+                        "weitere informationen über gericht {dish}",
+                        "weitere informationen über gericht {dish} bitte",
+                        "informationen für gericht {dish}",
+                        "informationen für gericht {dish} bitte",
+                        "weitere informationen für die {dish}",
+                        "weitere informationen für das {dish}",
+                        "weitere informationen für {dish}",
+                        "weitere informationen für gericht {dish}",
+                        "weitere informationen für den {dish}",
+                        "weitere informationen für gericht {dish} bitte",
+                        "mehr über gericht {dish} bitte",
+                        "mehr über {dish} bitte",
+                        "mehr über gericht {dish}",
+                        "mehr über {dish}",
+                        "weiteres über gericht {dish} bitte",
+                        "weiteres über {dish} bitte",
+                        "weiteres über gericht {dish}",
+                        "weiteres über {dish}",
+                        "was kannst du mir noch über das gericht {dish} sagen",
+                        "was kannst du mir noch über {dish} sagen",
+                        "details für essen {dish} bitte",
+                        "details für essen {dish}",
+                        "bitte details für essen {dish}",
+                        "details für essen {dish} bitte",
+                        "details für essen {dish}",
+                        "bitte details für essen {dish}",
+                        "ich würde gerne mehr über essen {dish} erfahren",
+                        "informationen über essen {dish}",
+                        "informationen über essen {dish} bitte",
+                        "weitere informationen über essen {dish}",
+                        "weitere informationen über essen {dish} bitte",
+                        "informationen für essen {dish}",
+                        "informationen für essen {dish} bitte",
+                        "weitere informationen für essen {dish}",
+                        "weitere informationen für essen {dish} bitte",
+                        "ich würde gerne mehr über essen {dish} erfahren",
+                        "informationen über essen {dish}",
+                        "informationen über essen {dish} bitte",
+                        "weitere informationen über essen {dish}",
+                        "weitere informationen über essen {dish} bitte",
+                        "informationen für essen {dish}",
+                        "informationen für essen {dish} bitte",
+                        "weitere informationen für essen {dish}",
+                        "weitere informationen für essen {dish} bitte",
+                        "mehr über essen {dish} bitte",
+                        "mehr über {dish} bitte",
+                        "mehr über essen {dish}",
+                        "mehr über {dish}",
+                        "weiteres über essen {dish} bitte",
+                        "weiteres über {dish} bitte",
+                        "weiteres über essen {dish}",
+                        "weiteres über {dish}",
+                        "was kannst du mir noch über essen {dish} sagen",
+                        "was kannst du mir noch über {dish} sagen",
+                        "details für angebot {dish} bitte",
+                        "details für angebot {dish}",
+                        "bitte details für angebot {dish}",
+                        "details für angebot {dish} bitte",
+                        "details für angebot {dish}",
+                        "bitte details für angebot {dish}",
+                        "ich würde gerne mehr über angebot {dish} erfahren",
+                        "informationen über angebot {dish}",
+                        "informationen über angebot {dish} bitte",
+                        "weitere informationen über angebot {dish}",
+                        "weitere informationen über angebot {dish} bitte",
+                        "informationen für angebot {dish}",
+                        "informationen für angebot {dish} bitte",
+                        "weitere informationen für angebot {dish}",
+                        "weitere informationen für angebot {dish} bitte",
+                        "ich würde gerne mehr über angebot {dish} erfahren",
+                        "informationen über angebot {dish}",
+                        "informationen über angebot {dish} bitte",
+                        "weitere informationen über angebot {dish}",
+                        "weitere informationen über angebot {dish} bitte",
+                        "informationen für angebot {dish}",
+                        "informationen für angebot {dish} bitte",
+                        "weitere informationen für angebot {dish}",
+                        "weitere informationen für angebot {dish} bitte",
+                        "mehr über angebot {dish} bitte",
+                        "mehr über {dish} bitte",
+                        "mehr über angebot {dish}",
+                        "mehr über {dish}",
+                        "weiteres über angebot {dish} bitte",
+                        "weiteres über {dish} bitte",
+                        "weiteres über angebot {dish}",
+                        "weiteres über {dish}",
+                        "was kannst du mir noch über angebot {dish} sagen",
+                        "was kannst du mir noch über {dish} sagen",
+                        "details für menü {dish} bitte",
+                        "details für menü {dish}",
+                        "bitte details für menü {dish}",
+                        "details für menü {dish} bitte",
+                        "details für menü {dish}",
+                        "bitte details für menü {dish}",
+                        "ich würde gerne mehr über menü {dish} erfahren",
+                        "informationen über menü {dish}",
+                        "informationen über menü {dish} bitte",
+                        "weitere informationen über menü {dish}",
+                        "weitere informationen über menü {dish} bitte",
+                        "informationen für menü {dish}",
+                        "informationen für menü {dish} bitte",
+                        "weitere informationen für menü {dish}",
+                        "weitere informationen für menü {dish} bitte",
+                        "ich würde gerne mehr über menü {dish} erfahren",
+                        "informationen über menü {dish}",
+                        "informationen über menü {dish} bitte",
+                        "weitere informationen über menü {dish}",
+                        "weitere informationen über menü {dish} bitte",
+                        "informationen für menü {dish}",
+                        "informationen für menü {dish} bitte",
+                        "weitere informationen für menü {dish}",
+                        "weitere informationen für menü {dish} bitte",
+                        "mehr über menü {dish} bitte",
+                        "mehr über das menü {dish} bitte",
+                        "mehr über menü {dish}",
+                        "mehr über das menü {dish}",
+                        "weiteres über menü {dish} bitte",
+                        "weiteres über das menü {dish} bitte",
+                        "weiteres über menü {dish}",
+                        "weiteres über das menü {dish}",
+                        "was kannst du mir noch über menü {dish} sagen",
+                        "was kannst du mir noch über das menü {dish} sagen",
+                        "das menü mit dem {dish}",
+                        "das menü mit der {dish}",
+                        "das menü mit {dish}",
+                        "das essen mit {dish}",
+                        "das essen mit der {dish}",
+                        "das essen mit dem {dish}",
+                        "das angebot mit {dish}",
+                        "das angebot mit dem {dish}",
+                        "das angebot mit der {dish}",
+                        "infos",
+                        "{dish}",
+                        "mehr infos",
+                        "mehr details",
+                        "gib mir details",
+                        "bitte gib mir details",
+                        "gib mir details bitte",
+                        "gib mir bitte details",
+                        "details bitte",
                         "details",
                         "{dish} details ansagen",
                         "details {dish}",
@@ -1273,10 +1446,21 @@
                         }
                     ],
                     "samples": [
-                        "wie viel kosten die {dish} für {user_group}",
-                        "{dish}",
-                        "kosten",
+                        "wie viel kostet das denn",
+                        "wie viel kostet das gericht",
+                        "was kostet das",
+                        "wie viel muss ich dafür bezahlen",
+                        "wie viel muss ein {user_group} bezahlen",
+                        "wie viel bezahlt ein {user_group}",
+                        "wie viel bezahlen {user_group}",
                         "preise",
+                        "was muss ich bezahlen",
+                        "wie teuer",
+                        "wie teuer ist das",
+                        "{user_group}",
+                        "wie viel kostet das",
+                        "wie viel kosten die {dish} für {user_group}",
+                        "kosten",
                         "preis",
                         "wie viel kosten die {dish}",
                         "was kosten die {dish}",
@@ -1432,7 +1616,7 @@
                                     "p. z. h. mensa",
                                     "mensa PZH",
                                     "p. z. h.",
-                                    "pzh",
+                                    "PZH",
                                     "p. z. h. hannover",
                                     "hannover p. z. h.",
                                     "mensa p. z. h.",
@@ -1575,7 +1759,7 @@
                                     "HTW wilhelminenhof",
                                     "h. t. w. wilhelminenhof",
                                     "mensa h. t. w. wilhelminenhof",
-                                    "htw wilhelminenhof",
+                                    "HTW wilhelminenhof",
                                     "mensa wilhelminenhof",
                                     "wilhelminenhof"
                                 ]
@@ -1597,21 +1781,22 @@
                                     "a. s. h.",
                                     "mensa alice salomon hochschule",
                                     "alice salomon hochschule",
-                                    "ash",
-                                    "mensa ash",
-                                    "ash berlin",
-                                    "ash hellersdorf"
+                                    "ASH",
+                                    "mensa ASH",
+                                    "ASH berlin",
+                                    "ASH hellersdorf"
                                 ]
                             }
                         },
                         {
                             "id": "27",
                             "name": {
-                                "value": "mensa fu zwei otto von simson straße",
+                                "value": "mensa FU zwei otto von simson straße",
                                 "synonyms": [
                                     "freie universität berlin",
                                     "mensa der f. u. berlin",
                                     "f. u. berlin",
+                                    "FU berlin",
                                     "mensa otto von simson straße",
                                     "otto von simson straße",
                                     "mensa f. u. zwei otto von simson straße",
@@ -1621,11 +1806,11 @@
                                     "f. u. berlin mensa zwei",
                                     "freie universität mensa zwei",
                                     "mensa zwei freie universität",
-                                    "mensa f. u. ii otto von simson straße",
+                                    "mensa f. u. zwei otto von simson straße",
                                     "freie uni mensa zwei",
                                     "mensa zwei fu",
-                                    "mensa zwei fu berlin",
-                                    "fu berlin mensa zwei",
+                                    "mensa zwei FU berlin",
+                                    "FU berlin mensa zwei",
                                     "freie universität mensa zwei",
                                     "mensa zwei freie universität"
                                 ]
@@ -1641,11 +1826,11 @@
                                     "schöneberg h. w. r.",
                                     "mensa h. w. r. schöneberg",
                                     "mensa h. w. r. badensche straße",
-                                    "hwr schöneberg",
-                                    "hwr campus schöneberg",
-                                    "schöneberg hwr",
+                                    "HWR schöneberg",
+                                    "HWR campus schöneberg",
+                                    "schöneberg HWR",
                                     "campus schöneberg",
-                                    "mensa hwr schöneberg"
+                                    "mensa HWR schöneberg"
                                 ]
                             }
                         },
@@ -1656,7 +1841,7 @@
                                 "synonyms": [
                                     "h. t. w. treskowallee",
                                     "mensa h. t. w. treskowallee",
-                                    "htw treskowallee",
+                                    "HTW treskowallee",
                                     "mensa treskowallee",
                                     "treskowallee"
                                 ]
@@ -1732,9 +1917,9 @@
                                     "mensa t. u. hardenbergstraße",
                                     "t. u. berlin",
                                     "t. u. hardenbergstraße",
-                                    "tu berlin",
+                                    "T. U. berlin",
                                     "mensa hardenbergstraße",
-                                    "tu hardenbergstaße",
+                                    "T. U. hardenbergstaße",
                                     "technische uni berlin",
                                     "technische universität berlin",
                                     "hardenbergstraße"
@@ -1751,7 +1936,8 @@
                                     "mensa h. u. spandauer straße",
                                     "mensa spandauer straße",
                                     "spandauer straße",
-                                    "hu spandauer straße"
+                                    "H. U. spandauer straße",
+                                    "HU spandauer straße"
                                 ]
                             }
                         },
@@ -1764,7 +1950,7 @@
                                     "mensa e. h. b.",
                                     "mensa e. h. b. teltower damm",
                                     "evangelische hochschule berlin",
-                                    "mensa ehb",
+                                    "mensa EHB",
                                     "mensa evangelische hochschule berlin",
                                     "mensa teltower damm",
                                     "teltower damm"
@@ -1828,21 +2014,21 @@
                                     "mensa herrenhaus düppel",
                                     "mensa herrenhaus",
                                     "mensa düppel",
-                                    "fu herrenhaus düppel",
-                                    "fu herrenhaus",
-                                    "fu düppel",
+                                    "FU herrenhaus düppel",
+                                    "FU herrenhaus",
+                                    "FU düppel",
                                     "freie uni herrenhaus düppel",
                                     "freie universität herrenhaus düppel",
-                                    "mensa fu herrenhaus düppel",
-                                    "mensa fu herrenhaus",
-                                    "mensa fu düppel",
+                                    "mensa FU herrenhaus düppel",
+                                    "mensa FU herrenhaus",
+                                    "mensa FU düppel",
                                     "mensa freie uni herrenhaus düppel",
                                     "mensa freie uni herrenhaus",
                                     "mensa freie uni düppel",
                                     "mensa freie universität herrenhaus",
                                     "mensa freie universität düppel",
-                                    "fu berlin herrenhaus düppel",
-                                    "mensa fu berlin herrenhaus düppel"
+                                    "FU berlin herrenhaus düppel",
+                                    "mensa FU berlin herrenhaus düppel"
                                 ]
                             }
                         },
@@ -1855,11 +2041,13 @@
                                     "humboldt universität berlin süd",
                                     "humboldt universität berlin mensa süd",
                                     "h. u. süd",
+                                    "HU mensa süd",
+                                    "HU süd",
                                     "mensa h. u. berlin süd",
                                     "h. u. süd mensa",
                                     "mensa h. u. süd",
                                     "mensa süd",
-                                    "mensa hu berlin süd",
+                                    "mensa HU berlin süd",
                                     "mensa berlin süd",
                                     "berlin süd"
                                 ]
@@ -1875,6 +2063,8 @@
                                     "humboldt universität berlin mensa nord",
                                     "humboldt universität",
                                     "h. u. nord",
+                                    "HU nord",
+                                    "HU mensa nord",
                                     "mensa h. u. berlin nord",
                                     "h. u. nord mensa",
                                     "mensa h. u. nord",
@@ -1913,9 +2103,9 @@
                                     "h. u. berlin adlershof",
                                     "mensa h. u. oase adlershof",
                                     "oase adlershof",
-                                    "hu adlershof",
-                                    "hu campus adlershof",
-                                    "hu berlin adlershof",
+                                    "HU adlershof",
+                                    "HU campus adlershof",
+                                    "HU berlin adlershof",
                                     "berlin adlershof",
                                     "adlershof",
                                     "mensa campus adlershof",
@@ -1932,6 +2122,8 @@
                                 "synonyms": [
                                     "h. f. m.",
                                     "h. f. m. berlin",
+                                    "HFM berlin",
+                                    "HFM",
                                     "mensa h. f. m. berlin",
                                     "mensa h. f. m. charlottenstraße",
                                     "mensa charlottenstraße",
@@ -1952,9 +2144,9 @@
                                     "f. u. lankwitz",
                                     "f. u. lankwitz malteserstraße",
                                     "mensa f. u. lankwitz malteserstraße",
-                                    "mensa fu lankwitz",
-                                    "fu lankwitz",
-                                    "fu lankwitz malteserstraße",
+                                    "mensa FU lankwitz",
+                                    "FU lankwitz",
+                                    "FU lankwitz malteserstraße",
                                     "malteserstraße",
                                     "mensa malteserstraße",
                                     "malteserstraße berlin",
@@ -1972,8 +2164,8 @@
                                     "k. h. s. berlin",
                                     "k. h. s.",
                                     "mensa katholische h. s. für sozialwesen",
-                                    "mensa khs berlin",
-                                    "khs berlin",
+                                    "mensa KHS berlin",
+                                    "KHS berlin",
                                     "katholische hochschule berlin",
                                     "mensa katholische hochschule",
                                     "mensa katholische hochschule berlin",
@@ -2254,7 +2446,10 @@
                                 "value": "dresden zeltschloesschen",
                                 "synonyms": [
                                     "zeltschloesschen dresden",
-                                    "zeltschloesschen"
+                                    "zeltschlösschen dresden",
+                                    "zeltschloesschen",
+                                    "dresden zeltschlösschen",
+                                    "zeltschlösschen"
                                 ]
                             }
                         },
@@ -2332,21 +2527,26 @@
                                 "value": "dresden mensa wueins",
                                 "synonyms": [
                                     "wueins dresden",
+                                    "wu eins dresden",
                                     "mensa wueins dresden",
+                                    "mensa wu eins dresden",
                                     "mensa wueins",
-                                    "wueins"
+                                    "mensa wu eins",
+                                    "dresden mensa wu eins",
+                                    "wueins",
+                                    "wu eins"
                                 ]
                             }
                         },
                         {
                             "id": "86",
                             "name": {
-                                "value": "dresden mensa stimm gabel",
+                                "value": "dresden mensa stimmgabel",
                                 "synonyms": [
-                                    "stimm gabel dresden",
-                                    "mensa stimm gabel dresden",
-                                    "mensa stimm gabel",
-                                    "stimm gabel"
+                                    "stimmgabel dresden",
+                                    "mensa stimmgabel dresden",
+                                    "mensa stimmgabel",
+                                    "stimmgabel"
                                 ]
                             }
                         },
@@ -2364,13 +2564,13 @@
                         {
                             "id": "88",
                             "name": {
-                                "value": "dresden biomensa u boot",
+                                "value": "dresden biomensa u-boot",
                                 "synonyms": [
                                     "biomensa dresden",
                                     "dresden biomensa",
-                                    "dresden u boot",
-                                    "mensa u boot",
-                                    "biomensa u boot"
+                                    "dresden u-boot",
+                                    "mensa u-boot",
+                                    "biomensa u-boot"
                                 ]
                             }
                         },
@@ -2475,6 +2675,7 @@
                                 "value": "aachen mensa e. u. p. s.",
                                 "synonyms": [
                                     "mensa EUPS aachen",
+                                    "EUPS",
                                     "EUPS aachen",
                                     "mensa EUPS",
                                     "aachen e. u. p. s.",
@@ -3053,13 +3254,13 @@
                         {
                             "id": "153",
                             "name": {
-                                "value": "mensa 1 (mittag)"
+                                "value": "mensa 1 mittag"
                             }
                         },
                         {
                             "id": "154",
                             "name": {
-                                "value": "mensa 1 (abend)"
+                                "value": "mensa 1 abend"
                             }
                         },
                         {
@@ -3339,6 +3540,7 @@
                                 "value": "göttingen bistro hawk",
                                 "synonyms": [
                                     "göttingen bistro h. a. w. k.",
+                                    "bistro HAWK",
                                     "bistro h. a. w. k. göttingen",
                                     "bistro h. a. w. k.",
                                     "h. a. w. k. bistro",
@@ -3366,7 +3568,8 @@
                                 "synonyms": [
                                     "hamburg cafe c. f. e. l.",
                                     "cafe c. f. e. l. hamburg",
-                                    "cafe c. f. e. l."
+                                    "cafe c. f. e. l.",
+                                    "cafe CFEL"
                                 ]
                             }
                         },
@@ -3380,7 +3583,8 @@
                                     "mensa h. c. u.",
                                     "h. c. u. hamburg",
                                     "hamburg h. c. u.",
-                                    "h. c. u."
+                                    "h. c. u.",
+                                    "HCU"
                                 ]
                             }
                         },
@@ -3415,7 +3619,8 @@
                                     "mensa konstanz h. t. w. g.",
                                     "mensa h. t. w. g. konstanz",
                                     "mensa h. t. w. g.",
-                                    "h. t. w. g."
+                                    "h. t. w. g.",
+                                    "HTWG"
                                 ]
                             }
                         },
@@ -3442,7 +3647,9 @@
                                     "mensa o. t. h. regensburg",
                                     "regensburg mensa o. t. h.",
                                     "o. t. h. regensburg",
-                                    "regensburg o. t. h."
+                                    "regensburg o. t. h.",
+                                    "OTH",
+                                    "OTH regensburg"
                                 ]
                             }
                         },
@@ -3469,7 +3676,9 @@
                                     "mensa h. s. landshut",
                                     "h. s. landshut mensa",
                                     "h. s. landshut",
-                                    "landshut h. s."
+                                    "landshut h. s.",
+                                    "landshut HS",
+                                    "HS landshut"
                                 ]
                             }
                         },
@@ -3481,6 +3690,7 @@
                                     "mensa t. h. deggendorf",
                                     "deggendorf mensa t. h.",
                                     "t. h. deggendorf",
+                                    "TH deggendorf",
                                     "deggendorf t. h.",
                                     "technische hochschule deggendorf",
                                     "mensa technische hochschule deggendorf"
@@ -3649,7 +3859,8 @@
                                 "synonyms": [
                                     "mensa h. f. m. d. k.",
                                     "h. f. m. d. k. mensa",
-                                    "h. f. m. d. k."
+                                    "h. f. m. d. k.",
+                                    "HFMDK"
                                 ]
                             }
                         },
@@ -3659,7 +3870,9 @@
                                 "value": "cafeteria h. f. g.",
                                 "synonyms": [
                                     "cafeteria h. f. .g.",
-                                    "h. f. g. cafeteria"
+                                    "h. f. g. cafeteria",
+                                    "HFG cafeteria",
+                                    "cafeteria HFG"
                                 ]
                             }
                         },
@@ -3758,14 +3971,15 @@
                         {
                             "id": "231",
                             "name": {
-                                "value": "freising stucafé mensa wst",
+                                "value": "freising stucafé mensa WST",
                                 "synonyms": [
                                     "freising stucafé mensa w. s. t.",
                                     "stucafé freising",
                                     "freising stucafé",
                                     "stucafé mensa w. s. t freising",
                                     "stucafé mensa w. s. t",
-                                    "mensa w. s. t. stucafé"
+                                    "mensa w. s. t. stucafé",
+                                    "mensa WST"
                                 ]
                             }
                         },
@@ -3910,6 +4124,8 @@
                                     "mensa k. i. t. campus nord",
                                     "kantine k. i. t. nord",
                                     "mensa k. i. t. nord",
+                                    "KIT nord mensa",
+                                    "KIT mensa nord",
                                     "k. i. t. nord mensa",
                                     "k. i. t. nord kantine",
                                     "k. i. t. campus nord mensa",
@@ -4260,13 +4476,14 @@
                         {
                             "id": "288",
                             "name": {
-                                "value": "mannheim eo",
+                                "value": "mannheim EO",
                                 "synonyms": [
                                     "schloss ehrenhof mensa",
                                     "mannheim e. o. schloss ehrenhof",
                                     "e. o. schloss ehrenhof mannheim",
                                     "mannheim e. o.",
                                     "e. o. mannheim",
+                                    "EO mannheim",
                                     "schloss ehrenhof",
                                     "schloss ehrenhof mannheim",
                                     "mannheim schloss ehrenhof"
@@ -4289,7 +4506,7 @@
                         {
                             "id": "291",
                             "name": {
-                                "value": "kiel mensa i am westring",
+                                "value": "kiel mensa 1 am westring",
                                 "synonyms": [
                                     "kiel mensa eins am westring",
                                     "mensa eins am westring kiel",
@@ -4423,7 +4640,7 @@
                         {
                             "id": "310",
                             "name": {
-                                "value": "mensa w. z. straubing",
+                                "value": "mensa WZ straubing",
                                 "synonyms": [
                                     "mensa w. z. straubing",
                                     "straubing mensa w. z.",
@@ -4548,7 +4765,10 @@
                             "name": {
                                 "value": "bistro oeconomicum",
                                 "synonyms": [
-                                    "oeconomicum bistro"
+                                    "oeconomicum bistro",
+                                    "ökonomikum",
+                                    "ökonomikum bistro",
+                                    "bistro ökonomikum"
                                 ]
                             }
                         },
@@ -4828,6 +5048,7 @@
                                     "mensa hochschule o. w. l. höxter",
                                     "hochschule o. w. l. höxter mensa",
                                     "hochschule o. w. l. höxter",
+                                    "OWL höxter",
                                     "höxter hochschule o. w. l.",
                                     "mensa höxter",
                                     "höxter mensa",
@@ -5089,6 +5310,7 @@
                                     "hochschule für wirtschaft und recht berlin café",
                                     "coffeebar h. w. r. alt friedrichsfeld",
                                     "café h. w. r. alt friedrichsfelde",
+                                    "HWR alt friedrichsfelde",
                                     "h. w. r. café alt friedrichsfelde",
                                     "h. w. r. alt friedrichsfelde"
                                 ]
@@ -5127,7 +5349,8 @@
                             "name": {
                                 "value": "restaurant visavis",
                                 "synonyms": [
-                                    "visavis restaurant"
+                                    "visavis restaurant",
+                                    "visavis"
                                 ]
                             }
                         },
@@ -5161,7 +5384,7 @@
                         {
                             "id": "614",
                             "name": {
-                                "value": "sv restaurant cockpit",
+                                "value": "SV restaurant cockpit",
                                 "synonyms": [
                                     "s. v. restaurant cockpit",
                                     "restaurant cockpit",
@@ -5209,7 +5432,9 @@
                                     "s. v. restaurant b. a. s. f. kaisten",
                                     "kaisten s. v. restaurant b. a. s. f.",
                                     "restaurant b. a. s. f.",
-                                    "b. a. s. f. restaurant"
+                                    "b. a. s. f. restaurant",
+                                    "BASF restaurant",
+                                    "BASF"
                                 ]
                             }
                         },
@@ -5251,9 +5476,11 @@
                         {
                             "id": "623",
                             "name": {
-                                "value": "cafeteria ewz",
+                                "value": "cafeteria EWZ",
                                 "synonyms": [
                                     "cafeteria e. w. z.",
+                                    "EWZ cafeteria",
+                                    "EWZ",
                                     "e. w. z. cafeteria"
                                 ]
                             }
@@ -5376,7 +5603,7 @@
                             "name": {
                                 "value": "s. v. restaurant siesta",
                                 "synonyms": [
-                                    "s. v. restaurant siesta"
+                                    "SV restaurant siesta"
                                 ]
                             }
                         },
@@ -5426,7 +5653,7 @@
                             "name": {
                                 "value": "s. v. restaurant manegg",
                                 "synonyms": [
-                                    "s. v. restaurant manegg"
+                                    "SV restaurant manegg"
                                 ]
                             }
                         },
@@ -5435,7 +5662,9 @@
                             "name": {
                                 "value": "restaurant p. w. c. inn",
                                 "synonyms": [
-                                    "restaurant p. w. c. inn",
+                                    "restaurant PWC inn",
+                                    "PWC inn",
+                                    "restaurant PWC",
                                     "p. w. c. inn restaurant"
                                 ]
                             }
@@ -5505,7 +5734,7 @@
                             "name": {
                                 "value": "s. b. b. stadtbistro brig",
                                 "synonyms": [
-                                    "s. b. b. stadtbistro brig",
+                                    "SBB stadtbistro brig",
                                     "stadtbistro brig"
                                 ]
                             }
@@ -5515,7 +5744,7 @@
                             "name": {
                                 "value": "s. v. restaurant scintilla",
                                 "synonyms": [
-                                    "s. v. restaurant scintilla",
+                                    "SV restaurant scintilla",
                                     "restaurant scintilla",
                                     "scintilla restaurant"
                                 ]
@@ -5722,6 +5951,7 @@
                                     "mensa b. f. h. a. h. b.",
                                     "biel b. f. h. a. h. b.",
                                     "b. f. h. a. h. b. biel",
+                                    "BFHAHB biel",
                                     "b. f. h. a. h. b."
                                 ]
                             }
@@ -5881,6 +6111,7 @@
                                 "synonyms": [
                                     "berufsbildungszentrum olten",
                                     "cafeteria b. b. z. olten",
+                                    "BBZ olten",
                                     "b. b. z. olten cafeteria",
                                     "b. b. z. olten"
                                 ]
@@ -5903,7 +6134,7 @@
                                 "value": "mensa h. s. r. hochschule rapperswil",
                                 "synonyms": [
                                     "hochschule für technik rapperswil",
-                                    "mensa h. s. r. hochschule rapperswil",
+                                    "mensa HSR hochschule rapperswil",
                                     "rapperswil mensa h. s. r. hochschule",
                                     "h. s. r. hochschule rapperswil",
                                     "rapperswil"
@@ -5915,7 +6146,7 @@
                             "name": {
                                 "value": "b. z. f. rheinfelden",
                                 "synonyms": [
-                                    "b. z. f. rheinfelden",
+                                    "BZF rheinfelden",
                                     "rheinfelden b. z. f."
                                 ]
                             }
@@ -5926,6 +6157,7 @@
                                 "value": "bistro gymnasium und w. m. s. thun schadau",
                                 "synonyms": [
                                     "bistro gymnasium und w. m. s. thun schadau",
+                                    "WMS thun schadau",
                                     "gymnasium thun schadau",
                                     "w. m. s. thun schadau"
                                 ]
@@ -5958,7 +6190,7 @@
                             "name": {
                                 "value": "restaurant campus f. h. n. w. brugg windisch",
                                 "synonyms": [
-                                    "restaurant campus f. h. n. w. brugg windisch",
+                                    "restaurant campus FHNW brugg windisch",
                                     "f. h. n. w. brugg windisch"
                                 ]
                             }
@@ -5968,8 +6200,9 @@
                             "name": {
                                 "value": "berufsfachschule b. f. s. winterthur",
                                 "synonyms": [
-                                    "berufsfachschule b. f. s. winterthur",
+                                    "berufsfachschule BFS winterthur",
                                     "b. f. s. winterthur",
+                                    "BFS winterthur",
                                     "berufsfachschule winterthur"
                                 ]
                             }
@@ -6001,6 +6234,7 @@
                                 "value": "mensa zag",
                                 "synonyms": [
                                     "mensa z. a. g.",
+                                    "mensa ZAG",
                                     "z. a. g. mensa",
                                     "z. a. g."
                                 ]
@@ -6011,7 +6245,7 @@
                             "name": {
                                 "value": "restaurant t. b. z. technische berufsschule zürich",
                                 "synonyms": [
-                                    "restaurant t. b. z. technische berufsschule zürich",
+                                    "restaurant TBZ technische berufsschule zürich",
                                     "t. b. z.",
                                     "t. b. zürich",
                                     "t. b. z. zürich",
@@ -6078,7 +6312,7 @@
                             "name": {
                                 "value": "u. b. s. restaurant elite",
                                 "synonyms": [
-                                    "u. b. s. restaurant elite"
+                                    "UBS restaurant elite"
                                 ]
                             }
                         },
@@ -6087,7 +6321,8 @@
                             "name": {
                                 "value": "gewerbliche berufsschule chur",
                                 "synonyms": [
-                                    "chur gewerblich berufsschule"
+                                    "chur gewerblich berufsschule",
+                                    "chur"
                                 ]
                             }
                         },
@@ -6130,7 +6365,7 @@
                             "name": {
                                 "value": "k. v. zürich business school",
                                 "synonyms": [
-                                    "k. v. zürich business school",
+                                    "KV zürich business school",
                                     "zürich business school"
                                 ]
                             }
@@ -6207,7 +6442,7 @@
                             "name": {
                                 "value": "konradhofer catering betriebskantine i. p. p.",
                                 "synonyms": [
-                                    "konradhofer catering betriebskantine i. p. p.",
+                                    "konradhofer catering betriebskantine IPP",
                                     "conradhofer betriebskantine",
                                     "conradhofer kantine",
                                     "betriebskantine i. p. p.",
@@ -6220,7 +6455,7 @@
                             "name": {
                                 "value": "hauptmensa t. u. dortmund",
                                 "synonyms": [
-                                    "hauptmensa t. u. dortmund",
+                                    "hauptmensa TU dortmund",
                                     "t. u. dortmund hauptmensa",
                                     "technische uni dortmund hauptmensa",
                                     "dortmund technisch uni hauptmensa",
@@ -6286,7 +6521,7 @@
                                 "synonyms": [
                                     "d. h. b. w.",
                                     "DHBW",
-                                    "mannheim eppelheim mensa d. h. b. w.",
+                                    "mannheim eppelheim mensa DHBW",
                                     "mensa d. h. b. w. eppelheim",
                                     "d. h. b. w. eppelheim",
                                     "eppelheim d. h. b. w."
@@ -6342,7 +6577,7 @@
                             "name": {
                                 "value": "mensa h. s. augsburg",
                                 "synonyms": [
-                                    "mensa h. s. augsburg",
+                                    "mensa HS augsburg",
                                     "h. s. augsburg mensa",
                                     "mensa hochschule augsburg",
                                     "hochschule augsburg mensa",
@@ -6356,7 +6591,7 @@
                             "name": {
                                 "value": "mensa h. s. neu ulm",
                                 "synonyms": [
-                                    "mensa h. s. neu ulm",
+                                    "mensa HS neu ulm",
                                     "mensa hochschule neu ulm",
                                     "h. s. neu ulm mensa",
                                     "hochschule neu ulm mensa",
@@ -6372,7 +6607,7 @@
                             "name": {
                                 "value": "cafeteria h. s. augsburg",
                                 "synonyms": [
-                                    "cafeteria h. s. augsburg",
+                                    "cafeteria HS augsburg",
                                     "h. s. augsburg cafeteria",
                                     "cafeteria hochschule augsburg",
                                     "hochschule augsburg cafeteria"
@@ -6384,7 +6619,7 @@
                             "name": {
                                 "value": "coffeebar der mensa t. u. hauptgebäude wetterleuchten",
                                 "synonyms": [
-                                    "coffeebar der mensa t. u. hauptgebäude wetterleuchten",
+                                    "coffeebar der mensa TU hauptgebäude wetterleuchten",
                                     "coffeebar wetterleuchten",
                                     "café wetterleuchten",
                                     "wetterleuchten",
@@ -6432,6 +6667,7 @@
                                     "freie uni ihnestraße",
                                     "mensa f. u. ihnestraße",
                                     "f. u. ihnestraße",
+                                    "FU ihnestraße",
                                     "f. u. ihnestraße mensa",
                                     "ihnestraße",
                                     "berlin ihnestraße",
@@ -6446,8 +6682,9 @@
                                 "synonyms": [
                                     "freie universität kosterstraße",
                                     "freie uni koserstraße",
-                                    "mensa f. u. koserstraße",
+                                    "mensa FU koserstraße",
                                     "f. u. koserstraße",
+                                    "FU koserstraße",
                                     "f. u. koserstraße mensa",
                                     "koserstraße",
                                     "berlin koserstraße",
@@ -6464,7 +6701,7 @@
                                     "pharmazie mensa FU berlin",
                                     "pharma mensa f. u.",
                                     "freie uni pharmazie mensa",
-                                    "mensa f. u. pharmazie",
+                                    "mensa FU pharmazie",
                                     "f. u. pharmazie",
                                     "pharmazie f. u.",
                                     "mensa pharmazie f. u."
@@ -6479,7 +6716,7 @@
                                     "freie universität berlin rechtswissenschaften",
                                     "freie uni rechtwissenschaften mensa",
                                     "freie uni recht mensa",
-                                    "mensa f. u. rechtswissenschaft",
+                                    "mensa FU rechtswissenschaft",
                                     "f. u. rechtswissenschaft",
                                     "rechtswissenschaft f. u.",
                                     "mensa rechtswissenschaft f. u."
@@ -6491,7 +6728,7 @@
                             "name": {
                                 "value": "mensa h. f. m. neuer marstall",
                                 "synonyms": [
-                                    "mensa h. f. m. neuer marstall",
+                                    "mensa HFM neuer marstall",
                                     "h. f. m. neuer marstall",
                                     "neuer marstall h. f. m.",
                                     "h. f. m. neuer marstall mensa",
@@ -6526,7 +6763,7 @@
                                     "technische uni berlin architektur mensa",
                                     "technische uni architektur mensa",
                                     "TU architektur",
-                                    "mensa t. u. architektur",
+                                    "mensa TU architektur",
                                     "t. u. architektur",
                                     "t. u. architektur mensa"
                                 ]
@@ -6539,7 +6776,7 @@
                                 "synonyms": [
                                     "technische uni berlin marchstraße",
                                     "technische uni marchstraße",
-                                    "mensa t. u. marchstraße",
+                                    "mensa TU marchstraße",
                                     "t. u. marchstraße",
                                     "t. u. marchstraße mensa",
                                     "marchstraße",
@@ -6555,7 +6792,7 @@
                                 "synonyms": [
                                     "technische universität skyline mensa",
                                     "technische uni skyline",
-                                    "mensa t. u. skyline",
+                                    "mensa TU skyline",
                                     "t. u. skyline",
                                     "t. u. skyline mensa"
                                 ]
@@ -6574,7 +6811,7 @@
                                     "universität der künste jazz mensa",
                                     "universität der künste jazz",
                                     "mensa u. d. k. jazz mensa",
-                                    "u. d. k. jazz mensa",
+                                    "UDK jazz mensa",
                                     "jazz mensa u. d. k."
                                 ]
                             }
@@ -6586,7 +6823,7 @@
                                 "synonyms": [
                                     "universität der künste mensa lietzenburger straße",
                                     "universität der künste lietzenburger straße",
-                                    "mensa u. d. k. lietzenburger straße",
+                                    "mensa UDK lietzenburger straße",
                                     "u. d. k. lietzenburger straße",
                                     "u. d. k. lietzenburger straße mensa",
                                     "lietzenburger straße",
@@ -6622,7 +6859,7 @@
                                     "HTW saarbrücken",
                                     "hochschule für technik und wirtschaft des saarlandes",
                                     "hochschule für technik und wirtschaft des saarlandes saarbrücken",
-                                    "mensa h. t. w. saar alt saarbrücken",
+                                    "mensa HTW saar alt saarbrücken",
                                     "h. t. w. saar alt saarbrücken mensa",
                                     "h. t. w. saar alt saarbrücken",
                                     "h. t. w. alt saarbrücken"
@@ -6636,10 +6873,10 @@
                                 "synonyms": [
                                     "HTW rotenbühl",
                                     "hochschule für technik und wirtschaft des saarlandes rotenbühl",
-                                    "mensa h. t. w saar rotenbühl",
-                                    "h. t. w saar rotenbühl mensa",
-                                    "h. t. w saar rotenbühl",
-                                    "h. t. w rotenbühl"
+                                    "mensa HTW saar rotenbühl",
+                                    "h. t. w. saar rotenbühl mensa",
+                                    "h. t. w. saar rotenbühl",
+                                    "h. t. w. rotenbühl"
                                 ]
                             }
                         },
@@ -6711,7 +6948,7 @@
                         {
                             "id": "838",
                             "name": {
-                                "value": "cafeteria eah",
+                                "value": "cafeteria EAH",
                                 "synonyms": [
                                     "cafeteria e. a. h.",
                                     "e. a. h. cafeteria"
@@ -6812,7 +7049,7 @@
                                     "technische uni süd",
                                     "TU dortmund",
                                     "technische uni dortmund  süd",
-                                    "mensa süd t. u. dortmund",
+                                    "mensa süd TU dortmund",
                                     "t. u. dortmund mensa süd",
                                     "mensa süd technische uni dortmund",
                                     "technische uni dortmund mensa süd",
@@ -6828,7 +7065,7 @@
                                 "synonyms": [
                                     "technische uni vital",
                                     "TU dortmund vital",
-                                    "vital t. u. dortmund",
+                                    "vital TU dortmund",
                                     "t. u. dortmund vital",
                                     "vital technische uni dortmund",
                                     "technische uni dortmund vital",
@@ -6844,7 +7081,7 @@
                                 "synonyms": [
                                     "technische uni archeteria",
                                     "TU dortmund archeteria",
-                                    "archeteria t. u. dortmund",
+                                    "archeteria TU dortmund",
                                     "t. u. dortmund archeteria",
                                     "archeteria technische uni dortmund",
                                     "technische uni dortmund archeteria",
@@ -6859,7 +7096,7 @@
                                 "value": "restaurant calla t. u. dortmund",
                                 "synonyms": [
                                     "technische uni calla restaurant",
-                                    "restaurant calla t. u. dortmund",
+                                    "restaurant calla TU dortmund",
                                     "t. u. dortmund restaurant calla",
                                     "calla t. u. dortmund",
                                     "t. u. dortmund calla",
@@ -6879,7 +7116,7 @@
                             "name": {
                                 "value": "food fakultät t. u. dortmund",
                                 "synonyms": [
-                                    "food fakultät t. u. dortmund",
+                                    "food fakultät TU dortmund",
                                     "t. u. dortmund food fakultät",
                                     "technische uni dortmund food fakultät",
                                     "food fakultät technische uni dortmund",
@@ -6924,7 +7161,7 @@
                             "name": {
                                 "value": "mensa der i. s. m. dortmund",
                                 "synonyms": [
-                                    "mensa der i. s. m. dortmund",
+                                    "mensa der ISM dortmund",
                                     "mensa i. s. m. dortmund",
                                     "i. s. m. dortmund mensa",
                                     "i. s. m. dortmund"
@@ -6999,7 +7236,7 @@
                                 "value": "q. west ruhr universität bochum",
                                 "synonyms": [
                                     "ruhr uni bochum",
-                                    "q. west ruhr universität bochum",
+                                    "Q west ruhr universität bochum",
                                     "q. west ruhr uni bochum",
                                     "q. west"
                                 ]
@@ -7090,7 +7327,7 @@
                                 "synonyms": [
                                     "ernst busch hochschule für schauspielkunst",
                                     "hochschule für schauspielkunst ernst busch",
-                                    "mensa h. f. s. ernst busch",
+                                    "mensa HFS ernst busch",
                                     "h. f. s. ernst busch",
                                     "h. f. s. ernst busch mensa"
                                 ]
@@ -7104,6 +7341,7 @@
                                     "veggie mensa zwei punkt null",
                                     "veggie zwei punkt null",
                                     "f. u. veggie mensa zwei",
+                                    "FU veggie mensa zwei",
                                     "veggie mensa zwei f. u.",
                                     "veggie mensa zwei",
                                     "tiefgrüne mensa f. u.",
@@ -7125,7 +7363,7 @@
                         {
                             "id": "881",
                             "name": {
-                                "value": "h130 technologiepark",
+                                "value": "H 130 technologiepark",
                                 "synonyms": [
                                     "h. hundert dreißig technologie park",
                                     "h. ein hundert dreißig technologie park",
@@ -7162,9 +7400,10 @@
                         {
                             "id": "895",
                             "name": {
-                                "value": "bistro nff",
+                                "value": "bistro NFF",
                                 "synonyms": [
                                     "bistro n. f. f.",
+                                    "NFF",
                                     "n. f. f. bistro"
                                 ]
                             }

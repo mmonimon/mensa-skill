@@ -88,6 +88,10 @@ def all_exception_handler(handler_input, exception):
     logger.error(exception, exc_info=True)
     return handler_input.response_builder.speak(ERROR_PROMPT).set_should_end_session(True).response
 
+# --- aws lambda
+
+lambda_handler = sb.lambda_handler()
+
 # --- flask
 
 from flask import Flask
