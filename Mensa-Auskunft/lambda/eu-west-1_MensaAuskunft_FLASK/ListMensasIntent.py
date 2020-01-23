@@ -50,6 +50,7 @@ class ListMensasIntentHandler(AbstractRequestHandler):
                 speech = "Ich habe {} Mensen in {} gefunden: {}".format(len(city_mensas), city, first_mensas)
                 speech = utility.convert_acronyms(speech)
                 if session_attr['last_idx_mensas'] < len(city_mensas):
+                    session_attr['last_idx_mensas'] += 4
                     question = "Möchtest du mehr Mensen hören? Sag: Weiter!"
                     return handler_input.response_builder.speak(speech+question).ask(question).response
 
